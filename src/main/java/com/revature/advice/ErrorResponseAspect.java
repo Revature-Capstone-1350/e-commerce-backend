@@ -15,13 +15,6 @@ import javax.persistence.EntityNotFoundException;
 public class ErrorResponseAspect {
 
 
-    // Unauthorized token status exception handler
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler
-    public ErrorResponse handleTokenParseException(TokenParseException e) {
-        return new ErrorResponse(401, e.getMessage());
-    }
-
     // Unauthorized registration authentication status exception handler
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler
