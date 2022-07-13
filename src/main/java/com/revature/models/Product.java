@@ -3,7 +3,7 @@ package com.revature.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "product")
+@Table(name = "products")
 public class Product {
 
     @Id
@@ -21,11 +21,8 @@ public class Product {
     @Column(columnDefinition = "text")
     private String description;
 
-    @Column(nullable = false)
-    private Integer category_id;
-
-    @Column(nullable = false)
-    private Integer vendor_id;
+    @Column(columnDefinition = "int default 1")
+    private Integer vendor_id; // There's only one vendor
 
     @Column(nullable = false)
     private double price;
@@ -35,11 +32,19 @@ public class Product {
 
     public Product() { super(); }
 
+    public Product(Category category, String name, String description, double price, String image_url) {
+        this();
+        this.category = category;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.image_url = image_url;
+    }
+
     public Integer getProduct_id() { return product_id; }
     public Category getCategory() { return category; }
     public String getName() { return name; }
     public String getDescription() { return description; }
-    public Integer getCategory_id() { return category_id; }
     public Integer getVendor_id() { return vendor_id; }
     public double getPrice() { return price; }
     public String getImage_url() { return image_url; }
@@ -48,7 +53,6 @@ public class Product {
     public void setCategory(Category category) { this.category = category; }
     public void setName(String name) { this.name = name; }
     public void setDescription(String description) { this.description = description; }
-    public void setCategory_id(Integer category_id) { this.category_id = category_id; }
     public void setVendor_id(Integer vendor_id) { this.vendor_id = vendor_id; }
     public void setPrice(double price) { this.price = price; }
     public void setImage_url(String image_url) { this.image_url = image_url; }

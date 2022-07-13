@@ -1,6 +1,7 @@
 package com.revature.config;
 
 import com.revature.dtos.RegisterRequest;
+import com.revature.models.Product;
 import com.revature.models.User;
 import com.revature.repositories.UserRepository;
 import com.revature.services.AuthService;
@@ -23,6 +24,9 @@ public class MockDataInserter implements CommandLineRunner {
         User user = new User(regReq);
         User created = userRepo.save(user);
 
-        authService.getToken(created);
+        authService.getToken(created); // verifies function
+
+        Product product = new Product(Product.Category.CATEGORY1, "first product", "indescribable",
+                1.95, "someURL.jpg");
     }
 }
