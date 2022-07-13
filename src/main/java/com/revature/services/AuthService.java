@@ -1,5 +1,6 @@
 package com.revature.services;
 
+import com.revature.dtos.AuthResponse;
 import com.revature.dtos.Principal;
 import com.revature.models.User;
 import com.revature.services.jwt.TokenService;
@@ -22,8 +23,13 @@ public class AuthService {
         return userService.findByCredentials(email, password);
     }
 
-    public User register(User user) {
-        return userService.save(user);
+    public AuthResponse login(User user) {
+        return new AuthResponse(userService.save(user));
+    }
+
+
+    public AuthResponse register(User user) {
+        return new AuthResponse(userService.save(user));
     }
 
     public String getToken(User user) {return service.generateToken(new Principal(user));}

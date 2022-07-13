@@ -10,8 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
+import static com.revature.services.security.Generation.generatePassword;
 import static com.revature.services.security.Hashv1.encrypt;
 
 @RestController
@@ -26,8 +28,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
-        Optional<User> optional = authService.findByCredentials(loginRequest.getEmail(), encrypt(loginRequest.getPassword()));
+    public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest loginRequest) {
+        Optional<User> optional = authService.findByCredentials(loginRequest.getEmail(), generatePassword(loginRequest.getPassword()));
 
         if(!optional.isPresent()) {
             return ResponseEntity.badRequest().build();
@@ -41,14 +43,12 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest registerRequest) {
-        registerRequest.setPassword(encrypt(registerRequest.getPassword()));
+    public ResponseEntity<AuthResponse> register(@RequestBody @Valid RegisterRequest registerRequest) {
         User created = new User(registerRequest);
+        AuthResponse authResp = authService.register(created); // try to register before making token
 
         HttpHeaders respHeaders = new HttpHeaders();
         respHeaders.set("Authorization", authService.getToken(created));
-
-        AuthResponse authResp = new AuthResponse(authService.register(created));
 
         return ResponseEntity.status(HttpStatus.CREATED).headers(respHeaders).body(authResp);
     }

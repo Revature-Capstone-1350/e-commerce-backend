@@ -8,9 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Principal {
 
-    private long authUserId;
+    private int authUserId;
     private String authUserEmail;
-
     private String authUsername;
 
     public Principal(User user) {
@@ -18,7 +17,7 @@ public class Principal {
         this.authUserEmail = user.getEmail();
     }
 
-    public Principal(long authUserId, String authUserEmail) {
+    public Principal(int authUserId, String authUserEmail) {
         this.authUserId = authUserId;
         this.authUserEmail = authUserEmail;
     }

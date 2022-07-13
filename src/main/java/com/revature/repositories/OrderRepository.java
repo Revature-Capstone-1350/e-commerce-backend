@@ -1,10 +1,10 @@
 package com.revature.repositories;
 
-import com.revature.models.Product;
+import com.revature.models.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Integer> {
+public interface OrderRepository extends JpaRepository<Order, Integer> {
 
 }

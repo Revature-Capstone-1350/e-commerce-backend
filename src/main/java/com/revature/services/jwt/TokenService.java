@@ -26,7 +26,7 @@ public class TokenService {
         long now = System.currentTimeMillis();
 
         JwtBuilder tokenBuilder = Jwts.builder()
-                                      .setIssuer("notecard")
+                                      .setIssuer("e-commerce-backend")
                                       .claim("id", ""+subject.getAuthUserId())
                                       .claim("email", subject.getAuthUserEmail())
                                       .setIssuedAt(new Date(now))
@@ -49,7 +49,7 @@ public class TokenService {
                                 .parseClaimsJws(token)
                                 .getBody();
 
-            return new Principal(Long.parseLong(claims.get("id", String.class)) , claims.get("role", String.class));
+            return new Principal(Integer.parseInt(claims.get("id", String.class)) , claims.get("role", String.class));
         } catch (ExpiredJwtException e) {
             throw new TokenParseException("The provided token is expired", e);
         } catch (Exception e) {

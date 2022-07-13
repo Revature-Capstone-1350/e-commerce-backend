@@ -1,6 +1,5 @@
 package com.revature.advice;
 
-import com.revature.dtos.ErrorResponse;
 import com.revature.exceptions.AuthenticationException;
 import com.revature.exceptions.NotLoggedInException;
 import com.revature.exceptions.TokenParseException;
@@ -30,4 +29,34 @@ public class RestExceptionHandler {
     public ResponseEntity<Object> handleResourceNotFoundException(AuthenticationException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
+    /*
+    // Unauthorized registration authentication status exception handler
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler
+    public ErrorResponse handleResourceNotFoundException(AuthenticationException e) {
+        return new ErrorResponse(401, e.getMessage());
+    }
+
+    // Resource not found status exception handler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler
+    public ErrorResponse handleResourceNotFoundException(EntityNotFoundException e) {
+        return new ErrorResponse(404, e.getMessage());
+    }
+
+    // Conflict status exception handler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler
+    public ErrorResponse handleResourcePersistenceException(ResourcePersistenceException e) {
+        return new ErrorResponse(409, e.getMessage());
+    }
+
+    // Internal server error status exception handler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler
+    public ErrorResponse handleOtherException(Throwable t) {
+        t.printStackTrace();
+        return new ErrorResponse(500, "An internal server error occurred");
+    }
+     */
 }
