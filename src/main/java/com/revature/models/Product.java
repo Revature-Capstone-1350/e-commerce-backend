@@ -1,6 +1,7 @@
 package com.revature.models;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -52,7 +53,10 @@ public class Product {
     public Integer getVendor_id() { return vendor_id; }
     public double getPrice() { return price; }
     public String getImage_url() { return image_url; }
-    public List<Rating> getRatings() { return ratings; }
+    public List<Rating> getRatings() {
+        if (ratings == null) return new ArrayList<>();
+        return ratings;
+    }
 
     public void setProduct_id(Integer product_id) { this.product_id = product_id; }
     public void setCategory(Category category) { this.category = category; }

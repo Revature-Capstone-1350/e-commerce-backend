@@ -16,7 +16,7 @@ public class ProductInfo {
     private Integer vendor_id;
     private double price;
     private String image_url;
-    private int number_of_ratings;
+    //private int number_of_ratings;
 
     public ProductInfo(Product product) {
         this.product_id = getProduct_id();
@@ -26,6 +26,6 @@ public class ProductInfo {
         this.vendor_id = product.getVendor_id();
         this.price = product.getPrice();
         this.image_url = product.getImage_url();
-        this.number_of_ratings = product.getRatings().size();
+        //this.number_of_ratings = product.getRatings().size();
     }
 }
