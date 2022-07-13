@@ -51,7 +51,7 @@ public class ProductController {
     	List<Product> productList = new ArrayList<Product>();
     	
     	for (int i = 0; i < metadata.size(); i++) {
-    		Optional<Product> optional = productService.findById(metadata.get(i).getId());
+    		Optional<Product> optional = productService.findById(metadata.get(i).getProduct_id());
 
     		if(!optional.isPresent()) {
     			return ResponseEntity.notFound().build();

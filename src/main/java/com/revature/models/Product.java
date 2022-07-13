@@ -52,6 +52,7 @@ public class Product {
     public Integer getVendor_id() { return vendor_id; }
     public double getPrice() { return price; }
     public String getImage_url() { return image_url; }
+    public List<Rating> getRatings() { return ratings; }
 
     public void setProduct_id(Integer product_id) { this.product_id = product_id; }
     public void setCategory(Category category) { this.category = category; }
@@ -60,6 +61,7 @@ public class Product {
     public void setVendor_id(Integer vendor_id) { this.vendor_id = vendor_id; }
     public void setPrice(double price) { this.price = price; }
     public void setImage_url(String image_url) { this.image_url = image_url; }
+    public void setRatings(List<Rating> ratings) { this.ratings = ratings; }
 
     public enum Category {
         CATEGORY1, CATEGORY2, CATEGORY3, CATEGORY4,
