@@ -1,6 +1,7 @@
 package com.revature.models;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -29,6 +30,9 @@ public class Product {
 
     @Column(columnDefinition = "varchar")
     private String image_url;
+
+    @OneToMany(mappedBy = "rating_id")
+    private List<Rating> ratings;
 
     public Product() { super(); }
 

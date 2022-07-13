@@ -35,6 +35,9 @@ public class User {
     @OneToMany(mappedBy = "user_id")
     private List<Order> user_orders;
 
+    @OneToMany(mappedBy = "rating_id")
+    private List<Rating> user_ratings; // TODO : constructor (?) and getter/setter
+
     public User() {
         super();
         this.role = Role.BASIC;
