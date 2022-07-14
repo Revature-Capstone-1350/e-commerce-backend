@@ -1,9 +1,11 @@
 package com.revature.controllers;
 
 import com.revature.annotations.Authorized;
+import com.revature.dtos.CreateProduct;
 import com.revature.dtos.ProductInfo;
 import com.revature.models.Product;
 import com.revature.services.ProductService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -84,4 +86,11 @@ public class ProductController {
 
         return ResponseEntity.ok(optional.get());
     }
+
+   @ResponseStatus(value = HttpStatus.CREATED)
+     @PostMapping( value = "/createproduct", consumes = "application/json", produces = "application/json")
+    public void newProduct(@RequestBody CreateProduct createProduct) {
+     //  productService.save(createProduct);
+
+   }
 }
