@@ -19,5 +19,5 @@ management:
       exposure:
         include: "*" # temp for development
 secrets:
-  secret: local-revature
+  token-secret: local-revature
   salt: local-salt

@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @Service
 public class AuthService {
-    @Value("${jwt.salt}")
+    @Value("${secrets.salt}")
     private String salt;
     private final UserService userService;
     private final TokenService service;
@@ -64,9 +64,7 @@ public class AuthService {
             factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             byte[] hash = factory.generateSecret(keySpec).getEncoded();
             return Base64.encodeBase64String(hash);
-        } catch (NoSuchAlgorithmException e) {
-            return null;
-        } catch (InvalidKeySpecException e) {
+        } catch (Throwable e) {
             return null;
         }
     }
