@@ -5,8 +5,6 @@ import com.revature.dtos.RegisterRequest;
 import javax.persistence.*;
 import java.util.List;
 
-import static com.revature.services.security.Generation.generatePassword;
-
 @Entity
 @Table(name = "users")
 public class User {
@@ -46,7 +44,7 @@ public class User {
     public User(RegisterRequest regReq) {
         this();
         this.email = regReq.getEmail();
-        this.password = generatePassword(regReq.getPassword());
+        this.password = regReq.getPassword();
         this.first_name = regReq.getFirstName();
         this.last_name = regReq.getLastName();
     }

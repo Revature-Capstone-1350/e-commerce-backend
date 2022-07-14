@@ -5,7 +5,7 @@ server:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=photo
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=soulnotes
     username: postgres
     password: revature
   jpa:
@@ -18,5 +18,6 @@ management:
     web:
       exposure:
         include: "*" # temp for development
-jwt:
+secrets:
   secret: local-revature
+  salt: local-salt

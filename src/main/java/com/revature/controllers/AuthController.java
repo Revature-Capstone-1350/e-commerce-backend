@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Optional;
 
-import static com.revature.services.security.Generation.generatePassword;
 import static com.revature.services.security.Hashv1.encrypt;
 
 @RestController
@@ -22,20 +21,20 @@ import static com.revature.services.security.Hashv1.encrypt;
 public class AuthController {
 
     private final AuthService authService;
-
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest loginRequest) {
-        Optional<User> optional = authService.findByCredentials(loginRequest.getEmail(), generatePassword(loginRequest.getPassword()));
+        Optional<User> optional = authService.findByCredentials(loginRequest.getEmail(), loginRequest.getPassword());
 
         if(!optional.isPresent()) {
             return ResponseEntity.badRequest().build();
         }
         HttpHeaders respHeaders = new HttpHeaders();
-        respHeaders.set("Authorization", authService.getToken(optional.get()));
+        // todo: fix
+        //  respHeaders.set("Authorization", authService.getToken(optional.get()));
 
         AuthResponse authResp = new AuthResponse(optional.get());
 
@@ -44,11 +43,10 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody @Valid RegisterRequest registerRequest) {
-        User created = new User(registerRequest);
-        AuthResponse authResp = authService.register(created); // try to register before making token
+        AuthResponse authResp = authService.register(registerRequest); // try to register before making token
 
         HttpHeaders respHeaders = new HttpHeaders();
-        respHeaders.set("Authorization", authService.getToken(created));
+        respHeaders.set("Authorization", authService.getToken(registerRequest));
 
         return ResponseEntity.status(HttpStatus.CREATED).headers(respHeaders).body(authResp);
     }

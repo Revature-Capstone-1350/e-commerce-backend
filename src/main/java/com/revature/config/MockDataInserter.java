@@ -31,7 +31,7 @@ public class MockDataInserter implements CommandLineRunner {
         RegisterRequest regReq = new RegisterRequest("a@gmail.com","12345","a",null);
         User user = new User(regReq);
         User created = userRepo.save(user);
-
+        user.setPassword("testingu");
         authService.getToken(created); // verifies function
 
         String baseURL = "https://raw.githubusercontent.com/jsparks9/pics/main/images/@.jpg";
