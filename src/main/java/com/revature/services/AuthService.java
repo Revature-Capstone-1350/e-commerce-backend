@@ -48,6 +48,10 @@ public class AuthService {
         return service.generateToken(user);
     }
 
+    public String getToken(User user) {
+        return service.generateToken(new Principal(user));
+    }
+
     public void verifyToken(String token) {
         service.extractTokenDetails(token);
     }

@@ -34,7 +34,7 @@ public class AuthController {
         }
         HttpHeaders respHeaders = new HttpHeaders();
         // todo: fix
-        //  respHeaders.set("Authorization", authService.getToken(optional.get()));
+        respHeaders.set("Authorization", authService.getToken(optional.get()));
 
         AuthResponse authResp = new AuthResponse(optional.get());
 
