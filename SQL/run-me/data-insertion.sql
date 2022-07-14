@@ -11,3 +11,14 @@ insert into order_status (name) values
 ('Delievered'),
 ('Canceled');
 
+insert into category (name) values 
+('Day'),
+('Night'),
+('Dawn'),
+('Dusk'),
+('Space'),
+('Clouds'),
+('Moon'),
+('Sun');
+
+

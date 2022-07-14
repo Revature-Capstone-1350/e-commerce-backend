@@ -88,5 +88,11 @@ CREATE TABLE order_item (
 	order_id INT NOT NULL,
 	product_id INT NOT NULL,
 	
-	CONSTRAINT order_item_pkey PRIMARY KEY (order_id, product_id)
+	CONSTRAINT order_item_pkey PRIMARY KEY (order_id, product_id),
+	constraint fk_order 
+		foreign key (order_id)
+			references "order"(order_id),
+	constraint fk_product
+		foreign key (product_id)
+			references product(product_id)
 );
