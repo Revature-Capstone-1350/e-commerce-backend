@@ -15,7 +15,7 @@ public class ProductReview {
     private Integer user_id;
 
     @JoinColumn(name = "product_id", nullable = false)
-    private Integer product_id;
+    private Integer productId;
 
     @Column
     private String description;
@@ -29,7 +29,7 @@ public class ProductReview {
     public ProductReview(Integer product_review_id, Integer user_id, Integer product_id, String description, int rating) {
         this.product_review_id = product_review_id;
         this.user_id = user_id;
-        this.product_id = product_id;
+        this.productId = product_id;
         this.description = description;
         this.rating = rating;
     }
@@ -51,11 +51,11 @@ public class ProductReview {
     }
 
     public Integer getProduct_id() {
-        return product_id;
+        return productId;
     }
 
     public void setProduct_id(Integer product_id) {
-        this.product_id = product_id;
+        this.productId = product_id;
     }
 
     public String getDescription() {
@@ -79,12 +79,12 @@ public class ProductReview {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductReview that = (ProductReview) o;
-        return rating == that.rating && Objects.equals(product_review_id, that.product_review_id) && Objects.equals(user_id, that.user_id) && Objects.equals(product_id, that.product_id) && Objects.equals(description, that.description);
+        return rating == that.rating && Objects.equals(product_review_id, that.product_review_id) && Objects.equals(user_id, that.user_id) && Objects.equals(productId, that.productId) && Objects.equals(description, that.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(product_review_id, user_id, product_id, description, rating);
+        return Objects.hash(product_review_id, user_id, productId, description, rating);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class ProductReview {
         return "ProductReview{" +
                 "product_review_id=" + product_review_id +
                 ", user_id=" + user_id +
-                ", product_id=" + product_id +
+                ", product_id=" + productId +
                 ", description='" + description + '\'' +
                 ", rating=" + rating +
                 '}';

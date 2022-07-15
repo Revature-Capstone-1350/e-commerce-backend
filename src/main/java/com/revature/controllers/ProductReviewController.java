@@ -38,6 +38,12 @@ public class ProductReviewController {
     }
 
     @Authorized
+    @GetMapping("/product/{id}")
+     public ResponseEntity<List<ProductReview>> getProudctReviewByProductId(@PathVariable("id")int id) {
+        return ResponseEntity.ok(productReviewService.findAllByProductId(id));
+    }
+
+    @Authorized
     @DeleteMapping("/{id}")
     public  ResponseEntity<ProductReview> deleteProductReview(@PathVariable("id") int id) {
         Optional<ProductReview> optional = productReviewService.findById(id);

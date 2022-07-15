@@ -24,6 +24,10 @@ public class ProductReviewService {
         return productReviewRepository.findById(id);
     }
 
+    public List<ProductReview> findAllByProductId(int id) {
+        return productReviewRepository.findByProductId(id);
+    }
+
     public void delete(int id) {
         productReviewRepository.deleteById(id);
     }
