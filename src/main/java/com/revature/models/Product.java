@@ -1,5 +1,6 @@
 package com.revature.models;
 
+import com.revature.dtos.CreateProduct;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,4 +24,17 @@ public class Product {
     private String description;
     private String image;
     private String name;
+
+
+    public Product(CreateProduct createProduct) {
+        this.id = createProduct.getCreateId();
+        this.quantity = createProduct.getCreateQuantity();
+        this.price = createProduct.getCreatePrice();
+        this.description = createProduct.getCreateDescription();
+        this.image = createProduct.getCreateImage();
+        this.name = createProduct.getCreateName();
+    }
+
+
 }
+

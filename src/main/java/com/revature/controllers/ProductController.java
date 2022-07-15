@@ -87,10 +87,13 @@ public class ProductController {
         return ResponseEntity.ok(optional.get());
     }
 
+
+    //Create
    @ResponseStatus(value = HttpStatus.CREATED)
      @PostMapping( value = "/createproduct", consumes = "application/json", produces = "application/json")
     public void newProduct(@RequestBody CreateProduct createProduct) {
-     //  productService.save(createProduct);
+        Product newProduct = new Product(createProduct);
+        productService.save(newProduct);
 
    }
 }
