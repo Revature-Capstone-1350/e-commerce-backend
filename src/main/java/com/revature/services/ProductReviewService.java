@@ -17,18 +17,18 @@ public class ProductReviewService {
     }
 
     public List<ProductReview> findAll() {
-        return productReviewRepository.findAll();
+        return productReviewRepository.findAll(); // Return a list of all reviews
     }
 
     public Optional<ProductReview> findById(int id) {
-        return productReviewRepository.findById(id);
+        return productReviewRepository.findById(id); // Return a product review by their id
     }
 
     public List<ProductReview> findAllByProductId(int id) {
-        return productReviewRepository.findByProductId(id);
+        return productReviewRepository.findByProductId(id); // Return a List of all reviews for that product
     }
 
     public void delete(int id) {
         productReviewRepository.deleteById(id);
-    }
+    } // delete product review by id
 }
