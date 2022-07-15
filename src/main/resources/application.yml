@@ -1,15 +1,22 @@
 server:
-  port: 8080
+  port: 5000
+  servlet:
+    context-path: /skyview
 spring:
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    database-platform: org.hibernate.dialect.H2Dialect
-    defer-datasource-initialization: true
   datasource:
-    url: jdbc:h2:mem:memdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: password
-  h2:
-    console.enabled: true
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=skyview
+    username: postgres
+    password: revature
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" # temp for development
+jwt:
+  secret: local-revature
