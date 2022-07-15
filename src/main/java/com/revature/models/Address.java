@@ -12,13 +12,13 @@ public class Address {
     @Column(name = "address_id", updatable = false, nullable = false)
     private Integer address_id;
 
-    @Column(columnDefinition = "varchar", nullable=false)
+    @Column(nullable=false)
     private String street;
 
-    @Column(columnDefinition = "varchar")
+    @Column
     private String street2;
 
-    @Column(columnDefinition = "char(2)", nullable=false)
+    @Column(length = 2, nullable=false)
     private String state;
 
     @Column(length=50)

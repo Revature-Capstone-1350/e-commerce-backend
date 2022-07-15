@@ -19,6 +19,12 @@ public class Rating {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product_id;
 
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "creation", insertable = false,
+            updatable  = false,
+            nullable   = false,  columnDefinition = "timestamp not null default current_timestamp")
+    private String creation;
+
     @Column
     private String rating_text;
 

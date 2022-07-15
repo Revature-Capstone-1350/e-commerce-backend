@@ -48,7 +48,4 @@ public class Order {
     public enum Status {
         INPROGRESS, COMPLETED, PAYMENTDECLINED
     }
-
-//        @OneToMany(mappedBy = "creator")
-//        private List<Deck> createdDecks;
 }

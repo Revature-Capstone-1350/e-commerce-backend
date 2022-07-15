@@ -13,9 +13,9 @@ public class ProductInfo {
     private String category;
     private String name;
     private String description;
-    private Integer vendor_id;
     private double price;
-    private String image_url;
+    private String image_url_s;
+    private String image_url_m;
     //private int number_of_ratings;
 
     public ProductInfo(Product product) {
@@ -23,9 +23,9 @@ public class ProductInfo {
         this.category = product.getCategory().toString();
         this.name = product.getName();
         this.description = product.getDescription();
-        this.vendor_id = product.getVendor_id();
         this.price = product.getPrice();
-        this.image_url = product.getImage_url();
+        this.image_url_s = product.getImage_url_s();
+        this.image_url_m = product.getImage_url_m();
         //this.number_of_ratings = product.getRatings().size();
     }
 }

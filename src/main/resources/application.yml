@@ -5,12 +5,12 @@ server:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=soulnotes
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=photo
     username: postgres
     password: revature
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL10Dialect
-    show-sql: false
+    show-sql: true
     hibernate:
       ddl-auto: create-drop
 management:
