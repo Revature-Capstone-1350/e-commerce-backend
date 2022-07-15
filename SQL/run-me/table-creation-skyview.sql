@@ -2,17 +2,17 @@ CREATE SCHEMA skyview AUTHORIZATION postgres;
 
 set search_path to skyview;
 
-CREATE TABLE user_role (
+CREATE TABLE IF NOT EXISTS user_role (
 	role_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
 	name VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE order_status (
+CREATE TABLE IF NOT EXISTS order_status (
 	order_status_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
 	name VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE address (
+CREATE TABLE IF NOT EXISTS address (
 	address_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
 	street VARCHAR NOT NULL,
 	street2 VARCHAR,
@@ -21,12 +21,12 @@ CREATE TABLE address (
 	postal_code VARCHAR(10) NOT NULL
 );
 
-CREATE TABLE category (
+CREATE TABLE IF NOT EXISTS category (
 	category_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
 	name VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE "user" (
+CREATE TABLE IF NOT EXISTS "user" (
 	user_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
 	first_name VARCHAR(50) NOT NULL,
 	last_name VARCHAR(50),
@@ -39,7 +39,7 @@ CREATE TABLE "user" (
 			REFERENCES user_role(role_id)
 );
 
-CREATE TABLE product (
+CREATE TABLE IF NOT EXISTS product (
 	product_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
 	name VARCHAR(50) NOT NULL,
 	description VARCHAR,
@@ -52,7 +52,7 @@ CREATE TABLE product (
 			REFERENCES category(category_id)
 );
 
-CREATE TABLE product_review (
+CREATE TABLE IF NOT EXISTS product_review (
 	product_review_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
 	rating INT NOT NULL,
 	description VARCHAR,
@@ -67,7 +67,7 @@ CREATE TABLE product_review (
 			REFERENCES product(product_id)
 );
 
-CREATE TABLE "order" (
+CREATE TABLE IF NOT EXISTS "order" (
 	order_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
 	user_id INT,
 	address_id INT NOT NULL,
@@ -84,7 +84,7 @@ CREATE TABLE "order" (
 			REFERENCES order_status(order_status_id)
 );
 
-CREATE TABLE order_item (
+CREATE TABLE IF NOT EXISTS order_item (
 	order_id INT NOT NULL,
 	product_id INT NOT NULL,
 	
