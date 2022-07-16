@@ -265,7 +265,7 @@ public class MockDataInserter implements CommandLineRunner {
 
         // TODO : other tables; test table relationships
         // Add Product Reviews
-        reviewRepo.save(new ProductReview(3, "It's an OK picture",users.get(1),products.get(1)));
+//        reviewRepo.save(new ProductReview(3, "It's an OK picture",users.get(1),products.get(1)));
 
         // Add Addresses
         addressRepo.save(new Address("1 A St",null,"TX","San Antonio","99999"));
@@ -277,7 +277,7 @@ public class MockDataInserter implements CommandLineRunner {
         for (int i=0; i<10; i++) {
             cart.add(prodRepo.getById(i));
         }
-        orderRepo.save(new Order(users.get(1),addresses.get(1),statuses.get(1),cart));
+//        orderRepo.save(new Order(users.get(1),addresses.get(1),statuses.get(1),cart));
 
 
     }

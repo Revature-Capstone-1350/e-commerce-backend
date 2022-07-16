@@ -31,7 +31,7 @@ public class Address {
     @Column(length = 10, name = "postal_code")
     private String postalCode;
 
-    @OneToMany(mappedBy = "addressId")
+    @OneToMany(mappedBy = "address")
     private List<Order> orderList;
 
     // constructors

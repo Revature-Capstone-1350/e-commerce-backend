@@ -34,7 +34,7 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private UserRole role;
 
-    @OneToMany(mappedBy = "userId")
+    @OneToMany(mappedBy = "user")
     private List<Order> userOrders;
 
     @OneToMany(mappedBy = "productReviewId")
