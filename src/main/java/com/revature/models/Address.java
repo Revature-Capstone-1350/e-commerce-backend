@@ -32,8 +32,8 @@ public class Address {
     @Column(length = 10, name = "postal_code")
     private String postalCode;
 
-//    @OneToMany(mappedBy = "address")
-//    private List<Order> orderList;
+    @OneToMany(mappedBy = "address")
+    private List<Order> orderList;
 
     // constructors
     public Address() { super(); } // required no-args constructor

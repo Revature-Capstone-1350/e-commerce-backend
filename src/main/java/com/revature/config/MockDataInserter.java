@@ -91,7 +91,7 @@ public class MockDataInserter implements CommandLineRunner {
             String firstName = name[0];
             String lastName = name[1];
             String email = data.getEmails()[i];
-            String password = authService.generatePassword("generic-password"+i);
+            String password = authService.generatePassword("genericPassword"+i);
             userRepo.save(new User(firstName, lastName, email, password, roles.get(1), null, null));
         }
         List<User> users = userRepo.findAll();
