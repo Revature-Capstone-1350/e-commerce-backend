@@ -17,7 +17,7 @@ public class AuthResponse {
 
     public AuthResponse(User user) {
         this.email = user.getEmail();
-        this.firstName = user.getFirst_name();
-        this.lastName = user.getLast_name();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
     }
 }

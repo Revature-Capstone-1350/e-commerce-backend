@@ -11,11 +11,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id", updatable = false, nullable = false)
-    private Integer product_id;
-
-    @Enumerated(EnumType.STRING)
-    @Column(length=25, name="category")
-    private Category category;
+    private Integer productId;
 
     @Column(nullable = false)
     private String name;
@@ -26,17 +22,21 @@ public class Product {
     @Column(nullable = false)
     private double price;
 
-    @Column
+    @Column(nullable = false)
     private String image_url_s;
 
-    @Column
+    @Column(nullable = false)
     private String image_url_m;
 
-    @Column
+    @Column // might get all large images later, but nullable for now
     private String image_url_l;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
     @OneToMany(mappedBy = "rating_id")
-    private List<Rating> ratings;
+    private List<ProductReview> productReviews;
 
     public Product() { super(); }
 
@@ -59,7 +59,7 @@ public class Product {
         this.image_url_m = image_url_m;
     }
 
-    public Integer getProduct_id() { return product_id; }
+    public Integer getProductId() { return productId; }
     public Category getCategory() { return category; }
     public String getName() { return name; }
     public String getDescription() { return description; }
@@ -67,12 +67,12 @@ public class Product {
     public String getImage_url_s() { return image_url_s; }
     public String getImage_url_m() { return image_url_m; }
     public String getImage_url_l() { return image_url_l; }
-    public List<Rating> getRatings() {
-        if (ratings == null) return new ArrayList<>();
-        return ratings;
+    public List<ProductReview> getRatings() {
+        if (productReviews == null) return new ArrayList<>();
+        return productReviews;
     }
 
-    public void setProduct_id(Integer product_id) { this.product_id = product_id; }
+    public void setProductId(Integer productId) { this.productId = productId; }
     public void setCategory(Category category) { this.category = category; }
     public void setName(String name) { this.name = name; }
     public void setDescription(String description) { this.description = description; }
@@ -80,9 +80,6 @@ public class Product {
     public void setImage_url_s(String image_url_s) { this.image_url_s = image_url_s; }
     public void setImage_url_m(String image_url_m) { this.image_url_m = image_url_m; }
     public void setImage_url_l(String image_url_l) { this.image_url_l = image_url_l; }
-    public void setRatings(List<Rating> ratings) { this.ratings = ratings; }
+    public void setRatings(List<ProductReview> productReviews) { this.productReviews = productReviews; }
 
-    public enum Category {
-        DAY, NIGHT, DAWN, DUSK, SPACE, CLOUD, MOON, SUN
-    }
 }
