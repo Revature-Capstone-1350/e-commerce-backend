@@ -3,7 +3,7 @@ package com.revature.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "product_reviews")
+@Table(name = "`product_review`")
 public class ProductReview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

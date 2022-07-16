@@ -1,6 +1,7 @@
 package com.revature.advice;
 
 import com.revature.exceptions.AuthenticationException;
+import com.revature.exceptions.NotImplementedException;
 import com.revature.exceptions.NotLoggedInException;
 import com.revature.exceptions.TokenParseException;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,12 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestControllerAdvice
 public class RestExceptionHandler {
+
+    @ExceptionHandler(NotImplementedException.class)
+    public ResponseEntity<Object> handleNotImplementedException(NotImplementedException e) {
+        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(e.getMessage());
+    }
+
 
     @ExceptionHandler(NotLoggedInException.class)
     public ResponseEntity<Object> handleNotLoggedInException(NotLoggedInException e) {

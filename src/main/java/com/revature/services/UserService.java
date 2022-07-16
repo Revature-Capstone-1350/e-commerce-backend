@@ -24,6 +24,6 @@ public class UserService {
     }
 
     public Optional<User> findByIdAndEmailIgnoreCase(int id, String email) {
-        return userRepository.findByIdAndEmailIgnoreCase(email,id);
+        return userRepository.findByUserIdAndEmailIgnoreCase(id, email);
     }
 }

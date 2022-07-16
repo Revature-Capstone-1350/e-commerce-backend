@@ -3,7 +3,7 @@ package com.revature.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "user_roles")
+@Table(name = "`user_role`")
 public class UserRole {
 
     @Id

@@ -6,13 +6,13 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "users")
+@Table(name = "`user`")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", updatable = false, nullable = false)
-    private Integer user_id;
+    private Integer userId;
 
     @Column(length=50, name="first_name", nullable = false)
     private String firstName;
@@ -50,7 +50,7 @@ public class User {
     }
 
     // getters
-    public Integer getUser_id() { return user_id; }
+    public Integer getUserId() { return userId; }
     public UserRole getRole() { return role; }
     public String getFirstName() { return firstName; }
     public String getLastName() { return lastName; }
@@ -78,7 +78,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "user_id=" + user_id +
+                "user_id=" + userId +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +

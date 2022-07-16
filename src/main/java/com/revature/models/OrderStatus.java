@@ -3,7 +3,7 @@ package com.revature.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "order_statuses")
+@Table(name = "`order_status`")
 public class OrderStatus {
 
     @Id

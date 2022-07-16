@@ -13,7 +13,7 @@ public class Principal {
     private String authUsername;
 
     public Principal(User user) {
-        this.authUserId = user.getUser_id();
+        this.authUserId = user.getUserId();
         this.authUserEmail = user.getEmail();
     }
 

@@ -3,6 +3,7 @@ package com.revature.controllers;
 import com.revature.annotations.AdminOnly;
 import com.revature.annotations.Authorized;
 import com.revature.dtos.ProductInfo;
+import com.revature.exceptions.NotImplementedException;
 import com.revature.services.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,27 +26,29 @@ public class ProductController implements com.revature.interfaces.ProductControl
 //    @Authorized
     @GetMapping
     public ResponseEntity<List<ProductInfo>> getInventory() {
-        return null;
+        throw new NotImplementedException();
 //        return ResponseEntity.ok(productService.findAll());
     }
 
 //    @Authorized
     @GetMapping("/{id}")
     public ResponseEntity<ProductInfo> getProductById(@PathVariable("id") int id) {
-        return null;
+        throw new NotImplementedException();
 //        return ResponseEntity.ok(optional.get());
     }
 
     @AdminOnly
     @PutMapping
     public void upsert(@RequestBody ProductInfo product) {
+        throw new NotImplementedException();
 //        return ResponseEntity.ok(productService.save(product));
     }
 
     @AdminOnly
     @PatchMapping
     public ResponseEntity<List<ProductInfo>> purchase(@RequestBody List<ProductInfo> metadata) {
-//    	List<Product> productList = new ArrayList<Product>();
+        throw new NotImplementedException();
+        //    	List<Product> productList = new ArrayList<Product>();
 //
 //    	for (int i = 0; i < metadata.size(); i++) {
 //    		Optional<Product> optional = productService.findById(metadata.get(i).getProduct_id());
@@ -67,12 +70,12 @@ public class ProductController implements com.revature.interfaces.ProductControl
 //        productService.saveAll(productList, metadata);
 //
 //        return ResponseEntity.ok(productList);
-        return null;
     }
 
     @AdminOnly
     @DeleteMapping("/{id}")
     public ResponseEntity<ProductInfo> deleteProduct(@PathVariable("id") int id) {
+        throw new NotImplementedException();
 //        Optional<Product> optional = productService.findById(id);
 //
 //        if(!optional.isPresent()) {
@@ -81,6 +84,5 @@ public class ProductController implements com.revature.interfaces.ProductControl
 //        productService.delete(id);
 //
 //        return ResponseEntity.ok(optional.get());
-        return null;
     }
 }
