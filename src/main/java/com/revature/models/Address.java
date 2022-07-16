@@ -37,6 +37,14 @@ public class Address {
     // constructors
     public Address() { super(); } // required no-args constructor
 
+    public Address(String street, String street2, String state, String city, String postalCode) {
+        this.street = street;
+        this.street2 = street2;
+        this.state = state;
+        this.city = city;
+        this.postalCode = postalCode;
+    }
+
     // getters
     public Integer getAddressId() { return addressId; }
     public String getStreet() { return street; }

@@ -23,37 +23,36 @@ public class ProductReview {
 
     @ManyToOne // one user, many ratings; each rating has one associated user
     @JoinColumn(name = "user_id", nullable = false)
-    private User userId;
+    private User user;
 
     @ManyToOne // one user, many ratings; each rating has one associated user
     @JoinColumn(name = "product_id", nullable = false)
-    private Product productId;
+    private Product product;
 
     // constructors
     public ProductReview() { super(); } // required no-args constructor
 
-    public ProductReview(Integer productReviewId, Integer rating, String description, User userId, Product productId) {
+    public ProductReview(Integer rating, String description, User user, Product product) {
         this();
-        this.productReviewId = productReviewId;
         this.rating = rating;
         this.description = description;
-        this.userId = userId;
-        this.productId = productId;
+        this.user = user;
+        this.product = product;
     }
 
     // getters
     public Integer getProductReviewId() { return productReviewId; }
     public Integer getRating() { return rating; }
     public String getDescription() { return description; }
-    public User getUserId() { return userId; }
-    public Product getProductId() { return productId; }
+    public User getUser() { return user; }
+    public Product getProduct() { return product; }
 
     // setters
 //    public void setProductReviewId(Integer productReviewId) { this.productReviewId = productReviewId; }
     public void setRating(Integer rating) { this.rating = rating; }
     public void setDescription(String description) { this.description = description; }
-    public void setUserId(User userId) { this.userId = userId; }
-    public void setProductId(Product productId) { this.productId = productId; }
+    public void setUser(User user) { this.user = user; }
+    public void setProduct(Product product) { this.product = product; }
 
     @Override
     public String toString() {
@@ -61,8 +60,8 @@ public class ProductReview {
                 "productReviewId=" + productReviewId +
                 ", rating=" + rating +
                 ", description='" + description + '\'' +
-                ", userId=" + userId +
-                ", productId=" + productId +
+                ", userId=" + user +
+                ", productId=" + product +
                 '}';
     }
 }

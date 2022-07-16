@@ -18,11 +18,11 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User userId;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "address_id", nullable = false)
-    private Address addressId;
+    private Address address;
 
     @ManyToOne
     @JoinColumn(name = "order_status_id", nullable = false)
@@ -39,26 +39,33 @@ public class Order {
     // constructors
     public Order() { super(); } // required no-args constructor
 
+    public Order(User user, Address address, OrderStatus status, List<Product> items) {
+        this.user = user;
+        this.address = address;
+        this.status = status;
+        this.items = items;
+    }
+
     // getters
     public Integer getOrderId() { return orderId; }
     public OrderStatus getStatus() { return status; }
-    public User getUserId() { return userId; }
-    public Address getAddressId() { return addressId; }
+    public User getUser() { return user; }
+    public Address getAddress() { return address; }
     public List<Product> getItems() { return items; }
 
     // setters
 //    public void setOrderId(Integer orderId) { this.orderId = orderId; }
     public void setStatus(OrderStatus status) { this.status = status; }
-    public void setUserId(User userId) { this.userId = userId; }
-    public void setAddressId(Address addressId) { this.addressId = addressId; }
+    public void setUser(User user) { this.user = user; }
+    public void setAddress(Address address) { this.address = address; }
     public void setItems(List<Product> items) { this.items = items; }
 
     @Override
     public String toString() {
         return "Order{" +
                 "orderId=" + orderId +
-                ", userId=" + userId +
-                ", addressId=" + addressId +
+                ", userId=" + user +
+                ", addressId=" + address +
                 ", status=" + status +
                 ", items.size()=" + items.size() +
                 '}';

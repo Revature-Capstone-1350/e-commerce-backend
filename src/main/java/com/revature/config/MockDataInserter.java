@@ -10,6 +10,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -83,11 +84,8 @@ public class MockDataInserter implements CommandLineRunner {
 //        System.out.println("Length of pass: " + userTest.getPassword().length());
         userRepo.save(userAdmin);
         userRepo.save(userTest);
+        List<User> users = userRepo.findAll();
 
-        // TODO : other tables; test table relationships
-
-
-        ;
         String base_url = "https://raw.githubusercontent.com/jsparks9/pics/main/images-by-category/";
         prodRepo.save(new Product(cats.get(0),"cloud picture","cloud picture",2.95,base_url+"cloud/small/1.jpg",base_url+"cloud/medium/1.jpg"));
         prodRepo.save(new Product(cats.get(0),"cloud picture","cloud picture",1.45,base_url+"cloud/small/10.jpg",base_url+"cloud/medium/10.jpg"));
@@ -256,12 +254,30 @@ public class MockDataInserter implements CommandLineRunner {
         prodRepo.save(new Product(cats.get(7),"sun picture","sun picture",0.45,base_url+"sun/small/8.jpg",base_url+"sun/medium/8.jpg"));
         prodRepo.save(new Product(cats.get(7),"sun picture","sun picture",0.95,base_url+"sun/small/9.jpg",base_url+"sun/medium/9.jpg"));
 
+        List<Product> products = prodRepo.findAll();
         System.out.println("Printing Products");
         stars();
         System.out.println(mapper.writeValueAsString(prodRepo.findAll().stream().map(ProductInfo::new).collect(Collectors.toList())));
         System.out.println(mapper.writeValueAsString(prodRepo.findAll()));
 
         stars();
+
+
+        // TODO : other tables; test table relationships
+        // Add Product Reviews
+        reviewRepo.save(new ProductReview(3, "It's an OK picture",users.get(1),products.get(1)));
+
+        // Add Addresses
+        addressRepo.save(new Address("1 A St",null,"TX","San Antonio","99999"));
+        addressRepo.save(new Address("1 B St",null,"CA","Los Angeles","11111"));
+        List<Address> addresses = addressRepo.findAll();
+
+        // Add Orders
+        List<Product> cart = new ArrayList<>();
+        for (int i=0; i<10; i++) {
+            cart.add(prodRepo.getById(i));
+        }
+        orderRepo.save(new Order(users.get(1),addresses.get(1),statuses.get(1),cart));
 
 
     }
