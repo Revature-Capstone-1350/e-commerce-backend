@@ -3,35 +3,39 @@ package com.revature.models;
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
-@Table(name = "`address`")
+@Entity // necessary annotation to mark this class as an entity bean
+@Table(name = "`address`") // specifies database table name
 public class Address {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "address_id", updatable = false, nullable = false)
+    @Id // Identifies this column as a primary key
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-incrementing
+    @Column(name = "address_id", // defines column name in the database
+            insertable = false,  // this column is not included in generated INSERT statements
+            updatable = false,   // this column is not included in generated UPDATE statements
+            nullable = false
+            )
     private Integer addressId;
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String street;
 
     @Column
     private String street2;
 
-    @Column(length=2, nullable=false)
+    @Column(length = 2, nullable = false)
     private String state;
 
-    @Column(length=50)
+    @Column(length = 50)
     private String city;
 
-    @Column(length=10, name="postal_code")
+    @Column(length = 10, name = "postal_code")
     private String postalCode;
 
     @OneToMany(mappedBy = "addressId")
     private List<Order> orderList;
 
     // constructors
-    public Address() { super(); }
+    public Address() { super(); } // required no-args constructor
 
     // getters
     public Integer getAddressId() { return addressId; }

@@ -2,20 +2,24 @@ package com.revature.models;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "`order_status`")
+@Entity // necessary annotation to mark this class as an entity bean
+@Table(name = "`order_status`") // specifies database table name
 public class OrderStatus {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_status_id", updatable = false, nullable = false)
+    @Id // Identifies this column as a primary key
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-incrementing
+    @Column(name = "order_status_id", // defines column name in the database
+            insertable = false, // this column is not included in generated INSERT statements
+            updatable = false,  // this column is not included in generated UPDATE statements
+            nullable = false
+            )
     private Integer orderStatusId;
 
-    @Column(length=50)
+    @Column(length = 50)
     private String name;
 
     // constructors
-    public OrderStatus() { super(); }
+    public OrderStatus() { super(); } // required no-args constructor
 
     public OrderStatus(Integer orderStatusId, String name) {
         this.orderStatusId = orderStatusId;

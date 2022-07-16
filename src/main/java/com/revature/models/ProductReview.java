@@ -2,18 +2,23 @@ package com.revature.models;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "`product_review`")
+@Entity // necessary annotation to mark this class as an entity bean
+@Table(name = "`product_review`") // specifies database table name
 public class ProductReview {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_review_id", updatable = false, nullable = false)
+
+    @Id // Identifies this column as a primary key
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-incrementing
+    @Column(name = "product_review_id", // defines column name in the database
+            insertable = false, // this column is not included in generated INSERT statements
+            updatable = false,  // this column is not included in generated UPDATE statements
+            nullable = false
+            )
     private Integer productReviewId;
 
     @Column(nullable = false)
     private Integer rating;
 
-    @Column(length=500, nullable = false) // TODO : length=500 ?
+    @Column(length = 500, nullable = false) // TODO : length=500 ?
     private String description;
 
     @ManyToOne // one user, many ratings; each rating has one associated user
@@ -25,7 +30,7 @@ public class ProductReview {
     private Product productId;
 
     // constructors
-    public ProductReview() { super(); }
+    public ProductReview() { super(); } // required no-args constructor
 
     public ProductReview(Integer productReviewId, Integer rating, String description, User userId, Product productId) {
         this();

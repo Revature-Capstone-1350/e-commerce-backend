@@ -4,13 +4,17 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "`product`")
+@Entity // necessary annotation to mark this class as an entity bean
+@Table(name = "`product`") // specifies database table name
 public class Product {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id", updatable = false, nullable = false)
+    @Id // Identifies this column as a primary key
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-incrementing
+    @Column(name = "product_id", // defines column name in the database
+            insertable = false, // this column is not included in generated INSERT statements
+            updatable = false,  // this column is not included in generated UPDATE statements
+            nullable = false
+            )
     private Integer productId;
 
     @Column(nullable = false)
@@ -39,7 +43,7 @@ public class Product {
     private List<ProductReview> productReviews;
 
     // constructors
-    public Product() { super(); }
+    public Product() { super(); } // required no-args constructor
 
     public Product(Category category, String name, String description, double price, String image_url_s, String image_url_m) {
         this();

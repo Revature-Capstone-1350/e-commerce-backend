@@ -3,13 +3,17 @@ package com.revature.models;
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
-@Table(name = "`order`")
+@Entity // necessary annotation to mark this class as an entity bean
+@Table(name = "`order`") // specifies database table name
 public class Order {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_id", updatable = false, nullable = false)
+    @Id // Identifies this column as a primary key
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-incrementing
+    @Column(name = "order_id",  // defines column name in the database
+            insertable = false, // this column is not included in generated INSERT statements
+            updatable = false,  // this column is not included in generated UPDATE statements
+            nullable = false
+            )
     private Integer orderId;
 
     @ManyToOne
@@ -21,19 +25,19 @@ public class Order {
     private Address addressId;
 
     @ManyToOne
-    @JoinColumn(name="order_status_id", nullable = false)
+    @JoinColumn(name = "order_status_id", nullable = false)
     private OrderStatus status;
 
     @ManyToMany
     @JoinTable(
-            name="order_item",
-            joinColumns = @JoinColumn(name="order_id"),
-            inverseJoinColumns = @JoinColumn(name="product_id")
+            name="`order_item`",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
     )
     private List<Product> items;
 
     // constructors
-    public Order() { super(); }
+    public Order() { super(); } // required no-args constructor
 
     // getters
     public Integer getOrderId() { return orderId; }

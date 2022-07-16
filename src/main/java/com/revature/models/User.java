@@ -5,25 +5,29 @@ import com.revature.dtos.RegisterRequest;
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
-@Table(name = "`user`")
+@Entity // necessary annotation to mark this class as an entity bean
+@Table(name = "`user`") // specifies database table name
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id", updatable = false, nullable = false)
+    @Id // Identifies this column as a primary key
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-incrementing
+    @Column(name = "user_id", // defines column name in the database
+            insertable = false, // this column is not included in generated INSERT statements
+            updatable = false,  // this column is not included in generated UPDATE statements
+            nullable = false
+            )
     private Integer userId;
 
-    @Column(length=50, name="first_name", nullable = false)
+    @Column(length = 50, name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(length=50, name="last_name")
+    @Column(length = 50, name = "last_name")
     private String lastName;
 
-    @Column(length=255, nullable = false)
+    @Column(nullable = false)
     private String email;
 
-    @Column(length=64, nullable = false) // TODO : Length
+    @Column(length = 64, nullable = false) // TODO : Length
     private String password;
 
     @ManyToOne // one role, many users; each user has 1 role
@@ -39,7 +43,7 @@ public class User {
     // constructors
     public User() {
         super();
-    }
+    } // required no-args constructor
 
     public User(RegisterRequest regReq) {
         this();
