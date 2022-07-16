@@ -22,6 +22,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "address_id", nullable = false)
+//    @Embedded
     private Address address;
 
     @ManyToOne

@@ -26,13 +26,13 @@ public class Product {
     @Column(nullable = false)
     private double price;
 
-    @Column(nullable = false)
+    @Column(name = "image_url_s", nullable = false)
     private String imageUrlS;
 
-    @Column(nullable = false)
+    @Column(name = "image_url_m", nullable = false)
     private String imageUrlM;
 
-    @Column // might get all large images later, but nullable for now
+    @Column(name = "image_url_l") // might get all large images later, but nullable for now
     private String imageUrlL;
 
     @ManyToOne
