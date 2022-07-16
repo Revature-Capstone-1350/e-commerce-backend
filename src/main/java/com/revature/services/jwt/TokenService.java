@@ -49,7 +49,7 @@ public class TokenService {
                                 .parseClaimsJws(token)
                                 .getBody();
 
-            return new Principal(Integer.parseInt(claims.get("id", String.class)) , claims.get("role", String.class));
+            return new Principal(Integer.parseInt(claims.get("id", String.class)) , claims.get("email", String.class));
         } catch (ExpiredJwtException e) {
             throw new TokenParseException("The provided token is expired", e);
         } catch (Exception e) {

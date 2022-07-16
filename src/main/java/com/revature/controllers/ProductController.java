@@ -1,8 +1,8 @@
 package com.revature.controllers;
 
+import com.revature.annotations.AdminOnly;
 import com.revature.annotations.Authorized;
 import com.revature.dtos.ProductInfo;
-import com.revature.models.Product;
 import com.revature.services.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +14,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/product")
 //@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000"}, allowCredentials = "true")
-public class ProductController {
+public class ProductController implements com.revature.interfaces.ProductController {
 
     private final ProductService productService;
 
@@ -22,66 +22,65 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @Authorized
+//    @Authorized
     @GetMapping
-    public ResponseEntity<List<Product>> getInventory() {
-        return ResponseEntity.ok(productService.findAll());
+    public ResponseEntity<List<ProductInfo>> getInventory() {
+        return null;
+//        return ResponseEntity.ok(productService.findAll());
     }
 
-    @Authorized
+//    @Authorized
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable("id") int id) {
-        Optional<Product> optional = productService.findById(id);
-
-        if(!optional.isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(optional.get());
+    public ResponseEntity<ProductInfo> getProductById(@PathVariable("id") int id) {
+        return null;
+//        return ResponseEntity.ok(optional.get());
     }
 
-    @Authorized
+    @AdminOnly
     @PutMapping
-    public ResponseEntity<Product> upsert(@RequestBody Product product) {
-        return ResponseEntity.ok(productService.save(product));
+    public void upsert(@RequestBody ProductInfo product) {
+//        return ResponseEntity.ok(productService.save(product));
     }
 
-    @Authorized
+    @AdminOnly
     @PatchMapping
-    public ResponseEntity<List<Product>> purchase(@RequestBody List<ProductInfo> metadata) { 	
-    	List<Product> productList = new ArrayList<Product>();
-    	
-    	for (int i = 0; i < metadata.size(); i++) {
-    		Optional<Product> optional = productService.findById(metadata.get(i).getProduct_id());
-
-    		if(!optional.isPresent()) {
-    			return ResponseEntity.notFound().build();
-    		}
-
-    		Product product = optional.get();
-
-//    		if(product.getQuantity() - metadata.get(i).getQuantity() < 0) {
-//    			return ResponseEntity.badRequest().build();
+    public ResponseEntity<List<ProductInfo>> purchase(@RequestBody List<ProductInfo> metadata) {
+//    	List<Product> productList = new ArrayList<Product>();
+//
+//    	for (int i = 0; i < metadata.size(); i++) {
+//    		Optional<Product> optional = productService.findById(metadata.get(i).getProduct_id());
+//
+//    		if(!optional.isPresent()) {
+//    			return ResponseEntity.notFound().build();
 //    		}
-    		
-//    		product.setQuantity(product.getQuantity() - metadata.get(i).getQuantity());
-    		productList.add(product);
-    	}
-        
-        productService.saveAll(productList, metadata);
-
-        return ResponseEntity.ok(productList);
+//
+//    		Product product = optional.get();
+//
+////    		if(product.getQuantity() - metadata.get(i).getQuantity() < 0) {
+////    			return ResponseEntity.badRequest().build();
+////    		}
+//
+////    		product.setQuantity(product.getQuantity() - metadata.get(i).getQuantity());
+//    		productList.add(product);
+//    	}
+//
+//        productService.saveAll(productList, metadata);
+//
+//        return ResponseEntity.ok(productList);
+        return null;
     }
 
-    @Authorized
+    @AdminOnly
     @DeleteMapping("/{id}")
-    public ResponseEntity<Product> deleteProduct(@PathVariable("id") int id) {
-        Optional<Product> optional = productService.findById(id);
-
-        if(!optional.isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-        productService.delete(id);
-
-        return ResponseEntity.ok(optional.get());
+    public ResponseEntity<ProductInfo> deleteProduct(@PathVariable("id") int id) {
+//        Optional<Product> optional = productService.findById(id);
+//
+//        if(!optional.isPresent()) {
+//            return ResponseEntity.notFound().build();
+//        }
+//        productService.delete(id);
+//
+//        return ResponseEntity.ok(optional.get());
+        return null;
     }
 }

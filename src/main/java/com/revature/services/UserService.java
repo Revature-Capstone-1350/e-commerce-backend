@@ -22,4 +22,8 @@ public class UserService {
     public User save(User user) {
         return userRepository.save(user);
     }
+
+    public Optional<User> findByIdAndEmailIgnoreCase(int id, String email) {
+        return userRepository.findByIdAndEmailIgnoreCase(email,id);
+    }
 }

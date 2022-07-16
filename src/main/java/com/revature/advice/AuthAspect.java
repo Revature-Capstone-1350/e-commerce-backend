@@ -1,5 +1,6 @@
 package com.revature.advice;
 
+import com.revature.annotations.AdminOnly;
 import com.revature.annotations.Authorized;
 import com.revature.services.AuthService;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -47,6 +48,12 @@ public class AuthAspect {
     @Around("@annotation(authorized)")
     public Object authenticate(ProceedingJoinPoint pjp, Authorized authorized) throws Throwable {
         authService.verifyToken(req.getHeader("Authorization"));
+        return pjp.proceed(pjp.getArgs()); // Call the originally intended method
+    }
+
+    @Around("@annotation(adminOnly)")
+    public Object authenticate(ProceedingJoinPoint pjp, AdminOnly adminOnly) throws Throwable {
+        authService.adminCheck(req.getHeader("Authorization"));
         return pjp.proceed(pjp.getArgs()); // Call the originally intended method
     }
 }

@@ -56,6 +56,17 @@ public class AuthService {
         service.extractTokenDetails(token);
     }
 
+    public void adminCheck(String token) {
+        Principal prin = service.extractTokenDetails(token);
+        User user = userService.findByIdAndEmailIgnoreCase(prin.getAuthUserId(), prin.getAuthUserEmail())
+                .orElseThrow(RuntimeException::new); // TODO : 400 : user data in token not in DB
+        if (!user.getRole().toString().equalsIgnoreCase("admin")) {
+            // TODO : 403 error; must be admin
+            throw new RuntimeException();
+        }
+        // no errors thrown, execution of program can continue
+    }
+
     public String generatePassword(String password) {
         SecretKeyFactory factory;
 
