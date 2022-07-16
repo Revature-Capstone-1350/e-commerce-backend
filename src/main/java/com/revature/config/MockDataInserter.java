@@ -1,7 +1,6 @@
 package com.revature.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.dtos.ProductInfo;
 import com.revature.models.*;
 import com.revature.repositories.*;
 import com.revature.services.AuthService;
@@ -11,9 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Component
@@ -87,6 +84,8 @@ public class MockDataInserter implements CommandLineRunner {
 //        System.out.println("Length of pass: " + userTest.getPassword().length());
         userRepo.save(userAdmin);
         userRepo.save(userTest);
+
+        // Generate users
         for (int i=0; i< data.getNames().length; i++) {
             String[] name = data.getNames()[i].split(" ");
             String firstName = name[0];
@@ -96,8 +95,9 @@ public class MockDataInserter implements CommandLineRunner {
             userRepo.save(new User(firstName, lastName, email, password, roles.get(1), null, null));
         }
         List<User> users = userRepo.findAll();
-        System.out.println("There are "+users.size()+" users");
+//        System.out.println("There are "+users.size()+" users");
 
+        // Add products
         String base_url = "https://raw.githubusercontent.com/jsparks9/pics/main/images-by-category/";
         prodRepo.save(new Product(cats.get(0),"cloud picture","cloud picture",2.95,base_url+"cloud/small/1.jpg",base_url+"cloud/medium/1.jpg"));
         prodRepo.save(new Product(cats.get(0),"cloud picture","cloud picture",1.45,base_url+"cloud/small/10.jpg",base_url+"cloud/medium/10.jpg"));
@@ -267,19 +267,8 @@ public class MockDataInserter implements CommandLineRunner {
         prodRepo.save(new Product(cats.get(7),"sun picture","sun picture",0.95,base_url+"sun/small/9.jpg",base_url+"sun/medium/9.jpg"));
 
         List<Product> products = prodRepo.findAll();
-        System.out.println("Printing Products");
-        stars();
-        System.out.println(mapper.writeValueAsString(prodRepo.findAll().stream().map(ProductInfo::new).collect(Collectors.toList())));
-        System.out.println(mapper.writeValueAsString(prodRepo.findAll()));
 
-        stars();
-
-
-        // TODO : other tables; test table relationships
-        // Add Product Reviews
-        // for each product, generate 2-10 reviews
-
-
+        // Generate reviews
         for (Product product: products) {
             int reviewsToGenerate = ThreadLocalRandom.current().nextInt(2, 10+1);
             int catId = -1;
@@ -294,13 +283,8 @@ public class MockDataInserter implements CommandLineRunner {
                 String desc = data.getReviews()[catId][ThreadLocalRandom.current().nextInt(0, maxLen)];
                 int userId = ThreadLocalRandom.current().nextInt(0, userRepo.findAll().size());
                 reviewRepo.save(new ProductReview(rating,desc, users.get(userId),product));
-
-
             }
         }
-
-
-        reviewRepo.save(new ProductReview(3, "It's an OK picture",users.get(1),products.get(1)));
 
         // Add Addresses
         addressRepo.save(new Address("4 Chamois Court","","Pooler","GA","31322"));
@@ -505,7 +489,7 @@ public class MockDataInserter implements CommandLineRunner {
         addressRepo.save(new Address("301 Willow Way","","Lynn Haven","FL","32444"));
         List<Address> addresses = addressRepo.findAll();
 
-        // Add Orders
+        // Generate Orders
         for (int i=0; i<50; i++) {
             int userId = ThreadLocalRandom.current().nextInt(0, users.size());
             User user = users.get(userId);
@@ -514,13 +498,13 @@ public class MockDataInserter implements CommandLineRunner {
             OrderStatus status;
             switch(ThreadLocalRandom.current().nextInt(0, 6)) {
                 case 1:
-                    status = statusRepo.getById(2);
+                    status = statuses.get(2);
                     break;
                 case 2:
-                    status = statusRepo.getById(3);
+                    status = statuses.get(3);
                     break;
                 default:
-                    status = statusRepo.getById(1);
+                    status = statuses.get(1);
             }
             int amountOfItems = ThreadLocalRandom.current().nextInt(1, 15+1);
             List<Product> cart = new ArrayList<>();
@@ -532,19 +516,14 @@ public class MockDataInserter implements CommandLineRunner {
                     cart.add(products.get(prodId));
                 }
             }
-
             orderRepo.save(new Order(user,address,status,cart));
         }
-        //        this.user = user;
-        //        this.address = address;
-        //        this.status = status;
-        //        this.items = items;
-
-
-
     }
 
     private static void stars() {
-        System.out.println("*****************************************************************************************");
+        for (int i=0; i<10; i++) {
+            System.out.print("**********");
+        }
+        System.out.println();
     }
 }
