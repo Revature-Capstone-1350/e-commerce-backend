@@ -14,18 +14,18 @@ public class ProductInfo {
     private String name;
     private String description;
     private double price;
-    private String image_url_s;
-    private String image_url_m;
+    private String imageUrlS;
+    private String imageUrlM;
     //private int number_of_ratings;
 
     public ProductInfo(Product product) {
-        this.product_id = getProduct_id();
+        this.product_id = product.getProductId();
         this.category = product.getCategory().toString();
         this.name = product.getName();
         this.description = product.getDescription();
         this.price = product.getPrice();
-        this.image_url_s = product.getImage_url_s();
-        this.image_url_m = product.getImage_url_m();
+        this.imageUrlS = product.getImageUrlS();
+        this.imageUrlM = product.getImageUrlM();
         //this.number_of_ratings = product.getRatings().size();
     }
 }

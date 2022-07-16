@@ -27,13 +27,13 @@ public class Product {
     private double price;
 
     @Column(nullable = false)
-    private String image_url_s;
+    private String imageUrlS;
 
     @Column(nullable = false)
-    private String image_url_m;
+    private String imageUrlM;
 
     @Column // might get all large images later, but nullable for now
-    private String image_url_l;
+    private String imageUrlL;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
@@ -45,14 +45,14 @@ public class Product {
     // constructors
     public Product() { super(); } // required no-args constructor
 
-    public Product(Category category, String name, String description, double price, String image_url_s, String image_url_m) {
+    public Product(Category category, String name, String description, double price, String imageUrlS, String imageUrlM) {
         this();
         this.category = category;
         this.name = name;
         this.description = description;
         this.price = price;
-        this.image_url_s = image_url_s;
-        this.image_url_m = image_url_m;
+        this.imageUrlS = imageUrlS;
+        this.imageUrlM = imageUrlM;
     }
 
     // getters
@@ -61,9 +61,9 @@ public class Product {
     public String getName() { return name; }
     public String getDescription() { return description; }
     public double getPrice() { return price; }
-    public String getImage_url_s() { return image_url_s; }
-    public String getImage_url_m() { return image_url_m; }
-    public String getImage_url_l() { return image_url_l; }
+    public String getImageUrlS() { return imageUrlS; }
+    public String getImageUrlM() { return imageUrlM; }
+    public String getImageUrlL() { return imageUrlL; }
     public List<ProductReview> getRatings() {
         if (productReviews == null) return new ArrayList<>();
         return productReviews;
@@ -75,9 +75,9 @@ public class Product {
     public void setName(String name) { this.name = name; }
     public void setDescription(String description) { this.description = description; }
     public void setPrice(double price) { this.price = price; }
-    public void setImage_url_s(String image_url_s) { this.image_url_s = image_url_s; }
-    public void setImage_url_m(String image_url_m) { this.image_url_m = image_url_m; }
-    public void setImage_url_l(String image_url_l) { this.image_url_l = image_url_l; }
+    public void setImageUrlS(String imageUrlS) { this.imageUrlS = imageUrlS; }
+    public void setImageUrlM(String imageUrlM) { this.imageUrlM = imageUrlM; }
+    public void setImageUrlL(String imageUrlL) { this.imageUrlL = imageUrlL; }
     public void setRatings(List<ProductReview> productReviews) { this.productReviews = productReviews; }
 
     @Override
@@ -87,9 +87,9 @@ public class Product {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", price=" + price +
-                ", image_url_s='" + image_url_s + '\'' +
-                ", image_url_m='" + image_url_m + '\'' +
-                ", image_url_l='" + image_url_l + '\'' +
+                ", image_url_s='" + imageUrlS + '\'' +
+                ", image_url_m='" + imageUrlM + '\'' +
+                ", image_url_l='" + imageUrlL + '\'' +
                 ", category=" + category +
                 ", productReviews.size()=" + productReviews.size() +
                 '}';
