@@ -18,8 +18,10 @@ import java.util.Optional;
 
 @Service
 public class AuthService {
+
     @Value("${secrets.salt}")
     private String salt;
+
     private final UserService userService;
     private final TokenService service;
 
