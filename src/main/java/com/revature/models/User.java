@@ -30,12 +30,13 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private UserRole role;
 
-    @OneToMany(mappedBy = "user_id")
+    @OneToMany(mappedBy = "userId")
     private List<Order> userOrders;
 
-    @OneToMany(mappedBy = "rating_id")
+    @OneToMany(mappedBy = "productReviewId")
     private List<ProductReview> userProductReviews; // TODO : constructor (?) and getter/setter
 
+    // constructors
     public User() {
         super();
     }
@@ -48,6 +49,7 @@ public class User {
         this.lastName = regReq.getLastName();
     }
 
+    // getters
     public Integer getUser_id() { return user_id; }
     public UserRole getRole() { return role; }
     public String getFirstName() { return firstName; }
@@ -56,7 +58,8 @@ public class User {
     public String getPassword() { return password; }
     public List<Order> getUserOrders() { return userOrders; }
 
-    public void setUser_id(Integer user_id) { this.user_id = user_id; }
+    // setters
+//    public void setUser_id(Integer user_id) { this.user_id = user_id; }
     public void setRole(UserRole role) { this.role = role; }
     public void setFirstName(String firstName) {
         this.firstName = firstName;
@@ -72,5 +75,17 @@ public class User {
     }
     public void setUserOrders(List<Order> userOrders) { this.userOrders = userOrders; }
 
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "user_id=" + user_id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                ", userOrders.size()=" + userOrders.size() +
+                ", userProductReviews.size()=" + userProductReviews.size() +
+                '}';
+    }
 }

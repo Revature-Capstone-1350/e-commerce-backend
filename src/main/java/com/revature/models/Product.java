@@ -35,19 +35,11 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @OneToMany(mappedBy = "rating_id")
+    @OneToMany(mappedBy = "productId")
     private List<ProductReview> productReviews;
 
+    // constructors
     public Product() { super(); }
-
-    public Product(Category category, String name, String description, double price, String image_url) {
-        this();
-        this.category = category;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.image_url_s = image_url;
-    }
 
     public Product(Category category, String name, String description, double price, String image_url_s, String image_url_m) {
         this();
@@ -59,6 +51,7 @@ public class Product {
         this.image_url_m = image_url_m;
     }
 
+    // getters
     public Integer getProductId() { return productId; }
     public Category getCategory() { return category; }
     public String getName() { return name; }
@@ -72,7 +65,8 @@ public class Product {
         return productReviews;
     }
 
-    public void setProductId(Integer productId) { this.productId = productId; }
+    // setters
+//    public void setProductId(Integer productId) { this.productId = productId; }
     public void setCategory(Category category) { this.category = category; }
     public void setName(String name) { this.name = name; }
     public void setDescription(String description) { this.description = description; }
@@ -82,4 +76,18 @@ public class Product {
     public void setImage_url_l(String image_url_l) { this.image_url_l = image_url_l; }
     public void setRatings(List<ProductReview> productReviews) { this.productReviews = productReviews; }
 
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productId=" + productId +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", image_url_s='" + image_url_s + '\'' +
+                ", image_url_m='" + image_url_m + '\'' +
+                ", image_url_l='" + image_url_l + '\'' +
+                ", category=" + category +
+                ", productReviews.size()=" + productReviews.size() +
+                '}';
+    }
 }

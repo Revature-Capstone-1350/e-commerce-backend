@@ -6,18 +6,19 @@ import java.util.List;
 @Entity
 @Table(name = "orders")
 public class Order {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id", updatable = false, nullable = false)
-    private Integer order_id;
+    private Integer orderId;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user_id;
+    private User userId;
 
     @ManyToOne
     @JoinColumn(name = "address_id", nullable = false)
-    private Address address_id;
+    private Address addressId;
 
     @ManyToOne
     @JoinColumn(name="order_status_id", nullable = false)
@@ -31,18 +32,31 @@ public class Order {
     )
     private List<Product> items;
 
+    // constructors
     public Order() { super(); }
 
-    public Integer getOrder_id() { return order_id; }
+    // getters
+    public Integer getOrderId() { return orderId; }
     public OrderStatus getStatus() { return status; }
-    public User getUser_id() { return user_id; }
-    public Address getAddress_id() { return address_id; }
+    public User getUserId() { return userId; }
+    public Address getAddressId() { return addressId; }
     public List<Product> getItems() { return items; }
 
-    public void setOrder_id(Integer order_id) { this.order_id = order_id; }
+    // setters
+//    public void setOrderId(Integer orderId) { this.orderId = orderId; }
     public void setStatus(OrderStatus status) { this.status = status; }
-    public void setUser_id(User user_id) { this.user_id = user_id; }
-    public void setAddress_id(Address address_id) { this.address_id = address_id; }
+    public void setUserId(User userId) { this.userId = userId; }
+    public void setAddressId(Address addressId) { this.addressId = addressId; }
     public void setItems(List<Product> items) { this.items = items; }
 
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderId=" + orderId +
+                ", userId=" + userId +
+                ", addressId=" + addressId +
+                ", status=" + status +
+                ", items.size()=" + items.size() +
+                '}';
+    }
 }

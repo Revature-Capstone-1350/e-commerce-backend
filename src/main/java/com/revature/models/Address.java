@@ -27,11 +27,13 @@ public class Address {
     @Column(length=10, name="postal_code")
     private String postalCode;
 
-    @OneToMany(mappedBy = "address_id")
+    @OneToMany(mappedBy = "addressId")
     private List<Order> orderList;
 
+    // constructors
     public Address() { super(); }
 
+    // getters
     public Integer getAddressId() { return addressId; }
     public String getStreet() { return street; }
     public String getStreet2() { return street2; }
@@ -40,7 +42,8 @@ public class Address {
     public String getPostalCode() { return postalCode; }
     public List<Order> getOrderList() { return orderList; }
 
-    public void setAddressId(Integer addressId) { this.addressId = addressId; }
+    // setters
+//    public void setAddressId(Integer addressId) { this.addressId = addressId; }
     public void setStreet(String street) { this.street = street; }
     public void setStreet2(String street2) { this.street2 = street2; }
     public void setState(String state) { this.state = state; }
@@ -48,4 +51,16 @@ public class Address {
     public void setPostalCode(String postalCode) { this.postalCode = postalCode; }
     public void setOrderList(List<Order> orderList) { this.orderList = orderList; }
 
+    @Override
+    public String toString() {
+        return "Address{" +
+                "addressId=" + addressId +
+                ", street='" + street + '\'' +
+                ", street2='" + street2 + '\'' +
+                ", state='" + state + '\'' +
+                ", city='" + city + '\'' +
+                ", postalCode='" + postalCode + '\'' +
+                ", orderList.size()=" + orderList.size() +
+                '}';
+    }
 }
