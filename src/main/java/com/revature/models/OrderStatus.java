@@ -21,8 +21,7 @@ public class OrderStatus {
     // constructors
     public OrderStatus() { super(); } // required no-args constructor
 
-    public OrderStatus(Integer orderStatusId, String name) {
-        this.orderStatusId = orderStatusId;
+    public OrderStatus(String name) {
         this.name = name;
     }
 

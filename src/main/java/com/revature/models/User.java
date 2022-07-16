@@ -53,6 +53,16 @@ public class User {
         this.lastName = regReq.getLastName();
     }
 
+    public User(String firstName, String lastName, String email, String password, UserRole role, List<Order> userOrders, List<ProductReview> userProductReviews) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.userOrders = userOrders;
+        this.userProductReviews = userProductReviews;
+    }
+
     // getters
     public Integer getUserId() { return userId; }
     public UserRole getRole() { return role; }

@@ -21,9 +21,8 @@ public class UserRole {
     // constructors
     public UserRole() { super(); } // required no-args constructor
 
-    public UserRole(Integer roleId, String name) {
+    public UserRole(String name) {
         this();
-        this.roleId = roleId;
         this.name = name;
     }
 

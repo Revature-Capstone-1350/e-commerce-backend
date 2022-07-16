@@ -2,15 +2,14 @@ package com.revature.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.dtos.ProductInfo;
-import com.revature.models.Category;
-import com.revature.models.Product;
+import com.revature.models.*;
 import com.revature.repositories.*;
+import com.revature.services.AuthService;
 import com.revature.services.jwt.TokenService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,9 +26,10 @@ public class MockDataInserter implements CommandLineRunner {
     private final UserRoleRepository roleRepo;
     private final ObjectMapper mapper = new ObjectMapper();
     private final TokenService service;
+    private final AuthService authService;
 
 
-    public MockDataInserter(AddressRepository addressRepo, CategoryRepository catRepo, OrderRepository orderRepo, OrderStatusRepository statusRepo, ProductRepository prodRepo, ProductReviewRepository reviewRepo, UserRepository userRepo, UserRoleRepository roleRepo, TokenService service) {
+    public MockDataInserter(AddressRepository addressRepo, CategoryRepository catRepo, OrderRepository orderRepo, OrderStatusRepository statusRepo, ProductRepository prodRepo, ProductReviewRepository reviewRepo, UserRepository userRepo, UserRoleRepository roleRepo, TokenService service, AuthService authService) {
         this.addressRepo = addressRepo;
         this.catRepo = catRepo;
         this.orderRepo = orderRepo;
@@ -39,24 +39,55 @@ public class MockDataInserter implements CommandLineRunner {
         this.userRepo = userRepo;
         this.roleRepo = roleRepo;
         this.service = service;
+        this.authService = authService;
     }
 
     @Override
     @Transactional
     public void run(String... args) throws Exception {
 
-        // Add categories
-        String[] categories = {"Cloud","Dawn","Day","Dusk","Moon","Night","Space","Sun"};
-        for (String cat: categories) {
+        // Add Categories
+        String[] defaultCategories = {"Cloud","Dawn","Day","Dusk","Moon","Night","Space","Sun"};
+        // Alphabetical order to sync with external generation script
+        for (String cat: defaultCategories) {
             catRepo.save(new Category(cat));
         }
-        List<Category> cats = new ArrayList<>();
-        for (int i=1; i<=categories.length; i++){
-            cats.add(catRepo.getById(i));
+        List<Category> cats = catRepo.findAll();
+
+        // Add Roles
+        String[] defaultRoles = {"Admin","Basic"};
+        // Ordered by decreasing permission
+        for (String role: defaultRoles) {
+            roleRepo.save(new UserRole(role.toUpperCase()));
         }
+        List<UserRole> roles = roleRepo.findAll();
+
+        // Add Order Statuses
+        String[] defaultStatuses = {"Cart","Pending","Shipped","Delivered","Canceled"};
+        // Chronological order
+        for (String status: defaultStatuses) {
+            statusRepo.save(new OrderStatus(status));
+        }
+        List<OrderStatus> statuses = statusRepo.findAll();
+
+        // Add Users
+        User userAdmin  = new User("Admin","Admin","Admin@SkyView.com",
+                authService.generatePassword("admin"),
+                roles.get(0), // ADMIN user
+                null,null);
+
+        User userTest = new User("Tester","McTesterson","Tester1@revature.net",
+                authService.generatePassword("tester"),
+                roles.get(1), // BASIC user
+                null,null);
+//        System.out.println("Length of pass: " + userTest.getPassword().length());
+        userRepo.save(userAdmin);
+        userRepo.save(userTest);
+
+        // TODO : other tables; test table relationships
 
 
-
+        ;
         String base_url = "https://raw.githubusercontent.com/jsparks9/pics/main/images-by-category/";
         prodRepo.save(new Product(cats.get(0),"cloud picture","cloud picture",2.95,base_url+"cloud/small/1.jpg",base_url+"cloud/medium/1.jpg"));
         prodRepo.save(new Product(cats.get(0),"cloud picture","cloud picture",1.45,base_url+"cloud/small/10.jpg",base_url+"cloud/medium/10.jpg"));
