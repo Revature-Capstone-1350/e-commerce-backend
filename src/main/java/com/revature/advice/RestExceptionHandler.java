@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.servlet.http.HttpServletRequest;
-
 @RestControllerAdvice
 public class RestExceptionHandler {
 
@@ -19,12 +17,20 @@ public class RestExceptionHandler {
                 "This endpoint is coming soon");
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BadRequestException.class)
+    public ErrorResponse handleBadRequestException() {
+        return new ErrorResponse(HttpStatus.BAD_REQUEST.value(),
+                "Invalid Input.");
+    }
+
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(UnauthorizedException.class)
     public ErrorResponse handleUnauthorizedException() {
         return new ErrorResponse(HttpStatus.UNAUTHORIZED.value(),
-                "Must be logged in to perform this action.");
+                "Invalid Credentials.");
     }
+
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(TokenParseException.class)
     public ErrorResponse handleTokenParseException() {
@@ -40,15 +46,8 @@ public class RestExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler
-    public ErrorResponse handleNotFoundException() {
-        return new ErrorResponse(HttpStatus.CONFLICT.value(),
-                "There is already a resource with those specifications.");
-    }
-
-    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
-    public ErrorResponse handleResourceNotFoundException() {
+    public ErrorResponse handleNotFoundException() {
         return new ErrorResponse(HttpStatus.NOT_FOUND.value(),
                 "Resource not found.");
     }

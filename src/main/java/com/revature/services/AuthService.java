@@ -1,21 +1,29 @@
 package com.revature.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.dtos.AuthResponse;
 import com.revature.dtos.LoginRequest;
 import com.revature.dtos.Principal;
 import com.revature.dtos.RegisterRequest;
+import com.revature.exceptions.BadRequestException;
 import com.revature.exceptions.NotImplementedException;
+import com.revature.exceptions.UnauthorizedException;
 import com.revature.models.User;
+import com.revature.repositories.UserRepository;
 import com.revature.services.jwt.TokenService;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.validation.Valid;
 import java.security.spec.KeySpec;
-import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -23,16 +31,44 @@ public class AuthService {
     @Value("${secrets.salt}")
     private String salt;
 
+    private final UserRepository userRepo;
     private final UserService userService;
     private final TokenService tokenService;
+    private final ObjectMapper mapper = new ObjectMapper();
 
-    public AuthService(UserService userService, TokenService tokenService) {
+    public AuthService(UserRepository userRepo, UserService userService, TokenService tokenService) {
+        this.userRepo = userRepo;
         this.userService = userService;
         this.tokenService = tokenService;
     }
 
-    public AuthResponse login(@Valid LoginRequest loginRequest) {
-        throw new NotImplementedException();
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity login(@Valid LoginRequest loginRequest) {
+
+        // Validate credentials
+        User user = userRepo.findByEmailIgnoreCaseAndPassword(
+                loginRequest.getEmail(),
+                generatePassword(loginRequest.getPassword())
+        ).orElseThrow(UnauthorizedException::new);
+        // at this point, the credentials have been determined to be valid.
+
+        AuthResponse authResp = new AuthResponse(user);
+        String resp = "";
+        try {
+            resp = mapper.writeValueAsString(authResp);
+        } catch (JsonProcessingException e) {
+            throw new BadRequestException();
+        }
+
+        Principal prin = new Principal(user);
+        String token = tokenService.generateToken(prin);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", token);
+
+        return ResponseEntity
+                .status(HttpStatus.OK.value())
+                .headers(headers)
+                .body(resp);
     }
 
 
