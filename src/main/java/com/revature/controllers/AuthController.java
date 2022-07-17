@@ -19,8 +19,8 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginRequest loginRequest) {
+    @PostMapping("/login") // @RequestBody @Valid did not work in service layer.
+    public ResponseEntity login(@RequestBody @Valid LoginRequest loginRequest) {
         return authService.login(loginRequest);
     }
 

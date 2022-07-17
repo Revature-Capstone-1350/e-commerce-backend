@@ -18,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.crypto.SecretKeyFactory;
@@ -43,7 +44,7 @@ public class AuthService {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity login(@Valid LoginRequest loginRequest) {
+    public ResponseEntity login(LoginRequest loginRequest) {
 
         // Validate credentials
         User user = userRepo.findByEmailIgnoreCaseAndPassword(
