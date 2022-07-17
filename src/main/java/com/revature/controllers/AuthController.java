@@ -1,13 +1,8 @@
 package com.revature.controllers;
 
-import com.revature.dtos.AuthResponse;
 import com.revature.dtos.LoginRequest;
 import com.revature.dtos.RegisterRequest;
-import com.revature.exceptions.NotImplementedException;
-import com.revature.models.User;
 import com.revature.services.AuthService;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,12 +20,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
-        throw new NotImplementedException();
+    public ResponseEntity login(@RequestBody LoginRequest loginRequest) {
+        authService.login(loginRequest);
     }
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody RegisterRequest registerRequest) {
-        throw new NotImplementedException();
+        authService.register(registerRequest);
     }
 }

@@ -2,8 +2,8 @@ package com.revature.services.jwt;
 
 
 import com.revature.dtos.Principal;
-import com.revature.exceptions.MissingAuthTokenException;
 import com.revature.exceptions.TokenParseException;
+import com.revature.exceptions.UnauthorizedException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtBuilder;
@@ -40,7 +40,7 @@ public class TokenService {
     public Principal extractTokenDetails(String token) {
 
         if (token == null || token.isEmpty()) {
-            throw new MissingAuthTokenException();
+            throw new UnauthorizedException();
         }
 
         try {
@@ -51,9 +51,9 @@ public class TokenService {
 
             return new Principal(Integer.parseInt(claims.get("id", String.class)) , claims.get("email", String.class));
         } catch (ExpiredJwtException e) {
-            throw new TokenParseException("The provided token is expired", e);
+            throw new TokenParseException();
         } catch (Exception e) {
-            throw new TokenParseException(e);
+            throw new UnauthorizedException();
         }
     }
 
