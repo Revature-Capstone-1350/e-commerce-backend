@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.dtos.AuthResponse;
 import com.revature.dtos.ProductInfo;
+import com.revature.dtos.ReviewResponse;
 import com.revature.exceptions.BadRequestException;
+import com.revature.exceptions.NotFoundException;
 import com.revature.models.Product;
 import com.revature.models.ProductReview;
 import com.revature.models.User;
@@ -52,19 +54,43 @@ public class ProductService {
                 .body(resp);        // Add the JSON response body
     }
 
-    public Optional<Product> findById(int id) {
-        return productRepo.findById(id);
+    public ResponseEntity findReviewsByProductId(int id) {
+        Product product = productRepo.findById(id)
+                .orElseThrow(NotFoundException::new);
+
+        List<ReviewResponse> reviews;
+        if (product.getRatings() == null || product.getRatings().size() == 0) {
+            reviews = new ArrayList<>();
+        }
+        else {
+            reviews = product.getRatings().stream().map(ReviewResponse::new).collect(Collectors.toList());
+        }
+        String resp = "";
+        try {
+            resp = mapper.writeValueAsString(reviews); // prepare JSON response
+        } catch (JsonProcessingException e) {
+            throw new BadRequestException();
+        } // This throw is only anticipated to happen upon a bad request
+
+        return ResponseEntity
+                .status(HttpStatus.OK.value()) // Set response status
+                .body(resp);        // Add the JSON response body
+
     }
 
-    public Product save(Product product) {
-        return productRepo.save(product);
+
+    public ResponseEntity findById(int id) {
+        return null;
+    }
+
+    public ResponseEntity save(Product product) {
+        return null;
     }
     
-    public List<Product> saveAll(List<Product> productList, List<ProductInfo> metadata) {
-    	return productRepo.saveAll(productList);
+    public ResponseEntity saveAll(List<Product> productList, List<ProductInfo> metadata) {
+        return null;
     }
 
     public void delete(int id) {
-        productRepo.deleteById(id);
     }
 }

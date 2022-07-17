@@ -29,6 +29,12 @@ public class ProductController implements com.revature.interfaces.ProductControl
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/rating/{id}")
+    public ResponseEntity getProductReviewsById(@PathVariable("id") int id) {
+        return productService.findReviewsByProductId(id);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public ResponseEntity getProductById(@PathVariable("id") int id) {
         throw new NotImplementedException();
