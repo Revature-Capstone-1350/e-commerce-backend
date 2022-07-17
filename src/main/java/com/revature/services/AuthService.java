@@ -6,11 +6,11 @@ import com.revature.dtos.AuthResponse;
 import com.revature.dtos.LoginRequest;
 import com.revature.dtos.Principal;
 import com.revature.dtos.RegisterRequest;
-import com.revature.exceptions.BadRequestException;
-import com.revature.exceptions.NotImplementedException;
-import com.revature.exceptions.UnauthorizedException;
+import com.revature.exceptions.*;
 import com.revature.models.User;
+import com.revature.models.UserRole;
 import com.revature.repositories.UserRepository;
+import com.revature.repositories.UserRoleRepository;
 import com.revature.services.jwt.TokenService;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,12 +18,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-import javax.validation.Valid;
 import java.security.spec.KeySpec;
 
 @Service
@@ -33,12 +31,14 @@ public class AuthService {
     private String salt;
 
     private final UserRepository userRepo;
+    private final UserRoleRepository roleRepo;
     private final UserService userService;
     private final TokenService tokenService;
     private final ObjectMapper mapper = new ObjectMapper();
 
-    public AuthService(UserRepository userRepo, UserService userService, TokenService tokenService) {
+    public AuthService(UserRepository userRepo, UserRoleRepository roleRepo, UserService userService, TokenService tokenService) {
         this.userRepo = userRepo;
+        this.roleRepo = roleRepo;
         this.userService = userService;
         this.tokenService = tokenService;
     }
@@ -53,33 +53,45 @@ public class AuthService {
         ).orElseThrow(UnauthorizedException::new);
         // at this point, the credentials have been determined to be valid.
 
-        AuthResponse authResp = new AuthResponse(user);
+        return makeResp(user, HttpStatus.OK.value());
+    }
+
+
+    public ResponseEntity register(RegisterRequest registerRequest) {
+        // First, check if email is already taken
+        if (userRepo.existsByEmailIgnoreCase(registerRequest.getEmail())) {
+            throw new ConflictException(); // Gives generic response
+        }
+        // The DTO annotations validated the input and the email is available
+        registerRequest.setPassword(
+                generatePassword( registerRequest.getPassword() )
+        );
+        User user = new User(registerRequest);
+        UserRole basicRole = roleRepo.findByNameIgnoreCase("Basic").orElseThrow(RuntimeException::new);
+        // RuntimeException because the server really should be able to find this role
+
+        user.setRole(basicRole);
+        user = userRepo.save(user);
+        return makeResp(user, HttpStatus.CREATED.value());
+    }
+
+    private ResponseEntity makeResp(User user, int statusCode) {
+        AuthResponse authResp = new AuthResponse(user); // init
         String resp = "";
         try {
-            resp = mapper.writeValueAsString(authResp);
+            resp = mapper.writeValueAsString(authResp); // prepare JSON response
         } catch (JsonProcessingException e) {
             throw new BadRequestException();
-        }
+        } // This throw is only anticipated to happen upon a bad request
 
-        Principal prin = new Principal(user);
-        String token = tokenService.generateToken(prin);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", token);
+        String token = getToken(user); // Generate a JWT
+        HttpHeaders headers = new HttpHeaders(); // init
+        headers.add("Authorization", token); // Set token in header
 
         return ResponseEntity
-                .status(HttpStatus.OK.value())
-                .headers(headers)
-                .body(resp);
-    }
-
-
-    public AuthResponse register(RegisterRequest registerRequest) {
-        throw new NotImplementedException();
-    }
-
-    public String getToken(RegisterRequest request) {
-        Principal user = new Principal(new User(request));
-        return tokenService.generateToken(user);
+                .status(statusCode) // Set response status
+                .headers(headers)   // Add the headers object
+                .body(resp);        // Add the JSON response body
     }
 
     public String getToken(User user) {
@@ -93,10 +105,9 @@ public class AuthService {
     public void adminCheck(String token) {
         Principal prin = tokenService.extractTokenDetails(token);
         User user = userService.findByIdAndEmailIgnoreCase(prin.getAuthUserId(), prin.getAuthUserEmail())
-                .orElseThrow(RuntimeException::new); // TODO : 400 : user data in token not in DB
+                .orElseThrow(BadRequestException::new); // user data in token not in DB
         if (!user.getRole().toString().equalsIgnoreCase("admin")) {
-            // TODO : 403 error; must be admin
-            throw new RuntimeException();
+            throw new ForbiddenException(); // 403 error; must be admin
         }
         // no errors thrown, execution of program can continue
     }

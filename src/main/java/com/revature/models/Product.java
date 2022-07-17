@@ -91,7 +91,7 @@ public class Product {
                 ", image_url_m='" + imageUrlM + '\'' +
                 ", image_url_l='" + imageUrlL + '\'' +
                 ", category=" + category +
-                ", productReviews.size()=" + productReviews.size() +
+                ", productReviews.size()=" + ((productReviews == null)?0:productReviews.size()) +
                 '}';
     }
 }

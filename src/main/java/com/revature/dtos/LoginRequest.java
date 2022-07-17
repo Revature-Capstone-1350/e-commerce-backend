@@ -13,12 +13,11 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class LoginRequest {
 
-    @NotNull
     @NotBlank
+    @NotNull
     private String email;
 
-    @Length(min = 4)
-    @NotNull
     @NotBlank
+    @NotNull
     private String password;
 }

@@ -73,7 +73,7 @@ public class Address {
                 ", city='" + city + '\'' +
                 ", state='" + state + '\'' +
                 ", postalCode='" + postalCode + '\'' +
-//                ", orderList.size()=" + orderList.size() +
+                ", orderList.size()=" + ((orderList == null)?0:orderList.size()) +
                 '}';
     }
 }

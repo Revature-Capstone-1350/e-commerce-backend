@@ -98,8 +98,8 @@ public class User {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", role=" + role +
-                ", userOrders.size()=" + userOrders.size() +
-                ", userProductReviews.size()=" + userProductReviews.size() +
+                ", userOrders.size()=" + ((userOrders == null)?0:userOrders.size()) +
+                ", userProductReviews.size()=" + ((userProductReviews == null)?0:userProductReviews.size()) +
                 '}';
     }
 }

@@ -68,7 +68,7 @@ public class Order {
                 ", userId=" + user +
                 ", addressId=" + address +
                 ", status=" + status +
-                ", items.size()=" + items.size() +
+                ", items.size()=" + ((items == null)?0:items.size()) +
                 '}';
     }
 }

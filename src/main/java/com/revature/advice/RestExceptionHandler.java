@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class RestExceptionHandler {
 
+    // Generic 501
     @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
     @ExceptionHandler(NotImplementedException.class)
     public ErrorResponse handleNotImplementedException() {
@@ -18,16 +19,7 @@ public class RestExceptionHandler {
                 "This endpoint is coming soon");
     }
 
-    // This handles error thrown via the DTO validation annotations
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler
-    public ErrorResponse handleMethodArgumentNotValidExceptionException(
-            MethodArgumentNotValidException e
-    ) {
-        return new ErrorResponse(HttpStatus.BAD_REQUEST.value(),
-                "Invalid Input.");
-    }
-
+    // Generic 400
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BadRequestException.class)
     public ErrorResponse handleBadRequestException() {
@@ -35,6 +27,18 @@ public class RestExceptionHandler {
                 "Invalid Input.");
     }
 
+    // Specific 400
+    // This handles error thrown via the DTO validation annotations
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ErrorResponse handleMethodArgumentNotValidException(
+            MethodArgumentNotValidException e
+    ) {
+        return new ErrorResponse(HttpStatus.BAD_REQUEST.value(),
+                "Invalid Input."); // TODO : give message from DTO
+    }
+
+    // Generic 401
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(UnauthorizedException.class)
     public ErrorResponse handleUnauthorizedException() {
@@ -42,6 +46,7 @@ public class RestExceptionHandler {
                 "Invalid Credentials.");
     }
 
+    // Specific 401
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(TokenParseException.class)
     public ErrorResponse handleTokenParseException() {
@@ -49,13 +54,15 @@ public class RestExceptionHandler {
                 "Login session expired. Please login again.");
     }
 
-    @ResponseStatus(HttpStatus.CONFLICT)
-    @ExceptionHandler(ConflictException.class)
-    public ErrorResponse handleConflictException() {
-        return new ErrorResponse(HttpStatus.CONFLICT.value(),
-                "There is already a resource with those specifications.");
+    // Generic 403
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(ForbiddenException.class)
+    public ErrorResponse handleForbiddenException() {
+        return new ErrorResponse(HttpStatus.FORBIDDEN.value(),
+                "Access Denied");
     }
 
+    // Generic 404
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
     public ErrorResponse handleNotFoundException() {
@@ -63,6 +70,15 @@ public class RestExceptionHandler {
                 "Resource not found.");
     }
 
+    // Generic 409
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(ConflictException.class)
+    public ErrorResponse handleConflictException() {
+        return new ErrorResponse(HttpStatus.CONFLICT.value(),
+                "There is already a resource with those specifications.");
+    }
+
+    // Generic 500
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler
     public ErrorResponse handleOtherException(Throwable t) {
