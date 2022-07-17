@@ -53,7 +53,7 @@ public class AuthAspect {
 
     @Around("@annotation(adminOnly)")
     public Object authenticate(ProceedingJoinPoint pjp, AdminOnly adminOnly) throws Throwable {
-        authService.adminCheck(req.getHeader("Authorization"));
+        authService.adminCheck(req.getHeader("Authorization")); // Checks if user is an admin
         return pjp.proceed(pjp.getArgs()); // Call the originally intended method
     }
 }

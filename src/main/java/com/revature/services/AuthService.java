@@ -116,9 +116,11 @@ public class AuthService {
 
     public void adminCheck(String token) {
         Principal prin = tokenService.extractTokenDetails(token);
+        System.out.println("Checking if admin: "+prin);
         User user = userService.findByIdAndEmailIgnoreCase(prin.getAuthUserId(), prin.getAuthUserEmail())
                 .orElseThrow(BadRequestException::new); // user data in token not in DB
-        if (!user.getRole().toString().equalsIgnoreCase("admin")) {
+        System.out.println("User found: " + user);
+        if (!user.getRole().getName().toString().equalsIgnoreCase("admin")) {
             throw new ForbiddenException(); // 403 error; must be admin
         }
         // no errors thrown, execution of program can continue
