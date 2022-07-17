@@ -51,7 +51,7 @@ public class AuthService {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity login(LoginRequest loginRequest) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public ResponseEntity login(LoginRequest loginRequest) {
 
         // Validate credentials
         User user = userRepo.findByEmailIgnoreCaseAndPassword(
@@ -64,7 +64,7 @@ public class AuthService {
     }
 
 
-    public ResponseEntity register(RegisterRequest registerRequest) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public ResponseEntity register(RegisterRequest registerRequest) {
         // First, check if email is already taken
         if (userRepo.existsByEmailIgnoreCase(registerRequest.getEmail())) {
             throw new ConflictException(); // Gives generic response
@@ -82,7 +82,7 @@ public class AuthService {
         return makeResp(user, HttpStatus.CREATED.value());
     }
 
-    private ResponseEntity makeResp(User user, int statusCode) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    private ResponseEntity makeResp(User user, int statusCode) {
         AuthResponse authResp = new AuthResponse(user); // init
         String resp = "";
         try {
@@ -101,7 +101,7 @@ public class AuthService {
                 .body(resp);        // Add the JSON response body
     }
 
-    public String getToken(User user) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public String getToken(User user) {
         return tokenService.generateToken(new Principal(user));
 //        try {
 //
@@ -110,11 +110,11 @@ public class AuthService {
 //        }
     }
 
-    public void verifyToken(String token) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public void verifyToken(String token) {
         tokenService.extractTokenDetails(token);
     }
 
-    public void adminCheck(String token) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public void adminCheck(String token) {
         Principal prin = tokenService.extractTokenDetails(token);
         User user = userService.findByIdAndEmailIgnoreCase(prin.getAuthUserId(), prin.getAuthUserEmail())
                 .orElseThrow(BadRequestException::new); // user data in token not in DB

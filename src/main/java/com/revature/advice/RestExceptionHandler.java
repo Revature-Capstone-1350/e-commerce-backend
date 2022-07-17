@@ -14,7 +14,8 @@ public class RestExceptionHandler {
     // Generic 501
     @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
     @ExceptionHandler(NotImplementedException.class)
-    public ErrorResponse handleNotImplementedException() {
+    public ErrorResponse handleNotImplementedException(Throwable t) {
+        t.printStackTrace();
         return new ErrorResponse(HttpStatus.NOT_IMPLEMENTED.value(),
                 "This endpoint is coming soon");
     }
@@ -22,7 +23,8 @@ public class RestExceptionHandler {
     // Generic 400
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BadRequestException.class)
-    public ErrorResponse handleBadRequestException() {
+    public ErrorResponse handleBadRequestException(Throwable t) {
+        t.printStackTrace();
         return new ErrorResponse(HttpStatus.BAD_REQUEST.value(),
                 "Invalid Input.");
     }
@@ -34,6 +36,7 @@ public class RestExceptionHandler {
     public ErrorResponse handleMethodArgumentNotValidException(
             MethodArgumentNotValidException e
     ) {
+        e.printStackTrace();
         return new ErrorResponse(HttpStatus.BAD_REQUEST.value(),
                 "Invalid Input."); // TODO : give message from DTO
     }
@@ -41,7 +44,8 @@ public class RestExceptionHandler {
     // Generic 401
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(UnauthorizedException.class)
-    public ErrorResponse handleUnauthorizedException() {
+    public ErrorResponse handleUnauthorizedException(Throwable t) {
+        t.printStackTrace();
         return new ErrorResponse(HttpStatus.UNAUTHORIZED.value(),
                 "Invalid Credentials.");
     }
@@ -49,7 +53,8 @@ public class RestExceptionHandler {
     // Specific 401
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(TokenParseException.class)
-    public ErrorResponse handleTokenParseException() {
+    public ErrorResponse handleTokenParseException(Throwable t) {
+        t.printStackTrace();
         return new ErrorResponse(HttpStatus.UNAUTHORIZED.value(),
                 "Login session expired. Please login again.");
     }
@@ -57,7 +62,8 @@ public class RestExceptionHandler {
     // Generic 403
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(ForbiddenException.class)
-    public ErrorResponse handleForbiddenException() {
+    public ErrorResponse handleForbiddenException(Throwable t) {
+        t.printStackTrace();
         return new ErrorResponse(HttpStatus.FORBIDDEN.value(),
                 "Access Denied");
     }
@@ -65,7 +71,8 @@ public class RestExceptionHandler {
     // Generic 404
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
-    public ErrorResponse handleNotFoundException() {
+    public ErrorResponse handleNotFoundException(Throwable t) {
+        t.printStackTrace();
         return new ErrorResponse(HttpStatus.NOT_FOUND.value(),
                 "Resource not found.");
     }
@@ -73,7 +80,8 @@ public class RestExceptionHandler {
     // Generic 409
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(ConflictException.class)
-    public ErrorResponse handleConflictException() {
+    public ErrorResponse handleConflictException(Throwable t) {
+        t.printStackTrace();
         return new ErrorResponse(HttpStatus.CONFLICT.value(),
                 "There is already a resource with those specifications.");
     }

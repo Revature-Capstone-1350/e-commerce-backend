@@ -49,7 +49,9 @@ public class JwtConfig {
     public JwtConfig() {
         try {
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-            keyGen.initialize(4096);
+            keyGen.initialize(8192);
+            // 4096  only supported email length 240
+            // 8192 supports email length 632
             KeyPair pair = keyGen.generateKeyPair();
             this.privateKey = pair.getPrivate();
             this.publicKey = pair.getPublic();

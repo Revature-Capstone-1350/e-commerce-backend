@@ -76,16 +76,27 @@ public class MockDataInserter implements CommandLineRunner {
         }
         statusRepo.saveAll(statuses);
 
-        stars();
-        User user0 = userRepo.save(new User("test","test","test@test.test",
-                authService.generatePassword("abcde"),
-                roles.get(0), null, null));
-        Principal prin = new Principal(user0);
-        String token = service.generateToken(prin);
-        prin = service.extractTokenDetails(token);
-        stars();
-        System.out.println(prin);
-        stars();
+        Boolean testRSA = false;
+        if (testRSA) { // tests maximum email size RSA key-size permits
+            stars();
+            int n = 260; // starting email length
+            StringBuilder email50Length = new StringBuilder(n);
+            for (int i = 0; i < n; i++) {
+                email50Length.append("@");
+            }
+            String currentEmail = email50Length.toString();
+            Principal prin;
+            for (int i=0; i<500; i++) { // add up to 500 to starting email length
+                currentEmail += "@";
+                System.out.println("Testing length " + currentEmail.length());
+                prin = new Principal(Integer.MAX_VALUE, currentEmail);
+                String token = service.generateToken(prin);
+                prin = service.extractTokenDetails(token);
+                System.out.println(prin);
+            }
+            stars();
+        }
+
 
 
         // Populate table "user"

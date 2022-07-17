@@ -2,6 +2,7 @@ package com.revature.services.jwt;
 
 
 import com.revature.dtos.Principal;
+import com.revature.exceptions.BadRequestException;
 import com.revature.exceptions.TokenParseException;
 import com.revature.exceptions.UnauthorizedException;
 import io.jsonwebtoken.Claims;
@@ -30,7 +31,7 @@ public class TokenService {
     }
     //public TokenService() {this.jwtConfig = new JwtConfig();}
 
-    public String generateToken(Principal subject) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public String generateToken(Principal subject) {
         long now = System.currentTimeMillis();
 
         JwtBuilder tokenBuilder = Jwts.builder()
@@ -45,7 +46,7 @@ public class TokenService {
 
     }
 
-    public Principal extractTokenDetails(String token) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public Principal extractTokenDetails(String token) {
 
         if (token == null || token.isEmpty()) {
             throw new UnauthorizedException();
@@ -55,7 +56,7 @@ public class TokenService {
                 .parseClaimsJws(decryptRSA(token))
                 .getBody();
 
-        return new Principal(Integer.parseInt(claims.get("id", String.class)));
+        return new Principal(Integer.parseInt(claims.get("id", String.class)),claims.get("email",String.class));
 
 //        try {
 //            } catch (ExpiredJwtException e) {
@@ -65,15 +66,23 @@ public class TokenService {
 //        }
     }
 
-    private String encryptRSA(String data) throws NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
-        Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-        cipher.init(Cipher.ENCRYPT_MODE, jwtConfig.getPublicKey());
-        byte[] encrypted = cipher.doFinal(data.getBytes());
-        return Base64.encodeBase64String(encrypted);
+    private String encryptRSA(String data) {
+        try {
+            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, jwtConfig.getPublicKey());
+            byte[] encrypted = cipher.doFinal(data.getBytes());
+            return Base64.encodeBase64String(encrypted);
+        } catch (Throwable t) {
+            throw new BadRequestException(t);
+        } // This was tested, so errors here are due to bad data
     }
-    private String decryptRSA(String data) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-        cipher.init(Cipher.DECRYPT_MODE, jwtConfig.getPrivateKey());
-        return new String(cipher.doFinal(Base64.decodeBase64(data)));
+    private String decryptRSA(String data) {
+        try {
+            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            cipher.init(Cipher.DECRYPT_MODE, jwtConfig.getPrivateKey());
+            return new String(cipher.doFinal(Base64.decodeBase64(data)));
+        } catch (Throwable t) {
+            throw new BadRequestException(t);
+        } // This was tested, so errors here are due to bad data
     }
 }
