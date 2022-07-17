@@ -73,7 +73,7 @@ public class AuthService {
     }
 
 
-    public AuthResponse register(@Valid RegisterRequest registerRequest) {
+    public AuthResponse register(RegisterRequest registerRequest) {
         throw new NotImplementedException();
     }
 
