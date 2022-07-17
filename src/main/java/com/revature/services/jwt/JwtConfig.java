@@ -21,6 +21,9 @@ public class JwtConfig {
     @Value("#{24 * 60 * 60 * 1000}") // number of milliseconds in a day
     private int expiration;
 
+    @Value("#{5 * 60 * 1000}") // number of milliseconds in five minutes
+    private int expirationAdmin;
+
     private final SignatureAlgorithm sigAlg = SignatureAlgorithm.HS256;
 
     private Key signingKey;
@@ -35,6 +38,8 @@ public class JwtConfig {
         return expiration;
     }
 
+    public int getExpirationAdmin() { return expirationAdmin; }
+
     public SignatureAlgorithm getSigAlg() {
         return sigAlg;
     }
@@ -48,6 +53,7 @@ public class JwtConfig {
 
     public JwtConfig() {
         try {
+            long startTime = System.nanoTime();
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
             keyGen.initialize(8192);
             // 4096  only supported email length 240
@@ -55,6 +61,8 @@ public class JwtConfig {
             KeyPair pair = keyGen.generateKeyPair();
             this.privateKey = pair.getPrivate();
             this.publicKey = pair.getPublic();
+            long totalTime = System.nanoTime() - startTime;
+            System.out.println("RSA key gen took " + (totalTime/Math.pow(1000,3)) + " seconds");
         } catch (Throwable t) {
             throw new RuntimeException(t);
         }

@@ -29,17 +29,17 @@ public class TokenService {
     public TokenService(JwtConfig jwtConfig) {
         this.jwtConfig = jwtConfig;
     }
-    //public TokenService() {this.jwtConfig = new JwtConfig();}
 
     public String generateToken(Principal subject) {
         long now = System.currentTimeMillis();
+        long timeout = (subject.getIsAdmin()? jwtConfig.getExpirationAdmin() : jwtConfig.getExpiration());
 
         JwtBuilder tokenBuilder = Jwts.builder()
                                       .setIssuer("ecomapi")
                                       .claim("id", ""+subject.getAuthUserId())
                                       .claim("email",""+subject.getAuthUserEmail())
                                       .setIssuedAt(new Date(now))
-                                      .setExpiration(new Date(now + jwtConfig.getExpiration()))
+                                      .setExpiration(new Date(now + timeout))
                                       .signWith(jwtConfig.getSigAlg(), jwtConfig.getSigningKey());
 
         return encryptRSA(tokenBuilder.compact());
@@ -56,14 +56,9 @@ public class TokenService {
                 .parseClaimsJws(decryptRSA(token))
                 .getBody();
 
-        return new Principal(Integer.parseInt(claims.get("id", String.class)),claims.get("email",String.class));
-
-//        try {
-//            } catch (ExpiredJwtException e) {
-//            throw new TokenParseException();
-//        } catch (Exception e) {
-//            throw new UnauthorizedException();
-//        }
+        return new Principal(
+                Integer.parseInt(claims.get("id", String.class)),
+                claims.get("email",String.class));
     }
 
     private String encryptRSA(String data) {

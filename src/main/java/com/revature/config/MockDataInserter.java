@@ -48,6 +48,7 @@ public class MockDataInserter implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) throws Exception {
+        long startTime = System.nanoTime();
 
         // Populate table "category"
         List<Category> cats = new ArrayList<>();
@@ -358,6 +359,9 @@ public class MockDataInserter implements CommandLineRunner {
             orders.add(new Order(user,address,status,cart));
         }
         orderRepo.saveAll(orders);
+
+        long totalTime = System.nanoTime() - startTime;
+        System.out.println("Mock data insertion took " + (totalTime/Math.pow(1000,3)) + " seconds");
     }
 
     private static void stars() { // for debugging
