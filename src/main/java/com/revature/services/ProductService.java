@@ -3,6 +3,7 @@ package com.revature.services;
 import com.revature.dtos.ProductInfo;
 import com.revature.models.Product;
 import com.revature.repositories.ProductRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +18,8 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    public ResponseEntity findAll() {
+        return null;
     }
 
     public Optional<Product> findById(int id) {

@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Login and Register responds with this
+ * Login and Register respond with this
  */
 
 @Data

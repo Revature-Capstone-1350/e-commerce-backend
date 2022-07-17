@@ -3,6 +3,7 @@ package com.revature.controllers;
 import com.revature.dtos.AuthResponse;
 import com.revature.dtos.LoginRequest;
 import com.revature.dtos.RegisterRequest;
+import com.revature.exceptions.NotImplementedException;
 import com.revature.models.User;
 import com.revature.services.AuthService;
 import org.springframework.http.HttpHeaders;
@@ -24,28 +25,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest loginRequest) {
-        Optional<User> optional = authService.findByCredentials(loginRequest.getEmail(), loginRequest.getPassword());
-
-        if(!optional.isPresent()) {
-            return ResponseEntity.badRequest().build();
-        }
-        HttpHeaders respHeaders = new HttpHeaders();
-        // todo: fix
-        respHeaders.set("Authorization", authService.getToken(optional.get()));
-
-        AuthResponse authResp = new AuthResponse(optional.get());
-
-        return ResponseEntity.ok().headers(respHeaders).body(authResp);
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
+        throw new NotImplementedException();
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody @Valid RegisterRequest registerRequest) {
-        AuthResponse authResp = authService.register(registerRequest); // try to register before making token
-
-        HttpHeaders respHeaders = new HttpHeaders();
-        respHeaders.set("Authorization", authService.getToken(registerRequest));
-
-        return ResponseEntity.status(HttpStatus.CREATED).headers(respHeaders).body(authResp);
+    public ResponseEntity register(@RequestBody RegisterRequest registerRequest) {
+        throw new NotImplementedException();
     }
 }

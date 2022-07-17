@@ -13,7 +13,7 @@ public interface ProductController {
 
     public ResponseEntity<List<ProductInfo>> getInventory();
     public ResponseEntity<ProductInfo> getProductById(@PathVariable("id") int id);
-    public void upsert(@RequestBody ProductInfo product);
+    public void insert(@RequestBody ProductInfo product);
     public ResponseEntity<List<ProductInfo>> purchase(@RequestBody List<ProductInfo> metadata);
     public ResponseEntity<ProductInfo> deleteProduct(@PathVariable("id") int id);
 }
