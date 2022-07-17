@@ -78,7 +78,7 @@ public class MockDataInserter implements CommandLineRunner {
 
         stars();
         User user0 = userRepo.save(new User("test","test","test@test.test",
-                authService.generatePassword("abcd"),
+                authService.generatePassword("abcde"),
                 roles.get(0), null, null));
         Principal prin = new Principal(user0);
         String token = service.generateToken(prin);
