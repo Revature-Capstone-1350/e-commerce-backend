@@ -47,57 +47,55 @@ public class MockDataInserter implements CommandLineRunner {
     @Transactional
     public void run(String... args) throws Exception {
 
-        // Add Categories
+        // Populate table "category"
         String[] defaultCategories = {"Cloud","Dawn","Day","Dusk","Moon","Night","Space","Sun"};
-        // Alphabetical order to sync with external generation script
+        // Alphabetical order to sync with external Python generation script
         for (String cat: defaultCategories) {
-            catRepo.save(new Category(cat));
+            catRepo.save(new Category(cat)); // persist each category in order
         }
-        List<Category> cats = catRepo.findAll();
+        List<Category> cats = catRepo.findAll(); // handy list for use here
 
-        // Add Roles
+        // Populate table "user_role"
         String[] defaultRoles = {"Admin","Basic"};
         // Ordered by decreasing permission
         for (String role: defaultRoles) {
-            roleRepo.save(new UserRole(role.toUpperCase()));
+            roleRepo.save(new UserRole(role.toUpperCase())); // persist roles in UPPERCASE
         }
-        List<UserRole> roles = roleRepo.findAll();
+        List<UserRole> roles = roleRepo.findAll(); // handy list for use here
 
-        // Add Order Statuses
+        // Populate table "order_status
         String[] defaultStatuses = {"Cart","Pending","Shipped","Delivered","Canceled"};
         // Chronological order
         for (String status: defaultStatuses) {
-            statusRepo.save(new OrderStatus(status));
+            statusRepo.save(new OrderStatus(status)); // persist in order
         }
-        List<OrderStatus> statuses = statusRepo.findAll();
+        List<OrderStatus> statuses = statusRepo.findAll(); // handy list for use here
 
-        // Add Users
+        // Populate table "user"
         User userAdmin  = new User("Admin","Admin","Admin@SkyView.com",
                 authService.generatePassword("admin"),
                 roles.get(0), // ADMIN user
-                null,null);
+                null,null); // inserted with no reviews nor orders
 
         User userTest = new User("Tester","McTesterson","Tester1@revature.net",
                 authService.generatePassword("tester"),
                 roles.get(1), // BASIC user
-                null,null);
-//        System.out.println("Length of pass: " + userTest.getPassword().length());
+                null,null); // inserted with no reviews nor orders
         userRepo.save(userAdmin);
-        userRepo.save(userTest);
+        userRepo.save(userTest); // persist users
 
         // Generate users
-        for (int i=0; i< data.getNames().length; i++) {
-            String[] name = data.getNames()[i].split(" ");
+        for (int i=0; i< data.getNames().length; i++) { // generate as many users as data.class has names for them
+            String[] name = data.getNames()[i].split(" "); // split into first, last
             String firstName = name[0];
             String lastName = name[1];
-            String email = data.getEmails()[i];
-            String password = authService.generatePassword("genericPassword"+i);
+            String email = data.getEmails()[i]; // get an email for the user
+            String password = authService.generatePassword("genericPassword"+i); // set password
             userRepo.save(new User(firstName, lastName, email, password, roles.get(1), null, null));
         }
-        List<User> users = userRepo.findAll();
-//        System.out.println("There are "+users.size()+" users");
+        List<User> users = userRepo.findAll(); // handy list for use here
 
-        // Add products
+        // Populate table "product"; this code was generated in Python from image metadata
         String base_url = "https://raw.githubusercontent.com/jsparks9/pics/main/images-by-category/";
         prodRepo.save(new Product(cats.get(0),"cloud picture","cloud picture",2.95,base_url+"cloud/small/1.jpg",base_url+"cloud/medium/1.jpg"));
         prodRepo.save(new Product(cats.get(0),"cloud picture","cloud picture",1.45,base_url+"cloud/small/10.jpg",base_url+"cloud/medium/10.jpg"));
@@ -266,27 +264,32 @@ public class MockDataInserter implements CommandLineRunner {
         prodRepo.save(new Product(cats.get(7),"sun picture","sun picture",0.45,base_url+"sun/small/8.jpg",base_url+"sun/medium/8.jpg"));
         prodRepo.save(new Product(cats.get(7),"sun picture","sun picture",0.95,base_url+"sun/small/9.jpg",base_url+"sun/medium/9.jpg"));
 
-        List<Product> products = prodRepo.findAll();
+        List<Product> products = prodRepo.findAll(); // handy list for use here
 
-        // Generate reviews
-        for (Product product: products) {
-            int reviewsToGenerate = ThreadLocalRandom.current().nextInt(2, 10+1);
-            int catId = -1;
-            for (int j=0; j<defaultCategories.length; j++) {
+        // Populate table "product_review"
+        for (Product product: products) { // generate some reviews for each product
+            int reviewsToGenerate = ThreadLocalRandom.current().nextInt(2, 10+1); // 10+1 is intentional
+            // amount of reviews for each product could be as few as 2 reviews or as many as 10;
+
+            int catId = -1; // -1 is set so script won't execute without a category being selected
+            for (int j=0; j<defaultCategories.length; j++) { // determine category of the product
                 if (defaultCategories[j].equalsIgnoreCase(product.getCategory().getName())) {
                     catId = j;
+                    break;
                 }
             }
-            int maxLen = data.getReviews()[catId].length;
-            for (int i=0; i<reviewsToGenerate; i++) {
-                int rating = ThreadLocalRandom.current().nextInt(0, 5+1);
+            int maxLen = data.getReviews()[catId].length; // maxLen is the amount of reviews available for category catId
+            for (int i=0; i<reviewsToGenerate; i++) { // generates a review reviewsToGenerate number of times
+                int rating = ThreadLocalRandom.current().nextInt(0, 5+1); // random rating between 0 and 5 inclusive
                 String desc = data.getReviews()[catId][ThreadLocalRandom.current().nextInt(0, maxLen)];
-                int userId = ThreadLocalRandom.current().nextInt(0, userRepo.findAll().size());
-                reviewRepo.save(new ProductReview(rating,desc, users.get(userId),product));
+                // randomly grab a textual rating from those available for the category
+
+                int userId = ThreadLocalRandom.current().nextInt(0, users.size()); // review assigned to random user
+                reviewRepo.save(new ProductReview(rating,desc, users.get(userId),product)); // review persisted
             }
         }
 
-        // Add Addresses
+        // Populates "Address" table; this code was generated in Python using the random_address package
         addressRepo.save(new Address("4 Chamois Court","","Pooler","GA","31322"));
         addressRepo.save(new Address("295 Townes Drive","","Nashville","TN","37211"));
         addressRepo.save(new Address("5161 Jefferson Boulevard","#202","Louisville","KY","40219"));
@@ -487,16 +490,16 @@ public class MockDataInserter implements CommandLineRunner {
         addressRepo.save(new Address("17722 North 79th Avenue","#1135","Glendale","AZ","85308"));
         addressRepo.save(new Address("200 Hialeah Drive","","Glen Burnie","MD","21060"));
         addressRepo.save(new Address("301 Willow Way","","Lynn Haven","FL","32444"));
-        List<Address> addresses = addressRepo.findAll();
+        List<Address> addresses = addressRepo.findAll(); // handy list for use here
 
-        // Generate Orders
+        // Populate table "order"
         for (int i=0; i<50; i++) {
-            int userId = ThreadLocalRandom.current().nextInt(0, users.size());
-            User user = users.get(userId);
-            int addressId = ThreadLocalRandom.current().nextInt(0, addresses.size());
-            Address address = addresses.get(addressId);
+            int userInd = ThreadLocalRandom.current().nextInt(0, users.size()); // randomly get a user
+            User user = users.get(userInd);
+            int addressInd = ThreadLocalRandom.current().nextInt(0, addresses.size()); // randomly get an address
+            Address address = addresses.get(addressInd);
             OrderStatus status;
-            switch(ThreadLocalRandom.current().nextInt(0, 6)) {
+            switch(ThreadLocalRandom.current().nextInt(0, 6)) { // randomly assign order status
                 case 1:
                     status = statuses.get(2);
                     break;
@@ -507,12 +510,14 @@ public class MockDataInserter implements CommandLineRunner {
                     status = statuses.get(1);
             }
             int amountOfItems = ThreadLocalRandom.current().nextInt(1, 15+1);
+            // randomly determine how many items were ordered
+
             List<Product> cart = new ArrayList<>();
-            List<Integer> prodIds = new ArrayList<>();
-            for (int j = 0; j<amountOfItems; j++) {
-                int prodId = ThreadLocalRandom.current().nextInt(0, products.size());
-                if(!prodIds.contains(prodId)) {
-                    prodIds.add(prodId);
+            List<Integer> prodInds = new ArrayList<>(); // list of indexes
+            for (int j = 0; j < amountOfItems; j++) {
+                int prodId = ThreadLocalRandom.current().nextInt(0, products.size()); // randomly select product
+                if(!prodInds.contains(prodId)) { // this prevents duplicates
+                    prodInds.add(prodId); // keeps track of what indexes have been selected
                     cart.add(products.get(prodId));
                 }
             }
@@ -520,8 +525,8 @@ public class MockDataInserter implements CommandLineRunner {
         }
     }
 
-    private static void stars() {
-        for (int i=0; i<10; i++) {
+    private static void stars() { // for debugging
+        for (int i = 0; i < 10; i++) {
             System.out.print("**********");
         }
         System.out.println();

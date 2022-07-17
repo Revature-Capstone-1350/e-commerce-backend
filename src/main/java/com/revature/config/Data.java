@@ -609,25 +609,30 @@ public class Data {
             "My neighbor Karly has one of these. She works as a gambler and she says it looks tall.\n" +
             "i use it never when i'm in my nightclub."
     };
-    public Data() {
-        String[][] reviewBuilder = new String[genReviews.length][genReviews[0].split("\n").length] ;
+
+    public Data() { // no-args constructor
+        String[][] reviewBuilder = new String[genReviews.length][genReviews[0].split("\n").length]; // [0] used because all equal length
+        // 2-D array with each category representing the first index, and category-specific reviews the second index
+
         int ind = 0;
         for (String raw: genReviews) {
-            reviewBuilder[ind] = raw.split("\n");
+            reviewBuilder[ind] = raw.split("\n"); // populate 2nd index of array by category
             ind++;
         }
-        this.reviews = reviewBuilder;
-        this.names = genNames.split("\n");
-        String[] emailBuilder = genEmails.split("\n");
-        for (int i=0; i < emailBuilder.length; i++ ) {
+        this.reviews = reviewBuilder; // sets this.reviews to the 2-D array that separates reviews by category
+        this.names = genNames.split("\n"); // sets this.names to an array with each entry like "first last"
+        String[] emailBuilder = genEmails.split("\n"); // this becomes an array with each entry like "abc@domain.com"
+
+        for (int i=0; i < emailBuilder.length; i++ ) { // change 40% of the emails to first.last@domain.com
             if(ThreadLocalRandom.current().nextInt(0, 10) < 4) {
                 emailBuilder[i] = this.names[i].replace(" ",".") +
                         "@" + emailBuilder[i].split("@")[1];
             }
         }
-        this.emails = emailBuilder;
+        this.emails = emailBuilder; // sets this.emails to the final list of emails
     }
 
+    // Getters
     public String[][] getReviews() { return reviews; }
     public String[] getNames() { return names; }
     public String[] getEmails() { return emails; }
