@@ -10,27 +10,31 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProductInfo {
     private Integer productId;
-    private String category;
     private String name;
+    private String location;
     private String description;
+    private String date;
     private double price;
     private String imgUrlSmall;
     private String imgUrlMed;
+    private String category;
     private int numberOfRatings;
-    private double averageRating;
+    private int sumOfRatings;
 
     public ProductInfo(Product product) {
         this.productId = product.getProductId();
-        this.category = product.getCategory().toString();
         this.name = product.getName();
+        this.location = product.getLocation();
         this.description = product.getDescription();
+        this.date = product.getDate();
         this.price = product.getPrice();
         this.imgUrlSmall = product.getImageUrlS();
         this.imgUrlMed = product.getImageUrlM();
+        this.category = product.getCategory().toString();
         this.numberOfRatings = product.getRatings().size();
     }
 
-    public void setAverageRating(double averageRating) {
-        this.averageRating = averageRating;
+    public void setSumOfRating(int sumOfRatings) {
+        this.sumOfRatings = sumOfRatings;
     }
 }

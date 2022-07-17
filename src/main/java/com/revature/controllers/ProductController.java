@@ -5,6 +5,7 @@ import com.revature.annotations.Authorized;
 import com.revature.dtos.ProductInfo;
 import com.revature.exceptions.NotImplementedException;
 import com.revature.services.ProductService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,11 +22,13 @@ public class ProductController implements com.revature.interfaces.ProductControl
         this.productService = productService;
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public ResponseEntity getInventory() {
         return productService.findAll();
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public ResponseEntity getProductById(@PathVariable("id") int id) {
         throw new NotImplementedException();
