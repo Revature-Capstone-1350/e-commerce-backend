@@ -19,6 +19,7 @@ import javax.crypto.NoSuchPaddingException;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
 import java.util.Date;
 
 @Service
@@ -71,6 +72,12 @@ public class TokenService {
             throw new BadRequestException(t);
         } // This was tested, so errors here are due to bad data
     }
+    /*
+    Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+        cipher.init(Cipher.ENCRYPT_MODE, getPublicKey(publicKey));
+        return cipher.doFinal(data.getBytes())
+     */
+
     private String decryptRSA(String data) {
         try {
             Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
