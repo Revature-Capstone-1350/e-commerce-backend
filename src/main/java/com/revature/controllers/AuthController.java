@@ -7,7 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.validation.Valid;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 @RestController
@@ -22,13 +27,13 @@ public class AuthController {
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/login") // @RequestBody @Valid did not work in service layer.
-    public ResponseEntity login(@RequestBody @Valid LoginRequest loginRequest) {
+    public ResponseEntity login(@RequestBody @Valid LoginRequest loginRequest) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         return authService.login(loginRequest);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterRequest registerRequest) {
+    public ResponseEntity register(@RequestBody @Valid RegisterRequest registerRequest) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         return authService.register(registerRequest);
     }
 }

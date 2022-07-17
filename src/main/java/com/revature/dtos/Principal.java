@@ -10,21 +10,18 @@ public class Principal {
 
     private int authUserId;
     private String authUserEmail;
-    private String authUsername;
 
     public Principal(User user) {
         this.authUserId = user.getUserId();
         this.authUserEmail = user.getEmail();
     }
 
+    public Principal(int authUserId) {
+        this.authUserId = authUserId;
+    }
+
     public Principal(int authUserId, String authUserEmail) {
         this.authUserId = authUserId;
         this.authUserEmail = authUserEmail;
     }
-
-//    public Principal(LoginResponse loginResponse) {
-//        this.authUserId = Long.parseLong(loginResponse.getId());
-//        this.authUsername = loginResponse.getUsername();
-//        this.authUserRole = loginResponse.getRole();
-//    }
 }

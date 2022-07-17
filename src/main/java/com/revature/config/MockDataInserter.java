@@ -1,6 +1,7 @@
 package com.revature.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.dtos.Principal;
 import com.revature.models.*;
 import com.revature.repositories.*;
 import com.revature.services.AuthService;
@@ -74,6 +75,18 @@ public class MockDataInserter implements CommandLineRunner {
             statuses.add(new OrderStatus(status)); // persist in order
         }
         statusRepo.saveAll(statuses);
+
+        stars();
+        User user0 = userRepo.save(new User("test","test","test@test.test",
+                authService.generatePassword("abcd"),
+                roles.get(0), null, null));
+        Principal prin = new Principal(user0);
+        String token = service.generateToken(prin);
+        prin = service.extractTokenDetails(token);
+        stars();
+        System.out.println(prin);
+        stars();
+
 
         // Populate table "user"
         List<User> users = new ArrayList<>();

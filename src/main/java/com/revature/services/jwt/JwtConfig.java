@@ -7,10 +7,13 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
-import java.security.Key;
+import java.security.*;
 
 @Component
 public class JwtConfig {
+
+    private final PrivateKey privateKey;
+    private final PublicKey publicKey;
 
     @Value("${secrets.token-secret}")
     private String salt;
@@ -36,14 +39,26 @@ public class JwtConfig {
         return sigAlg;
     }
 
+    // Getters
     public Key getSigningKey() {
         return signingKey;
     }
+    public PrivateKey getPrivateKey() { return privateKey; }
+    public PublicKey getPublicKey() { return publicKey; }
 
-//    public JwtConfig() {
-//        this.salt = "revature";
-//        byte[] saltyBytes = DatatypeConverter.parseBase64Binary(salt);
-//        this.signingKey = new SecretKeySpec(saltyBytes, sigAlg.getJcaName());
-//        expiration = 24 * 60 * 60 * 1000;
-//    }
+    public JwtConfig() {
+        try {
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+            keyGen.initialize(4096);
+            KeyPair pair = keyGen.generateKeyPair();
+            this.privateKey = pair.getPrivate();
+            this.publicKey = pair.getPublic();
+        } catch (Throwable t) {
+            throw new RuntimeException(t);
+        }
+    }
+
+    private void RSAKeyPairGenerator() throws NoSuchAlgorithmException {
+
+    }
 }

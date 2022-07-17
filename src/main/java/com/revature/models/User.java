@@ -24,7 +24,7 @@ public class User {
     @Column(length = 50, name = "last_name")
     private String lastName;
 
-    @Column(nullable = false)
+    @Column(length=50, nullable = false)
     private String email;
 
     @Column(length = 64, nullable = false) // TODO : Length
