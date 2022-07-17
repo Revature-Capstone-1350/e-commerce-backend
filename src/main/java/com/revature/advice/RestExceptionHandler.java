@@ -18,6 +18,7 @@ public class RestExceptionHandler {
                 "This endpoint is coming soon");
     }
 
+    // This handles error thrown via the DTO validation annotations
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
     public ErrorResponse handleMethodArgumentNotValidExceptionException(
