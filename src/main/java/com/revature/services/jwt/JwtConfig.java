@@ -24,6 +24,7 @@ public class JwtConfig {
 
     @Value("${secrets.generate-rsa-keys}")
     private Boolean generateKeysRSA;
+    // toggles whether to generate new keys
 
     @Value("${secrets.encrypt-rsa-key}")
     private String publicKeyRSA;
@@ -62,6 +63,7 @@ public class JwtConfig {
                 KeyPair pair = keyGen.generateKeyPair();
                 this.privateKey = pair.getPrivate();
                 this.publicKey = pair.getPublic();
+                // The following two lines are used to get RSA keys.
 //                System.out.println(Base64.getEncoder().encodeToString(pair.getPrivate().getEncoded()));
 //                System.out.println(Base64.getEncoder().encodeToString(pair.getPublic().getEncoded()));
                 long totalTime = System.nanoTime() - startTime;
@@ -71,19 +73,9 @@ public class JwtConfig {
             }
         }
         else {
-            // TODO : form keys
-            this.encryptRSA = ""+publicKeyRSA;
-            this.decryptRSA = ""+privateKeyRSA;
             this.publicKey = (PublicKey) loadPublicKey(publicKeyRSA);
             this.privateKey = (PrivateKey) loadPrivateKey(privateKeyRSA);
-            //            PublicKey publicKey = (PublicKey) "";
         }
-        System.out.println("Values");
-        System.out.println(genKeys);
-        System.out.println(encryptRSA);
-        System.out.println(decryptRSA);
-        System.out.println(salt);
-        System.out.println(signingKey);
     }
 
     public int getExpiration() {
