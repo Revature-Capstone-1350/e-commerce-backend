@@ -2,6 +2,7 @@ package com.revature.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.hash.Hashing;
 import com.revature.dtos.AuthResponse;
 import com.revature.dtos.LoginRequest;
 import com.revature.dtos.Principal;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import java.nio.charset.StandardCharsets;
 import java.security.spec.KeySpec;
 
 @Service
@@ -116,13 +118,19 @@ public class AuthService {
         SecretKeyFactory factory;
 
         KeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt.getBytes(), 65536, 128);
+
         try {
             factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             byte[] hash = factory.generateSecret(keySpec).getEncoded();
-            return Base64.encodeBase64String(hash);
+            String hashedPassword = Base64.encodeBase64String(hash);
+            return additionalHash( hashedPassword );
         } catch (Throwable e) {
-            return null;
+            throw new RuntimeException();
         }
+    }
+    private String additionalHash(String string) {
+        return (string == null) ? null : Hashing.sha256().
+                hashString(string, StandardCharsets.UTF_8).toString();
     }
 }
 
