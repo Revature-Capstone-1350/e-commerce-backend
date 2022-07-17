@@ -45,11 +45,14 @@ public class AuthAspect {
     // which should return a 403 Forbidden such as:
     // String errorMessage = "Missing required role to perform this action";
     // return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorMessage);
-    @Around("@annotation(authorized)")
-    public Object authenticate(ProceedingJoinPoint pjp, Authorized authorized) throws Throwable {
-        authService.verifyToken(req.getHeader("Authorization"));
-        return pjp.proceed(pjp.getArgs()); // Call the originally intended method
-    }
+//    @Around("@annotation(authorized)") // This may be useless.
+//    // The only endpoints this applies to are those where the user's ID has to be linked to
+//    // the resource they're accessing or modifying. So, this could be deleted
+//    // The service layer handling requests would extract the token there.
+//    public Object authenticate(ProceedingJoinPoint pjp, Authorized authorized) throws Throwable {
+//        authService.verifyToken(req.getHeader("Authorization"));
+//        return pjp.proceed(pjp.getArgs()); // Call the originally intended method
+//    }
 
     @Around("@annotation(adminOnly)")
     public Object authenticate(ProceedingJoinPoint pjp, AdminOnly adminOnly) throws Throwable {
