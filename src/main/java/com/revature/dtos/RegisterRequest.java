@@ -1,28 +1,34 @@
 package com.revature.dtos;
 
+import com.revature.util.Regex;
+import com.revature.util.ValidatorMessageUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegisterRequest {
 
-    @NotBlank // This works. Blank input causes MethodArgumentNotValidException
-    @NotNull
+    @Email( message = ValidatorMessageUtil.EMAIL_REQUIRED_ON_REGISTRATION)
+    @NotNull( message = ValidatorMessageUtil.EMAIL_REQUIRED)
     private String email;
 
-    @NotBlank // requires that the field isn't just "" (zero characters)
-    @NotNull // requires field to be in the response body
+    @NotNull( message = ValidatorMessageUtil.PASSWORD_REQUIRED_ON_CREATE)
+    @Pattern( regexp  = Regex.PASSWORD, message = ValidatorMessageUtil.PASSWORD_REQUIREMENTS)
     private String password;
 
-    @NotBlank
-    @NotNull
+    @NotNull( message = ValidatorMessageUtil.FNAME_REQUIRED_ON_CREATE)
+    @Length( min = 1, message = ValidatorMessageUtil.FNAME_REQUIREMENT)
     private String firstName;
 
+    @NotNull( message = ValidatorMessageUtil.LNAME_REQUIRED_ON_CREATE)
+    @Length ( min = 1, message = ValidatorMessageUtil.LNAME_REQUIREMENT)
     private String lastName;
 }
