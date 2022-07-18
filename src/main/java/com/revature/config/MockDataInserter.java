@@ -22,7 +22,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 
 @Component
-@Profile("local || test || deploy")
+@Profile("default || local || test || deploy")
 public class MockDataInserter implements CommandLineRunner {
 
     private final AddressRepository addressRepo;
