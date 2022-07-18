@@ -1,6 +1,5 @@
 package com.revature.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.dtos.Principal;
 import com.revature.models.*;
 import com.revature.repositories.*;

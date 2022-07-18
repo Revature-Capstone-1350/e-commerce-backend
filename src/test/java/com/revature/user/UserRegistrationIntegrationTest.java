@@ -15,8 +15,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 // Test disabled for now
-//@SpringBootTest // Tells Spring we need to have an entire application context with everything set up and ready to go
-//@AutoConfigureMockMvc // configures mockMvc
+@SpringBootTest // Tells Spring we need to have an entire application context with everything set up and ready to go
+@AutoConfigureMockMvc // configures mockMvc
 class UserRegistrationIntegrationTest {
 
     private final MockMvc mockMvc;
@@ -35,14 +35,14 @@ class UserRegistrationIntegrationTest {
         this.userRepo = userRepo;
     }
 
-//    @Test
+    @Test
     void test_register_user_returns200givenValidRegisterRequest() throws Exception {
         RegisterRequest newRegistrationRequest = new RegisterRequest();
         newRegistrationRequest.setEmail("valid.user@valid.org");
         newRegistrationRequest.setFirstName("Valid");
         newRegistrationRequest.setLastName("AlsoValid");
         newRegistrationRequest.setPassword("!@#123qweQWEasd");
-
+        if (1==1) throw new RuntimeException();
         String requestPayload = mapper.writeValueAsString(newRegistrationRequest);
 
         mockMvc.perform(post(PATH).contentType(CONTENT_TYPE).content(requestPayload))
