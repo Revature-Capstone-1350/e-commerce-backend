@@ -10,6 +10,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class RestExceptionHandler {
+    /**
+     *
+     * The idea here is that all exceptions are coded here in the same way.
+     * Error messages are only here, not in the CustomException.class.
+     * The custom exceptions are the generic response codes, and other
+     * exceptions that give the same code will extend/inherit the original
+     */
+
 
     // Generic 501
     @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)

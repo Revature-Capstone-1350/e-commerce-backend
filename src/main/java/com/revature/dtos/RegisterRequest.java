@@ -16,8 +16,8 @@ public class RegisterRequest {
     @NotNull
     private String email;
 
-    @NotBlank
-    @NotNull
+    @NotBlank // requires that the field isn't just "" (zero characters)
+    @NotNull // requires field to be in the response body
     private String password;
 
     @NotBlank

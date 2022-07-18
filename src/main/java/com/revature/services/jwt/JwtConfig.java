@@ -28,37 +28,35 @@ public class JwtConfig {
 
     @Value("${secrets.encrypt-rsa-key}")
     private String publicKeyRSA;
+    // Stored RSA public key
 
     @Value("${secrets.decrypt-rsa-key}")
     private String privateKeyRSA;
+    //Stored RSA private key
 
     @Value("#{24 * 60 * 60 * 1000}") // number of milliseconds in a day
     private int expiration;
 
     @Value("#{5 * 60 * 1000}") // number of milliseconds in five minutes
-    private int expirationAdmin;
+    private int expirationAdmin; // only 5 minutes for security reasons
 
     private final SignatureAlgorithm sigAlg = SignatureAlgorithm.HS256;
 
     private Key signingKey;
-
-    private String encryptRSA;
-    private String decryptRSA;
-    private Boolean genKeys;
 
 
     @PostConstruct
     public void createSigningKey() {
         byte[] saltyBytes = DatatypeConverter.parseBase64Binary(salt);
         signingKey = new SecretKeySpec(saltyBytes, sigAlg.getJcaName());
-        this.genKeys = generateKeysRSA;
-        if (genKeys) {
+        Boolean genKeys = generateKeysRSA;
+        if (genKeys) { // generates new RSA keys
             try {
                 long startTime = System.nanoTime();
                 System.out.println("Generating RSA keys. This may take a few minutes.");
                 KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
                 keyGen.initialize(8192);
-                // 4096  only supported email length 240
+                // 4096 only supports email length 240
                 // 8192 supports email length 632
                 KeyPair pair = keyGen.generateKeyPair();
                 this.privateKey = pair.getPrivate();
@@ -72,7 +70,7 @@ public class JwtConfig {
                 throw new RuntimeException(t);
             }
         }
-        else {
+        else { // Turn the strings from the YML config file into Keys
             this.publicKey = (PublicKey) loadPublicKey(publicKeyRSA);
             this.privateKey = (PrivateKey) loadPrivateKey(privateKeyRSA);
         }

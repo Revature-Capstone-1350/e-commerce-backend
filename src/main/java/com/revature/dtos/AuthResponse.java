@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AuthResponse {
     private String email;
-    private String role;
+    private String role; // for conditional rendering in UI for admin
     private String firstName;
     private String lastName;
 

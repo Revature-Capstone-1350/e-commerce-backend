@@ -16,6 +16,11 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * This class populates all tables with data
+ * It normally runs in 3-4 seconds
+ */
+
 @Component
 @Profile("local || test || deploy")
 public class MockDataInserter implements CommandLineRunner {
@@ -28,7 +33,6 @@ public class MockDataInserter implements CommandLineRunner {
     private final ProductReviewRepository reviewRepo;
     private final UserRepository userRepo;
     private final UserRoleRepository roleRepo;
-    private final ObjectMapper mapper = new ObjectMapper();
     private final TokenService service;
     private final AuthService authService;
     private final Data data = new Data();
@@ -126,6 +130,7 @@ public class MockDataInserter implements CommandLineRunner {
         userRepo.saveAll(users); // handy list for use here
 
         // Populate table "product"; this code was generated in Python from image metadata
+        // TODO : Move the data to data.class and make this a loop
         String base_url = "https://raw.githubusercontent.com/jsparks9/pics/main/images-by-category/";
         List<Product> products = new ArrayList<>(); // products.add()
         products.add(new Product(cats.get(0),"cloud picture","cloud picture",2.95,base_url+"cloud/small/1.jpg",base_url+"cloud/medium/1.jpg"));
@@ -330,7 +335,7 @@ public class MockDataInserter implements CommandLineRunner {
 
         // Populate table "order"
         List<Order> orders = new ArrayList<>();
-        for (int i=0; i<50; i++) {
+        for (int i = 0; i < 50; i++) { // 50 random orders
             int userInd = ThreadLocalRandom.current().nextInt(0, users.size()); // randomly get a user
             User user = users.get(userInd);
             int addressInd = ThreadLocalRandom.current().nextInt(0, addresses.size()); // randomly get an address
@@ -366,7 +371,7 @@ public class MockDataInserter implements CommandLineRunner {
         System.out.println("Mock data insertion took " + (totalTime/Math.pow(1000,3)) + " seconds");
     }
 
-    private static void stars() { // for debugging
+    private static void stars() { // for debugging; prints 100 asterisks
         for (int i = 0; i < 10; i++) {
             System.out.print("**********");
         }

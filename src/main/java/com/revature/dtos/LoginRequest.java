@@ -3,7 +3,6 @@ package com.revature.dtos;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -13,11 +12,11 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class LoginRequest {
 
-    @NotBlank
-    @NotNull
+    @NotBlank // cannot be like ""
+    @NotNull // cannot be missing
     private String email;
 
-    @NotBlank
-    @NotNull
+    @NotBlank // cannot be like ""
+    @NotNull // cannot be missing
     private String password;
 }

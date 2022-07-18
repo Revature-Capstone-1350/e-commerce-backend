@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * This contains the metadata required for the product display
+ */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

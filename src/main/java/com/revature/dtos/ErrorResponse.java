@@ -5,6 +5,10 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * This gets sent as the response body when an error occurs
+ */
+
 @Data
 @NoArgsConstructor
 public class ErrorResponse {

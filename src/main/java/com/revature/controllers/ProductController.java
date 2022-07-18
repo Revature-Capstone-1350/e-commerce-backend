@@ -1,7 +1,6 @@
 package com.revature.controllers;
 
 import com.revature.annotations.AdminOnly;
-import com.revature.annotations.Authorized;
 import com.revature.dtos.ProductInfo;
 import com.revature.exceptions.NotImplementedException;
 import com.revature.services.ProductService;
@@ -13,8 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/product")
-//@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000"}, allowCredentials = "true")
-public class ProductController implements com.revature.interfaces.ProductController {
+public class ProductController {
 
     private final ProductService productService;
 

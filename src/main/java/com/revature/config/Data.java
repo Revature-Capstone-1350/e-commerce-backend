@@ -2,6 +2,13 @@ package com.revature.config;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * The purpose of this class is just to hold data.
+ * The names and addresses were generated in Python
+ * The Python packages used were "names" and "random_address" (no quotes)
+ * Reviews were generated online at https://randommer.io/Text/Review
+ */
+
 public class Data {
     private final String[][] reviews;
     private final String[] names;

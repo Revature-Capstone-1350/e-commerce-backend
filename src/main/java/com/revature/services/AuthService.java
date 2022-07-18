@@ -102,12 +102,11 @@ public class AuthService {
     }
 
     public String getToken(User user) {
-        return tokenService.generateToken(new Principal(user));
-//        try {
-//
-//        } catch (Throwable t) {
-//            throw new RuntimeException();
-//        }
+        Principal prin = new Principal(user);
+        if (user.getRole().getName().equalsIgnoreCase("Admin")) {
+            prin.setIsAdmin(true); // this affects the token expiration time
+        }
+        return tokenService.generateToken(prin);
     }
 
     public void verifyToken(String token) {

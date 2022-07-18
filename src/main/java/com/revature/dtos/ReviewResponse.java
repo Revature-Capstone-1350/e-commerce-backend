@@ -4,6 +4,10 @@ import com.revature.models.ProductReview;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * This is the DTO that would populate a table list of reviews for a product
+ */
+
 @Data
 @NoArgsConstructor
 public class ReviewResponse {
@@ -20,7 +24,7 @@ public class ReviewResponse {
         this.description = review.getDescription();
         this.reviewerId = review.getUser().getUserId();
         this.reviewerName = "";
-        String nameBuilder = "";
+        String nameBuilder = ""; // builds user's name for display in review
         if (review.getUser().getFirstName() != null
         && !review.getUser().getFirstName().isEmpty()) {
             nameBuilder += review.getUser().getFirstName();
