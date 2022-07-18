@@ -16,7 +16,7 @@ import javax.validation.constraints.Pattern;
 @AllArgsConstructor
 public class RegisterRequest {
 
-    @Email( message = ValidatorMessageUtil.EMAIL_REQUIRED_ON_REGISTRATION)
+    @Email( message = ValidatorMessageUtil.EMAIL_REQUIRED_ON_CREATE)
     @NotNull( message = ValidatorMessageUtil.EMAIL_REQUIRED)
     private String email;
 
@@ -25,10 +25,10 @@ public class RegisterRequest {
     private String password;
 
     @NotNull( message = ValidatorMessageUtil.FNAME_REQUIRED_ON_CREATE)
-    @Length( min = 1, message = ValidatorMessageUtil.FNAME_REQUIREMENT)
+    @Length( min = 1, message = ValidatorMessageUtil.FNAME_REQUIRED_ON_CREATE)
     private String firstName;
 
     @NotNull( message = ValidatorMessageUtil.LNAME_REQUIRED_ON_CREATE)
-    @Length ( min = 1, message = ValidatorMessageUtil.LNAME_REQUIREMENT)
+    @Length ( min = 1, message = ValidatorMessageUtil.LNAME_REQUIRED_ON_CREATE)
     private String lastName;
 }
