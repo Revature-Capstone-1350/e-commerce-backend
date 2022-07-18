@@ -35,7 +35,7 @@ class UserRegistrationIntegrationTest {
         this.userRepo = userRepo;
     }
 
-    @Test
+//    @Test
     void test_register_user_returns200givenValidRegisterRequest() throws Exception {
         RegisterRequest newRegistrationRequest = new RegisterRequest();
         newRegistrationRequest.setEmail("valid.user@valid.org");

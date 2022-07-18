@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 //@SpringBootTest
 class ECommerceApplicationTests {
 
-	@Test
+//	@Test
 	void contextLoads() {
 	}
 
