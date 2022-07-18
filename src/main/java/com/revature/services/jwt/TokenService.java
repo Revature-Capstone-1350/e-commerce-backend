@@ -3,23 +3,14 @@ package com.revature.services.jwt;
 
 import com.revature.dtos.Principal;
 import com.revature.exceptions.BadRequestException;
-import com.revature.exceptions.TokenParseException;
 import com.revature.exceptions.UnauthorizedException;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import java.nio.charset.StandardCharsets;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
 import java.util.Date;
 
 @Service
@@ -35,7 +26,7 @@ public class TokenService {
         long now = System.currentTimeMillis();
         long timeout = (subject.getIsAdmin()? jwtConfig.getExpirationAdmin() : jwtConfig.getExpiration());
 
-        JwtBuilder tokenBuilder = Jwts.builder()
+        JwtBuilder tokenBuilder = Jwts.builder() // IF adding claims, test that RSA key-size supports additional size
                                       .setIssuer("ecomapi")
                                       .claim("id", ""+subject.getAuthUserId())
                                       .claim("email",""+subject.getAuthUserEmail())
@@ -72,11 +63,6 @@ public class TokenService {
             throw new BadRequestException(t);
         } // This was tested, so errors here are due to bad data
     }
-    /*
-    Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-        cipher.init(Cipher.ENCRYPT_MODE, getPublicKey(publicKey));
-        return cipher.doFinal(data.getBytes())
-     */
 
     private String decryptRSA(String data) {
         try {

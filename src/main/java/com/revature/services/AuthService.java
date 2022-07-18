@@ -21,20 +21,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.nio.charset.StandardCharsets;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.security.spec.KeySpec;
 
 @Service
 public class AuthService {
 
-    @Value("${secrets.salt}")
+    @Value("${secrets.salt}") // TODO : test whether salt is getting set or needs @PostConstruct
     private String salt;
 
     private final UserRepository userRepo;
@@ -75,7 +70,7 @@ public class AuthService {
         );
         User user = new User(registerRequest);
         UserRole basicRole = roleRepo.findByNameIgnoreCase("Basic").orElseThrow(RuntimeException::new);
-        // RuntimeException because the server really should be able to find this role
+        // RuntimeException because the server should be able to find this role
 
         user.setRole(basicRole);
         user = userRepo.save(user);
