@@ -1,4 +1,4 @@
-package com.revature.filters;
+package com.revature.util.filters;
 
 import org.springframework.stereotype.Component;
 

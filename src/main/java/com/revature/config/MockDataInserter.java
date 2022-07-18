@@ -7,6 +7,7 @@ import com.revature.repositories.*;
 import com.revature.services.AuthService;
 import com.revature.services.jwt.TokenService;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Component
+@Profile("local || test || deploy")
 public class MockDataInserter implements CommandLineRunner {
 
     private final AddressRepository addressRepo;
