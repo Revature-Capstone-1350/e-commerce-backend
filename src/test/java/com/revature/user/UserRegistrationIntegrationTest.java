@@ -22,7 +22,6 @@ class UserRegistrationIntegrationTest {
     private final MockMvc mockMvc;
     // allows to send HTTP requests and assert about their responses
 
-
     private final ObjectMapper mapper;
     private final UserRepository userRepo;
     private final String PATH = "/auth/register";
