@@ -11,6 +11,9 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,5 +33,6 @@ public class RegisterRequest {
 
     @NotNull( message = ValidatorMessages.LNAME_REQUIRED_ON_REGISTRATION)
     @Length ( min = 1, message = ValidatorMessages.FNAME_REQUIREMENT)
+
     private String lastName;
 }

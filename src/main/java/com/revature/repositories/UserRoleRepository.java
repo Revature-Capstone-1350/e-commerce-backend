@@ -1,11 +1,14 @@
 package com.revature.repositories;
 
-import com.revature.models.Product;
+import com.revature.models.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Integer> {
+public interface UserRoleRepository extends JpaRepository<UserRole, Integer> {
     /**
      * Be sure to use the in-build methods, and avoid native queries
      * List<T> findAll();
@@ -19,4 +22,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
      * <S extends T> List<S> findAll(Example<S> example);
      * <S extends T> List<S> findAll(Example<S> example, Sort sort);
      */
+    @Query // Case-insensitive query
+    Optional<UserRole> findByNameIgnoreCase(String name);
 }

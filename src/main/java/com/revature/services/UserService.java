@@ -16,10 +16,14 @@ public class UserService {
     }
 
     public Optional<User> findByCredentials(String email, String password) {
-        return userRepository.findByEmailAndPassword(email, password);
+        return userRepository.findByEmailIgnoreCaseAndPassword(email, password);
     }
 
     public User save(User user) {
         return userRepository.save(user);
+    }
+
+    public Optional<User> findByIdAndEmailIgnoreCase(int id, String email) {
+        return userRepository.findByUserIdAndEmailIgnoreCase(id, email);
     }
 }

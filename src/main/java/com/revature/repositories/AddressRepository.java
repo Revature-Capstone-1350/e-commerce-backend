@@ -1,11 +1,11 @@
 package com.revature.repositories;
 
-import com.revature.models.Product;
+import com.revature.models.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Integer> {
+public interface AddressRepository extends JpaRepository<Address, Integer> {
     /**
      * Be sure to use the in-build methods, and avoid native queries
      * List<T> findAll();
