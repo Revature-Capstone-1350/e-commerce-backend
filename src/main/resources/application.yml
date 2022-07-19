@@ -1,11 +1,11 @@
 server:
   port: 5000
   servlet:
-    context-path: /photo
+    context-path: /
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=photo
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=skyview
     username: postgres
     password: revature
   jpa:
