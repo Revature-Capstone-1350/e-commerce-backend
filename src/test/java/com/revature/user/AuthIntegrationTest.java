@@ -19,6 +19,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -124,7 +125,7 @@ class AuthIntegrationTest {
         assertTrue(user.getRole().getName().equalsIgnoreCase("Basic"));
 
 //         Third block : Utilize token to access @AdminOnly endpoint
-        mockMvc.perform(post(TEST_PATH)
+        mockMvc.perform(delete(TEST_PATH)
                         .contentType(CONTENT_TYPE)
                         .header("Authorization", token))
                 .andExpect(status().isForbidden())
@@ -143,25 +144,6 @@ class AuthIntegrationTest {
                 .andReturn();
 
 
-    }
-
-    @Test
-    void abcd() throws Exception {
-        mockMvc.perform(post(TEST_PATH)
-                        .contentType(CONTENT_TYPE)
-                        .header("Authorization", "token"))
-//                .andExpect(status().isForbidden())
-//                .andExpect(header().string("content-type", CONTENT_TYPE))
-//                .andExpect(header().string("Access-Control-Allow-Origin", "*"))
-//                .andExpect(header().string("Access-Control-Allow-Methods", "*"))
-//                .andExpect(header().string("Access-Control-Allow-Headers", "*"))
-//                .andExpect(jsonPath("$.statusCode").exists())
-//                .andExpect(jsonPath("$.statusCode").isNumber())
-//                .andExpect(jsonPath("$.message").exists())
-//                .andExpect(jsonPath("$.message").isString())
-//                .andExpect(jsonPath("$.timestamp").exists())
-//                .andExpect(jsonPath("$.timestamp").isNotEmpty())
-                .andReturn();
     }
 
     private String randomPass() {
