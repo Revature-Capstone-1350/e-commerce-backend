@@ -3,10 +3,7 @@ package com.revature.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.hash.Hashing;
-import com.revature.dtos.AuthResponse;
-import com.revature.dtos.LoginRequest;
-import com.revature.dtos.Principal;
-import com.revature.dtos.RegisterRequest;
+import com.revature.dtos.*;
 import com.revature.exceptions.*;
 import com.revature.models.User;
 import com.revature.models.UserRole;
@@ -137,15 +134,15 @@ public class AuthService {
         return (string == null) ? null : Hashing.sha256().
                 hashString(string, StandardCharsets.UTF_8).toString();
     }
-    public ResponseEntity updateUser(String token, String oldPassword, String newPassword) {
+    public ResponseEntity updateUser(String token, ResetRequest resetRequest) {
         Principal principal = tokenService.extractTokenDetails(token); // get the principal from provided token
         User user = userRepo.getById(principal.getAuthUserId()); // find user by principal id
-        String hashedPassword = generatePassword(oldPassword);
+        String hashedOldPassword = generatePassword(resetRequest.getOldPassword());
 
-        if (!hashedPassword.equals(user.getPassword())) { // if the old password doesn't match what we have on record...
+        if (!hashedOldPassword.equals(user.getPassword())) { // if the old password doesn't match what we have on record...
             throw new UnauthorizedException(); // invalid password. possibly better exception could be used?
         }
-        user.setPassword(generatePassword(newPassword)); // otherwise, generate the password
+        user.setPassword(generatePassword(resetRequest.getNewPassword())); // otherwise, generate the password
         userRepo.save(user); // save the repo
         return makeResp(user, HttpStatus.OK.value()); // all is good
     }
