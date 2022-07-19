@@ -45,7 +45,7 @@
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 
-		<!--	Provides JpaRepository interface in our repos	-->
+		<!--	Provides our persistence annotations, i.e. @Table and @JpaRepository	-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
