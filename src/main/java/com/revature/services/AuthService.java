@@ -138,5 +138,10 @@ public class AuthService {
         return (string == null) ? null : Hashing.sha256().
                 hashString(string, StandardCharsets.UTF_8).toString();
     }
+    public ResponseEntity<Principal> updateUser(String token, String oldPassword, String newPassword) {
+        Principal foundUser = tokenService.extractTokenDetails(token);
+
+        return null;
+    }
 }
 
