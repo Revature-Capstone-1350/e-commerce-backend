@@ -19,13 +19,13 @@ public class AuthController {
     }
 
     @ResponseStatus(HttpStatus.OK) // if successful, sets status of response
-    @PostMapping("/login") // @RequestBody @Valid did not work in service layer.
+    @PostMapping(path="/login", consumes = "application/json", produces = "application/json")
     public ResponseEntity login(@RequestBody @Valid LoginRequest loginRequest) {
         return authService.login(loginRequest);
     }
 
     @ResponseStatus(HttpStatus.CREATED) // if successful, sets status of response
-    @PostMapping("/register")
+    @PostMapping(path="/register", consumes = "application/json", produces = "application/json")
     public ResponseEntity register(@RequestBody @Valid RegisterRequest registerRequest) {
         return authService.register(registerRequest);
     }
