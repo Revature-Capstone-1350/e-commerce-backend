@@ -51,12 +51,12 @@ class AuthIntegrationTest {
     }
 
 
-    String email = UUID.randomUUID().toString().replace("-","")+"@valid.org";
+    String validEmail = UUID.randomUUID().toString().replace("-","")+"@valid.org";
     // Constructs a random valid email
 
-    String password = randomPass();
-    String firstName = "Valid";
-    String lastName = "AlsoValid";
+    String validPass = randomPass();
+    String validFirst = "Valid";
+    String validLast = "AlsoValid";
 
     @Test
     void test_register_login_and_adminOnly_annotation() throws Exception {
@@ -64,11 +64,11 @@ class AuthIntegrationTest {
         // First block : show that login fails because user is not in the system
 
         LoginRequest newLoginRequest = new LoginRequest();
-        newLoginRequest.setEmail(email);
-        newLoginRequest.setPassword(password);
+        newLoginRequest.setEmail(validEmail);
+        newLoginRequest.setPassword(validPass);
 
         String loginRequest = mapper.writeValueAsString(newLoginRequest);
-        stars();
+
         mockMvc.perform(post(LOGIN_PATH).contentType(CONTENT_TYPE).content(loginRequest))
                 .andExpect(status().isUnauthorized())
                 .andExpect(header().string("content-type", CONTENT_TYPE))
@@ -83,15 +83,15 @@ class AuthIntegrationTest {
                 .andExpect(jsonPath("$.timestamp").exists())
                 .andExpect(jsonPath("$.timestamp").isNotEmpty())
                 .andReturn();
-        assertFalse(userRepo.existsByEmailIgnoreCase(email));
+        assertFalse(userRepo.existsByEmailIgnoreCase(validEmail));
 
         // Second block : register the user
 
         RegisterRequest newRegistrationRequest = new RegisterRequest();
-        newRegistrationRequest.setEmail(email);
-        newRegistrationRequest.setFirstName(firstName);
-        newRegistrationRequest.setLastName(lastName);
-        newRegistrationRequest.setPassword(password);
+        newRegistrationRequest.setEmail(validEmail);
+        newRegistrationRequest.setFirstName(validFirst);
+        newRegistrationRequest.setLastName(validLast);
+        newRegistrationRequest.setPassword(validPass);
         String registerRequest = mapper.writeValueAsString(newRegistrationRequest);
         stars();
         System.out.println(registerRequest);
@@ -106,21 +106,21 @@ class AuthIntegrationTest {
                 .andExpect(header().exists("Authorization"))
                 .andExpect(jsonPath("$.email").exists())
                 .andExpect(jsonPath("$.email").isString())
-                .andExpect(jsonPath("$.email").value(email))
+                .andExpect(jsonPath("$.email").value(validEmail))
                 .andExpect(jsonPath("$.role").exists())
                 .andExpect(jsonPath("$.role").isString())
                 .andExpect(jsonPath("$.role").value("BASIC"))
                 .andExpect(jsonPath("$.firstName").exists())
                 .andExpect(jsonPath("$.firstName").isString())
-                .andExpect(jsonPath("$.firstName").value(firstName))
+                .andExpect(jsonPath("$.firstName").value(validFirst))
                 .andExpect(jsonPath("$.lastName").exists())
                 .andExpect(jsonPath("$.lastName").isString())
-                .andExpect(jsonPath("$.lastName").value(lastName))
+                .andExpect(jsonPath("$.lastName").value(validLast))
                 .andReturn().getResponse().getHeader("Authorization");
-        assertTrue(userRepo.existsByEmailIgnoreCase(email));
+        assertTrue(userRepo.existsByEmailIgnoreCase(validEmail));
 
         User user = userRepo
-                .findByEmailIgnoreCaseAndPassword(email,authService.generatePassword(password))
+                .findByEmailIgnoreCaseAndPassword(validEmail,authService.generatePassword(validPass))
                 .orElseThrow(RuntimeException::new);
         assertTrue(user.getRole().getName().equalsIgnoreCase("Basic"));
 
@@ -146,6 +146,161 @@ class AuthIntegrationTest {
 
     }
 
+    @Test
+    void test_login_dto_no_number() throws Exception {
+        LoginRequest req = new LoginRequest();
+        req.setEmail(validEmail);
+        req.setPassword("aA@@@@@@");
+        String loginRequest = mapper.writeValueAsString(req);
+        mockMvc.perform(post(LOGIN_PATH).contentType(CONTENT_TYPE).content(loginRequest))
+                .andExpect(status().isBadRequest())
+                .andExpect(header().string("content-type", CONTENT_TYPE))
+                .andExpect(header().string("Access-Control-Allow-Origin", "*"))
+                .andExpect(header().string("Access-Control-Allow-Methods", "*"))
+                .andExpect(header().string("Access-Control-Allow-Headers", "*"))
+                .andExpect(jsonPath("$.statusCode").exists())
+                .andExpect(jsonPath("$.statusCode").isNumber())
+                .andExpect(jsonPath("$.statusCode").value(400))
+                .andExpect(jsonPath("$.message").exists())
+                .andExpect(jsonPath("$.message").isString())
+                .andExpect(jsonPath("$.message").value("Invalid Input."))
+                .andExpect(jsonPath("$.timestamp").exists())
+                .andExpect(jsonPath("$.timestamp").isNotEmpty())
+                .andReturn();
+    }
+    @Test
+    void test_login_dto_no_lowercase() throws Exception {
+        LoginRequest req = new LoginRequest();
+        req.setEmail(validEmail);
+        req.setPassword("1A@@@@@@");
+        assert(req.getPassword().length() >= 8);
+        String loginRequest = mapper.writeValueAsString(req);
+        mockMvc.perform(post(LOGIN_PATH).contentType(CONTENT_TYPE).content(loginRequest))
+                .andExpect(status().isBadRequest())
+                .andExpect(header().string("content-type", CONTENT_TYPE))
+                .andExpect(header().string("Access-Control-Allow-Origin", "*"))
+                .andExpect(header().string("Access-Control-Allow-Methods", "*"))
+                .andExpect(header().string("Access-Control-Allow-Headers", "*"))
+                .andExpect(jsonPath("$.statusCode").exists())
+                .andExpect(jsonPath("$.statusCode").isNumber())
+                .andExpect(jsonPath("$.statusCode").value(400))
+                .andExpect(jsonPath("$.message").exists())
+                .andExpect(jsonPath("$.message").isString())
+                .andExpect(jsonPath("$.message").value("Invalid Input."))
+                .andExpect(jsonPath("$.timestamp").exists())
+                .andExpect(jsonPath("$.timestamp").isNotEmpty())
+                .andReturn();
+    }
+    @Test
+    void test_login_dto_no_uppercase() throws Exception {
+        LoginRequest req = new LoginRequest();
+        req.setEmail(validEmail);
+        req.setPassword("1a@@@@@@");
+        assert(req.getPassword().length() >= 8);
+        String loginRequest = mapper.writeValueAsString(req);
+        mockMvc.perform(post(LOGIN_PATH).contentType(CONTENT_TYPE).content(loginRequest))
+                .andExpect(status().isBadRequest())
+                .andExpect(header().string("content-type", CONTENT_TYPE))
+                .andExpect(header().string("Access-Control-Allow-Origin", "*"))
+                .andExpect(header().string("Access-Control-Allow-Methods", "*"))
+                .andExpect(header().string("Access-Control-Allow-Headers", "*"))
+                .andExpect(jsonPath("$.statusCode").exists())
+                .andExpect(jsonPath("$.statusCode").isNumber())
+                .andExpect(jsonPath("$.statusCode").value(400))
+                .andExpect(jsonPath("$.message").exists())
+                .andExpect(jsonPath("$.message").isString())
+                .andExpect(jsonPath("$.message").value("Invalid Input."))
+                .andExpect(jsonPath("$.timestamp").exists())
+                .andExpect(jsonPath("$.timestamp").isNotEmpty())
+                .andReturn();
+    }
+    @Test
+    void test_login_dto_no_special_char() throws Exception {
+        LoginRequest req = new LoginRequest();
+        req.setEmail(validEmail);
+        req.setPassword("1Aaaaaaa");
+        assert(req.getPassword().length() >= 8);
+        String loginRequest = mapper.writeValueAsString(req);
+        mockMvc.perform(post(LOGIN_PATH).contentType(CONTENT_TYPE).content(loginRequest))
+                .andExpect(status().isBadRequest())
+                .andExpect(header().string("content-type", CONTENT_TYPE))
+                .andExpect(header().string("Access-Control-Allow-Origin", "*"))
+                .andExpect(header().string("Access-Control-Allow-Methods", "*"))
+                .andExpect(header().string("Access-Control-Allow-Headers", "*"))
+                .andExpect(jsonPath("$.statusCode").exists())
+                .andExpect(jsonPath("$.statusCode").isNumber())
+                .andExpect(jsonPath("$.statusCode").value(400))
+                .andExpect(jsonPath("$.message").exists())
+                .andExpect(jsonPath("$.message").isString())
+                .andExpect(jsonPath("$.message").value("Invalid Input."))
+                .andExpect(jsonPath("$.timestamp").exists())
+                .andExpect(jsonPath("$.timestamp").isNotEmpty())
+                .andReturn();
+    }
+    @Test
+    void test_login_dto_length7() throws Exception {
+        LoginRequest req = new LoginRequest();
+        req.setEmail(validEmail);
+        req.setPassword("1A@aaa");
+        assert(req.getPassword().length() < 8);
+        String loginRequest = mapper.writeValueAsString(req);
+        mockMvc.perform(post(LOGIN_PATH).contentType(CONTENT_TYPE).content(loginRequest))
+                .andExpect(status().isBadRequest())
+                .andExpect(header().string("content-type", CONTENT_TYPE))
+                .andExpect(header().string("Access-Control-Allow-Origin", "*"))
+                .andExpect(header().string("Access-Control-Allow-Methods", "*"))
+                .andExpect(header().string("Access-Control-Allow-Headers", "*"))
+                .andExpect(jsonPath("$.statusCode").exists())
+                .andExpect(jsonPath("$.statusCode").isNumber())
+                .andExpect(jsonPath("$.statusCode").value(400))
+                .andExpect(jsonPath("$.message").exists())
+                .andExpect(jsonPath("$.message").isString())
+                .andExpect(jsonPath("$.message").value("Invalid Input."))
+                .andExpect(jsonPath("$.timestamp").exists())
+                .andExpect(jsonPath("$.timestamp").isNotEmpty())
+                .andReturn();
+    }
+    @Test
+    void test_login_dto_correct_input() throws Exception {
+        LoginRequest req = new LoginRequest();
+        req.setEmail(validEmail);
+        req.setPassword("11AA@@$$aa");
+        assert(req.getPassword().length() >= 8);
+        assertFalse(userRepo.existsByEmailIgnoreCase(validEmail));
+        String loginRequest = mapper.writeValueAsString(req);
+        mockMvc.perform(post(LOGIN_PATH).contentType(CONTENT_TYPE).content(loginRequest))
+                .andExpect(status().isUnauthorized())
+                .andExpect(header().string("content-type", CONTENT_TYPE))
+                .andExpect(header().string("Access-Control-Allow-Origin", "*"))
+                .andExpect(header().string("Access-Control-Allow-Methods", "*"))
+                .andExpect(header().string("Access-Control-Allow-Headers", "*"))
+                .andExpect(jsonPath("$.statusCode").exists())
+                .andExpect(jsonPath("$.statusCode").isNumber())
+                .andExpect(jsonPath("$.statusCode").value(401))
+                .andExpect(jsonPath("$.message").exists())
+                .andExpect(jsonPath("$.message").isString())
+                .andExpect(jsonPath("$.message").value("Invalid Credentials."))
+                .andExpect(jsonPath("$.timestamp").exists())
+                .andExpect(jsonPath("$.timestamp").isNotEmpty())
+                .andReturn();
+    }
+    @Test
+    void test_login_dto_random_pass() throws Exception {
+        LoginRequest req = new LoginRequest();
+        req.setEmail(validEmail);
+        String password;
+        for (int i = 0; i < 10; i++) { // Worked locally with 1000 iterations
+            stars();
+            password = randomPass();
+            req.setPassword(password);
+            System.out.println("Testing: " + password);
+            String loginRequest = mapper.writeValueAsString(req);
+            mockMvc.perform(post(LOGIN_PATH).contentType(CONTENT_TYPE).content(loginRequest))
+                    .andExpect(status().isUnauthorized())
+                    .andReturn();
+        }
+
+    }
     private String randomPass() {
         String validChars = "@$!%*?&";
         String password = "";
