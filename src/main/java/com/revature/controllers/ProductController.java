@@ -51,7 +51,7 @@ public class ProductController {
     }
 
     @AdminOnly
-    @DeleteMapping("/{id}")
+    @DeleteMapping(path="/{id}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<ProductInfo> deleteProduct(@PathVariable("id") int id) {
         throw new NotImplementedException();
     }
