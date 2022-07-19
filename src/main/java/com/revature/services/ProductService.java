@@ -75,9 +75,8 @@ public class ProductService {
     }
 
 
-    public ProductInfo findById(int id){
-        return productRepo.findById(id).map(ProductInfo::new).orElseThrow(NotFoundException::new);
-
+    public ResponseEntity findById(int id) {
+        return null;
     }
 
     public ResponseEntity save(Product product) {

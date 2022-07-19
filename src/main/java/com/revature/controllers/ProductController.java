@@ -34,8 +34,8 @@ public class ProductController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
-    public ProductInfo getProductById(@PathVariable("id") int id) {
-        return productService.findById(id);
+    public ResponseEntity getProductById(@PathVariable("id") int id) {
+        throw new NotImplementedException();
     }
 
     @AdminOnly

@@ -34,7 +34,7 @@ public class ProductInfo {
         this.price = product.getPrice();
         this.imgUrlSmall = product.getImageUrlS();
         this.imgUrlMed = product.getImageUrlM();
-        this.category = product.getCategory().getName();
+        this.category = product.getCategory().toString();
         this.numberOfRatings = product.getRatings().size();
     }
 
