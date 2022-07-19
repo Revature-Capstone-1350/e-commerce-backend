@@ -128,8 +128,7 @@ public class AuthService {
         try {
             factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             byte[] hash = factory.generateSecret(keySpec).getEncoded();
-            String hashedPassword = Base64.encodeBase64String(hash);
-            return additionalHash( hashedPassword );
+            return Base64.encodeBase64String(hash);
         } catch (Throwable e) {
             throw new RuntimeException();
         }
@@ -139,7 +138,9 @@ public class AuthService {
                 hashString(string, StandardCharsets.UTF_8).toString();
     }
     public ResponseEntity<Principal> updateUser(String token, String oldPassword, String newPassword) {
-        Principal foundUser = tokenService.extractTokenDetails(token);
+        Principal principal = tokenService.extractTokenDetails(token); // get the principal from provided token
+        User user = userRepo.getById(principal.getAuthUserId()); // find user by principal id
+        String hashedPassword = generatePassword(newPassword);
 
         return null;
     }
