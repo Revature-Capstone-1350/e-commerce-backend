@@ -137,12 +137,17 @@ public class AuthService {
         return (string == null) ? null : Hashing.sha256().
                 hashString(string, StandardCharsets.UTF_8).toString();
     }
-    public ResponseEntity<Principal> updateUser(String token, String oldPassword, String newPassword) {
+    public ResponseEntity updateUser(String token, String oldPassword, String newPassword) {
         Principal principal = tokenService.extractTokenDetails(token); // get the principal from provided token
         User user = userRepo.getById(principal.getAuthUserId()); // find user by principal id
-        String hashedPassword = generatePassword(newPassword);
+        String hashedPassword = generatePassword(oldPassword);
 
-        return null;
+        if (!hashedPassword.equals(user.getPassword())) { // if the old password doesn't match what we have on record...
+            throw new UnauthorizedException(); // invalid password. possibly better exception could be used?
+        }
+        user.setPassword(generatePassword(newPassword)); // otherwise, generate the password
+        userRepo.save(user); // save the repo
+        return makeResp(user, HttpStatus.OK.value()); // all is good
     }
 }
 
