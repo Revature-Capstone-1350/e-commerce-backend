@@ -15,9 +15,7 @@ import lombok.NoArgsConstructor;
 public class ProductInfo {
     private Integer productId;
     private String name;
-    private String location;
     private String description;
-    private String date;
     private double price;
     private String imgUrlSmall;
     private String imgUrlMed;
@@ -28,9 +26,7 @@ public class ProductInfo {
     public ProductInfo(Product product) {
         this.productId = product.getProductId();
         this.name = product.getName();
-        this.location = product.getLocation();
         this.description = product.getDescription();
-        this.date = product.getDate();
         this.price = product.getPrice();
         this.imgUrlSmall = product.getImageUrlS();
         this.imgUrlMed = product.getImageUrlM();

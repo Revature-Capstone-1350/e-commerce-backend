@@ -2,6 +2,7 @@ package com.revature.controllers;
 
 import com.revature.dtos.LoginRequest;
 import com.revature.dtos.RegisterRequest;
+import com.revature.dtos.ResetRequest;
 import com.revature.services.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,5 +29,10 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterRequest registerRequest) {
         return authService.register(registerRequest);
+    }
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping(value = "/reset", consumes = "application/json")
+    public ResponseEntity resetPassword(@RequestBody @Valid ResetRequest resetRequest, @RequestHeader(name = "Authorization") String token) {
+        return authService.updateUser(token, resetRequest);
     }
 }

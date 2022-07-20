@@ -2,6 +2,7 @@ package com.revature.advice;
 
 import com.revature.dtos.ErrorResponse;
 import com.revature.exceptions.*;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -56,6 +57,14 @@ public class RestExceptionHandler {
         t.printStackTrace();
         return new ErrorResponse(HttpStatus.UNAUTHORIZED.value(),
                 "Invalid Credentials.");
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ErrorResponse handleTokenExpirationException(Throwable t) {
+        t.printStackTrace();
+        return new ErrorResponse(HttpStatus.UNAUTHORIZED.value(),
+                "Login session expired. Please login again.");
     }
 
     // Specific 401
