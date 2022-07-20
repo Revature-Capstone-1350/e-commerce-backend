@@ -28,7 +28,7 @@ public class Category {
     public String getName() { return name; }
 
     // setters
-//    public void setCategoryId(Integer categoryId) { this.categoryId = categoryId; }
+    public void setCategoryId(Integer categoryId) { this.categoryId = categoryId; }
     public void setName(String name) { this.name = name; }
 
     @Override

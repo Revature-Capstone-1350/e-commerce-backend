@@ -1,5 +1,7 @@
 package com.revature.models;
 
+import com.revature.dtos.ProductRequest;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,19 +19,13 @@ public class Product {
             )
     private Integer productId;
 
-    @Column(nullable = false)
+    @Column(length = 50, nullable = false)
     private String name; // person who posted or provided image
-
-    @Column
-    private String location; // Where photo was taken
 
     @Column
     private String description; // What's showcased in the photo
 
-    @Column
-    private String date; // When photo was taken
-
-    @Column(nullable = false)
+    @Column(nullable = false, precision = 8, scale = 2, columnDefinition = "numeric")
     private double price;
 
     @Column(name = "image_url_s", nullable = false)
@@ -51,12 +47,10 @@ public class Product {
     // constructors
     public Product() { super(); } // required no-args constructor
 
-    public Product(String name, String location, String description, String date, double price, String imageUrlS, String imageUrlM, String imageUrlL, Category category) {
+    public Product(String name, String location, String description, double price, String imageUrlS, String imageUrlM, String imageUrlL, Category category) {
         this();
         this.name = name;
-        this.location = location;
         this.description = description;
-        this.date = date;
         this.price = price;
         this.imageUrlS = imageUrlS;
         this.imageUrlM = imageUrlM;
@@ -70,16 +64,25 @@ public class Product {
         this.name = name;
         this.description = description;
         this.price = price;
+        //this.imageUrl = imageUrlS;
         this.imageUrlS = imageUrlS;
         this.imageUrlM = imageUrlM;
+    }
+
+    public Product(ProductRequest product, Category category) {
+        this.productId = product.getId();
+        this.name = product.getName();
+        this.description = product.getDescription();
+        this.price = product.getPrice();
+        this.imageUrlS = product.getImageUrlS();
+        this.imageUrlM = product.getImageUrlM();
+        this.category = category;
     }
 
     // getters
     public Integer getProductId() { return productId; }
     public String getName() { return name; }
-    public String getLocation() { return location; }
     public String getDescription() { return description; }
-    public String getDate() { return date; }
     public double getPrice() { return price; }
     public String getImageUrlS() { return imageUrlS; }
     public String getImageUrlM() { return imageUrlM; }
@@ -91,19 +94,15 @@ public class Product {
     }
 
     // setters
-//    public void setProductId(Integer productId) { this.productId = productId; }
+    public void setProductId(Integer productId) { this.productId = productId; }
     public void setName(String name) { this.name = name; }
-    public void setLocation(String location) { this.location = location; }
     public void setDescription(String description) { this.description = description; }
-    public void setDate(String date) { this.date = date; }
     public void setPrice(double price) { this.price = price; }
     public void setImageUrlS(String imageUrlS) { this.imageUrlS = imageUrlS; }
     public void setImageUrlM(String imageUrlM) { this.imageUrlM = imageUrlM; }
     public void setImageUrlL(String imageUrlL) { this.imageUrlL = imageUrlL; }
     public void setCategory(Category category) { this.category = category; }
     public void setRatings(List<ProductReview> productReviews) { this.productReviews = productReviews; }
-
-
 
     @Override
     public String toString() {

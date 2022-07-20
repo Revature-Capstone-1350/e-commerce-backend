@@ -2,6 +2,7 @@ package com.revature.controllers;
 
 import com.revature.annotations.AdminOnly;
 import com.revature.dtos.ProductInfo;
+import com.revature.dtos.ProductRequest;
 import com.revature.exceptions.NotImplementedException;
 import com.revature.services.ProductService;
 import org.springframework.http.HttpStatus;
@@ -38,10 +39,10 @@ public class ProductController {
         throw new NotImplementedException();
     }
 
-    @AdminOnly
+    //@AdminOnly
     @PutMapping
-    public void insert(@RequestBody ProductInfo product) {
-        throw new NotImplementedException();
+    public ResponseEntity insert(@RequestBody ProductRequest product) {
+        return productService.updateProduct(product);
     }
 
     @AdminOnly

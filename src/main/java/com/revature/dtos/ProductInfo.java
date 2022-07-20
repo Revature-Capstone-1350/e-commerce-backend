@@ -28,9 +28,9 @@ public class ProductInfo {
     public ProductInfo(Product product) {
         this.productId = product.getProductId();
         this.name = product.getName();
-        this.location = product.getLocation();
+//        this.location = product.getLocation();
         this.description = product.getDescription();
-        this.date = product.getDate();
+        //this.date = product.getDate();
         this.price = product.getPrice();
         this.imgUrlSmall = product.getImageUrlS();
         this.imgUrlMed = product.getImageUrlM();
