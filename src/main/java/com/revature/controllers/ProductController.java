@@ -56,11 +56,21 @@ public class ProductController {
         reviewService.postReview(token, reviewReq, productId);
     }
 
+    /**
+     * Will return product information by product id
+     * @param id
+     * @return return product
+     */
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public ResponseEntity getProductById(@PathVariable("id") int id) {
         throw new NotImplementedException();
     }
+
+    /**
+     * Will insert product information
+     * @param product
+     */
 
     @AdminOnly
     @PutMapping
@@ -68,11 +78,23 @@ public class ProductController {
         throw new NotImplementedException();
     }
 
+    /**
+     * Will list product information
+     * @param metadata
+     * @return return product information
+     */
+
     @AdminOnly
     @PatchMapping
     public ResponseEntity<List<ProductInfo>> purchase(@RequestBody List<ProductInfo> metadata) {
         throw new NotImplementedException();
     }
+
+    /**
+     * Will delete product by id
+     * @param id
+     * @return delete product
+     */
 
     @AdminOnly
     @DeleteMapping("/{id}")
