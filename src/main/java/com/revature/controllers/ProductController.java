@@ -25,12 +25,22 @@ public class ProductController {
         this.reviewService = reviewService;
     }
 
+    /**
+     * This endpoint will return all the products
+     * @return Return a list of the products
+     */
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public ResponseEntity getInventory() {
         return productService.findAll();
     }
 
+
+    /**
+     * This endpoint will return all review for the selected product
+     * @param id The id of the product we want to search
+     * @return Returns all the reviews for the selected product
+     */
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/rating/{id}")
     public ResponseEntity getProductReviewsById(@PathVariable("id") int id) {
@@ -39,9 +49,9 @@ public class ProductController {
 
     /**
      *
-     * @param token
-     * @param reviewReq
-     * @param productId
+     * @param token The token needed once a person is logged in
+     * @param reviewReq The review information passed into the review
+     * @param productId The id of the product
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(
@@ -63,8 +73,8 @@ public class ProductController {
      */
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
-    public ResponseEntity getProductById(@PathVariable("id") int id) {
-        throw new NotImplementedException();
+    public ProductInfo getProductById(@PathVariable("id") int id) {
+        return productService.findById(id);
     }
 
     /**
