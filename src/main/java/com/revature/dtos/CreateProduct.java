@@ -14,18 +14,18 @@ public class CreateProduct {
 
     private int createId;
 
-    private int createQuantity;
-
     private double createPrice;
 
     private String createDescription;
 
-    private String createImage;
+    private String createImageSmall;
+
+    private String createImageMedium;
 
     private String createName;
 
     public Product extractResource() {
-            return new Product(createId,createQuantity,createPrice,createDescription,createImage,createName);
+            return new Product(createId,createPrice, createDescription,createImageSmall,createImageMedium,createName);
     }
 
 }

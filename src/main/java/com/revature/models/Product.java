@@ -19,22 +19,21 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int quantity;
     private double price;
     private String description;
-    private String image;
+    private String imageSmall;
+    private String imageMedium;
     private String name;
 
 
     public Product(CreateProduct createProduct) {
         this.id = createProduct.getCreateId();
-        this.quantity = createProduct.getCreateQuantity();
         this.price = createProduct.getCreatePrice();
         this.description = createProduct.getCreateDescription();
-        this.image = createProduct.getCreateImage();
+        this.imageSmall = createProduct.getCreateImageSmall();
+        this.imageMedium = createProduct.getCreateImageMedium();
         this.name = createProduct.getCreateName();
     }
-
 
 }
 
