@@ -29,7 +29,7 @@ public class ProductReview {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    // constructors
+    //constructors
     public ProductReview() { super(); } // required no-args constructor
 
     public ProductReview(Integer rating, String description, User user, Product product) {

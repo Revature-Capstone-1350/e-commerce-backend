@@ -29,6 +29,12 @@ public class ReviewService {
         this.tokenService = tokenService;
     }
 
+    /**
+     *
+     * @param token
+     * @param reviewReq
+     * @param productId
+     */
     public void postReview(String token, ProductReviewRequest reviewReq, int productId) {
         Principal prin = tokenService.extractTokenDetails(token);
         System.out.println(prin);
@@ -36,7 +42,8 @@ public class ReviewService {
                 prin.getAuthUserId(),
                 prin.getAuthUserEmail()
         ).orElseThrow(ForbiddenException::new);
-        // User identity now verified
+        //User identity now verified
+
 
         // now, verify product exists
         Product product = productRepo.findById(productId).orElseThrow(BadRequestException::new);
