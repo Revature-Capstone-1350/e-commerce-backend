@@ -28,8 +28,9 @@ public class UserController {
         return userService.findAllUsers();
     }
 
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{id}")
+    //
+    @ResponseStatus(HttpStatus.OK) // Set status of the response
+    @GetMapping("/{id}") // Mapping /api/users/reqId
     public UserResponse getUserById(@PathVariable("id") @Valid int id) {
         return userService.findById(id);
     }

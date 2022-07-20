@@ -94,6 +94,7 @@ public class RestExceptionHandler {
                 "Resource not found.");
     }
 
+    // Invalid ID 404
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(NumberFormatException.class)
     public ErrorResponse handleNumberFormatException(Throwable t){

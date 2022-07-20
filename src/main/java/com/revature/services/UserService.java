@@ -41,6 +41,7 @@ public class UserService {
     }
 
     public UserResponse findById(Integer id){
+        // Find the user by ID and turn the returned entity into a response, if user is not found throw a NotFoundException
         return userRepository.findById(id).map(UserResponse::new).orElseThrow(NotFoundException::new);
     }
 
