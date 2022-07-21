@@ -299,6 +299,11 @@ public class MockDataInserter implements CommandLineRunner {
         products.add(new Product(cats.get(7),"sun picture","sun picture",1.95,base_url+"sun/small/7.jpg",base_url+"sun/medium/7.jpg"));
         products.add(new Product(cats.get(7),"sun picture","sun picture",0.45,base_url+"sun/small/8.jpg",base_url+"sun/medium/8.jpg"));
         products.add(new Product(cats.get(7),"sun picture","sun picture",0.95,base_url+"sun/small/9.jpg",base_url+"sun/medium/9.jpg"));
+        for (Product product: products) {
+            String genericDesc = product.getCategory().getName() + " picture";
+            product.setName(genericDesc);
+            product.setDescription(genericDesc);
+        }
         prodRepo.saveAll(products);
 
         // Populate table "product_review"

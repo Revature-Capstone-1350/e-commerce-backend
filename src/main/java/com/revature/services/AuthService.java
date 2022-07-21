@@ -3,10 +3,7 @@ package com.revature.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.hash.Hashing;
-import com.revature.dtos.AuthResponse;
-import com.revature.dtos.LoginRequest;
-import com.revature.dtos.Principal;
-import com.revature.dtos.RegisterRequest;
+import com.revature.dtos.*;
 import com.revature.exceptions.*;
 import com.revature.models.User;
 import com.revature.models.UserRole;
@@ -128,8 +125,7 @@ public class AuthService {
         try {
             factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             byte[] hash = factory.generateSecret(keySpec).getEncoded();
-            String hashedPassword = Base64.encodeBase64String(hash);
-            return additionalHash( hashedPassword );
+            return Base64.encodeBase64String(hash);
         } catch (Throwable e) {
             throw new RuntimeException();
         }
@@ -137,6 +133,18 @@ public class AuthService {
     private String additionalHash(String string) {
         return (string == null) ? null : Hashing.sha256().
                 hashString(string, StandardCharsets.UTF_8).toString();
+    }
+    public ResponseEntity updateUser(String token, ResetRequest resetRequest) {
+        Principal principal = tokenService.extractTokenDetails(token); // get the principal from provided token
+        User user = userRepo.getById(principal.getAuthUserId()); // find user by principal id
+        String hashedOldPassword = generatePassword(resetRequest.getOldPassword());
+
+        if (!hashedOldPassword.equals(user.getPassword())) { // if the old password doesn't match what we have on record...
+            throw new UnauthorizedException(); // invalid password. possibly better exception could be used?
+        }
+        user.setPassword(generatePassword(resetRequest.getNewPassword())); // otherwise, generate the password
+        userRepo.save(user); // save the repo
+        return makeResp(user, HttpStatus.OK.value()); // all is good
     }
 }
 

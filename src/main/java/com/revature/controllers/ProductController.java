@@ -35,13 +35,32 @@ public class ProductController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
-    public ResponseEntity getProductById(@PathVariable("id") int id) {
-        throw new NotImplementedException();
+    public ProductInfo getProductById(@PathVariable("id") int id) {
+        return productService.findById(id);
     }
 
-    //@AdminOnly
-    @PutMapping
+
+
+    /**
+     * put endpoint to update a product
+     * @param product receives a product Json
+     * @return org.springframework.http.ResponseEntity
+     */
+    @AdminOnly
+    @PutMapping(consumes = "application/json")
     public ResponseEntity insert(@RequestBody ProductRequest product) {
+        /*
+        //example json
+        {
+            "id":1,
+            "name":"limit 50 char",
+            "description":"no limit",
+            "price":123456.12,
+            "imageUrlS":"url",
+            "imageUrlM":"url",
+            "category":1
+        }
+        */
         return productService.updateProduct(product);
     }
 

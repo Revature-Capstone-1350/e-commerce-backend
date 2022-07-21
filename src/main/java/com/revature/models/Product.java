@@ -34,9 +34,6 @@ public class Product {
     @Column(name = "image_url_m", nullable = false)
     private String imageUrlM;
 
-    @Column(name = "image_url_l") // might get all large images later, but nullable for now
-    private String imageUrlL;
-
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
@@ -54,7 +51,6 @@ public class Product {
         this.price = price;
         this.imageUrlS = imageUrlS;
         this.imageUrlM = imageUrlM;
-        this.imageUrlL = imageUrlL;
         this.category = category;
     }
 
@@ -86,7 +82,6 @@ public class Product {
     public double getPrice() { return price; }
     public String getImageUrlS() { return imageUrlS; }
     public String getImageUrlM() { return imageUrlM; }
-    public String getImageUrlL() { return imageUrlL; }
     public Category getCategory() { return category; }
     public List<ProductReview> getRatings() {
         if (productReviews == null) return new ArrayList<>();
@@ -100,7 +95,6 @@ public class Product {
     public void setPrice(double price) { this.price = price; }
     public void setImageUrlS(String imageUrlS) { this.imageUrlS = imageUrlS; }
     public void setImageUrlM(String imageUrlM) { this.imageUrlM = imageUrlM; }
-    public void setImageUrlL(String imageUrlL) { this.imageUrlL = imageUrlL; }
     public void setCategory(Category category) { this.category = category; }
     public void setRatings(List<ProductReview> productReviews) { this.productReviews = productReviews; }
 
@@ -113,7 +107,6 @@ public class Product {
                 ", price=" + price +
                 ", image_url_s='" + imageUrlS + '\'' +
                 ", image_url_m='" + imageUrlM + '\'' +
-                ", image_url_l='" + imageUrlL + '\'' +
                 ", category=" + category +
                 ", productReviews.size()=" + ((productReviews == null)?0:productReviews.size()) +
                 '}';

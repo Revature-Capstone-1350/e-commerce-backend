@@ -81,37 +81,43 @@ public class ProductService {
     }
 
 
-    public ResponseEntity findById(int id) {
-        return null;
+    public ProductInfo findById(int id){
+        return productRepo.findById(id).map(ProductInfo::new).orElseThrow(NotFoundException::new);
+
     }
 
+    /**
+     * attempts to update based off a product
+     * @param product product to be updated
+     * @return org.springframework.http.ResponseEntity
+     */
     public ResponseEntity updateProduct(ProductRequest product) {
 
-        String errorMessage = "issues with this request: ";
+        String errorMessage = "Issue(s) with this request: ";
         boolean passed = true;
 
         if (!productRepo.findById(product.getId()).isPresent()) {
-            errorMessage += "\n No product found for this id";
+            errorMessage += "\n - No product found for this id";
             passed = false;
         }
 
         if (!categoryRepo.findById(product.getCategory()).isPresent()) {
-            errorMessage += "\n No category found";
+            errorMessage += "\n - No category found";
             passed = false;
         }
 
         if (BigDecimal.valueOf(product.getPrice()).scale() > 2) {
-            errorMessage += "\n Price too long of a decimal number";
+            errorMessage += "\n - Price too long of a decimal number";
             passed = false;
         }
 
         if (BigDecimal.valueOf(product.getPrice()).precision() > 8) {
-            errorMessage += "\n Price length is too long";
+            errorMessage += "\n - Price length is too long";
             passed = false;
         }
 
         if (product.getName().length() > 50) {
-            errorMessage += "\n Name is more then 50 characters";
+            errorMessage += "\n - Name is more then 50 characters";
             passed = false;
         }
 
