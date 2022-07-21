@@ -7,6 +7,7 @@ import com.revature.dtos.ProductRequest;
 import com.revature.dtos.ReviewResponse;
 import com.revature.exceptions.BadRequestException;
 import com.revature.exceptions.NotFoundException;
+import com.revature.exceptions.UnprocessableEntityException;
 import com.revature.models.Category;
 import com.revature.models.Product;
 import com.revature.models.ProductReview;
@@ -89,35 +90,34 @@ public class ProductService {
     /**
      * attempts to update based off a product
      * @param product product to be updated
-     * @return org.springframework.http.ResponseEntity
      */
-    public ResponseEntity updateProduct(ProductRequest product) {
+    public void updateProduct(ProductRequest product) {
 
-        String errorMessage = "Issue(s) with this request: ";
+        StringBuilder errorMessage = new StringBuilder("Issue(s) with this request:");
         boolean passed = true;
 
         if (!productRepo.findById(product.getId()).isPresent()) {
-            errorMessage += "\n - No product found for this id";
+            errorMessage.append(" - No product found for this id");
             passed = false;
         }
 
         if (!categoryRepo.findById(product.getCategory()).isPresent()) {
-            errorMessage += "\n - No category found";
+            errorMessage.append(" - No category found");
             passed = false;
         }
 
         if (BigDecimal.valueOf(product.getPrice()).scale() > 2) {
-            errorMessage += "\n - Price too long of a decimal number";
+            errorMessage.append(" - Price too long of a decimal number");
             passed = false;
         }
 
         if (BigDecimal.valueOf(product.getPrice()).precision() > 8) {
-            errorMessage += "\n - Price length is too long";
+            errorMessage.append(" - Price length is too long");
             passed = false;
         }
 
         if (product.getName().length() > 50) {
-            errorMessage += "\n - Name is more then 50 characters";
+            errorMessage.append(" - Name is more then 50 characters");
             passed = false;
         }
 
@@ -125,9 +125,8 @@ public class ProductService {
             Category updateCategory = categoryRepo.getById(product.getCategory());
             Product updateProduct = new Product(product,updateCategory);
             productRepo.save(updateProduct);
-            return ResponseEntity.status(204).body("");
         } else {
-            return ResponseEntity.status(422).body(errorMessage);
+            throw new UnprocessableEntityException(errorMessage.toString());
         }
     }
     

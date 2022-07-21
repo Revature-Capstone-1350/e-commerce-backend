@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.Collections;
+
 @RestControllerAdvice
 public class RestExceptionHandler {
     /**
@@ -110,6 +112,13 @@ public class RestExceptionHandler {
         t.printStackTrace();
         return new ErrorResponse(HttpStatus.CONFLICT.value(),
                 "There is already a resource with those specifications.");
+    }
+
+    // Generic 422
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ExceptionHandler(UnprocessableEntityException.class)
+    public ErrorResponse handleUnprocessableEntityException(UnprocessableEntityException e) {
+        return new ErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.getMessage());
     }
 
     // Generic 500

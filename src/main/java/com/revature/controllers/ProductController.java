@@ -46,9 +46,10 @@ public class ProductController {
      * @param product receives a product Json
      * @return org.springframework.http.ResponseEntity
      */
-    @AdminOnly
+    //@AdminOnly
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping(consumes = "application/json")
-    public ResponseEntity insert(@RequestBody ProductRequest product) {
+    public void update(@RequestBody ProductRequest product) {
         /*
         //example json
         {
@@ -61,7 +62,7 @@ public class ProductController {
             "category":1
         }
         */
-        return productService.updateProduct(product);
+        productService.updateProduct(product);
     }
 
     @AdminOnly
