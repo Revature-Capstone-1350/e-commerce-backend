@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS address (
 	address_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
 	street VARCHAR NOT NULL,
 	street2 VARCHAR,
-	state CHAR(2) NOT NULL,
+	state VARCHAR(2) NOT NULL,
 	city VARCHAR(50) NOT NULL,
 	postal_code VARCHAR(10) NOT NULL
 );
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS "user" (
 	first_name VARCHAR(50) NOT NULL,
 	last_name VARCHAR(50),
 	email VARCHAR(255) NOT NULL UNIQUE,
-	"password" CHAR(64) NOT NULL,
+	"password" VARCHAR(64) NOT NULL,
 	role_id INT NOT NULL,
 	
 	CONSTRAINT fk_user_role 
@@ -43,8 +43,9 @@ CREATE TABLE IF NOT EXISTS product (
 	product_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
 	name VARCHAR(50) NOT NULL,
 	description VARCHAR,
-	price DECIMAL(8,2) NOT NULL,
-	image_url VARCHAR NOT NULL,
+	price DOUBLE PRECISION NOT NULL,
+	image_url_small VARCHAR NOT NULL,
+	image_url_medium VARCHAR NOT NULL,
 	category_id INT NOT NULL,
 	
 	CONSTRAINT fk_category
