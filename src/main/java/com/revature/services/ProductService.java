@@ -51,28 +51,13 @@ public class ProductService {
                 .body(resp);        // Add the JSON response body
     }
 
-    public ResponseEntity findReviewsByProductId(int id) {
-        Product product = productRepo.findById(id)
-                .orElseThrow(NotFoundException::new);
-
-        List<ReviewResponse> reviews;
-        if (product.getRatings() == null || product.getRatings().size() == 0) {
-            reviews = new ArrayList<>();
-        }
-        else {
-            reviews = product.getRatings().stream().map(ReviewResponse::new).collect(Collectors.toList());
-        }
-        String resp = "";
-        try {
-            resp = mapper.writeValueAsString(reviews); // prepare JSON response
-        } catch (JsonProcessingException e) {
-            throw new BadRequestException();
-        } // This throw is only anticipated to happen upon a bad request
-
-        return ResponseEntity
-                .status(HttpStatus.OK.value()) // Set response status
-                .body(resp);        // Add the JSON response body
-
+    public List<ReviewResponse> findReviewsByProductId(int id) {
+        return productRepo.findById(id)
+                .orElseThrow(NotFoundException::new)
+                .getRatings()
+                .stream()
+                .map(ReviewResponse::new)
+                .collect(Collectors.toList());     // Add the JSON response body
     }
 
 

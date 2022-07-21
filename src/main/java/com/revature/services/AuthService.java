@@ -43,20 +43,18 @@ public class AuthService {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity login(LoginRequest loginRequest) {
+    public Principal login(LoginRequest loginRequest) {
 
-        // Validate credentials
-        User user = userRepo.findByEmailIgnoreCaseAndPassword(
-                loginRequest.getEmail(),
-                generatePassword(loginRequest.getPassword())
-        ).orElseThrow(UnauthorizedException::new);
-        // at this point, the credentials have been determined to be valid.
+        // Validate credential & at this point, the credentials have been determined to be valid.
+        return userRepo.findByEmailIgnoreCaseAndPassword(loginRequest.getEmail(), generatePassword(loginRequest.getPassword()))
+                .map(Principal::new)
+                .orElseThrow(UnauthorizedException::new);
 
-        return makeResp(user, HttpStatus.OK.value());
+        //return makeResp(user, HttpStatus.OK.value());
     }
 
 
-    public ResponseEntity register(RegisterRequest registerRequest) {
+    public UserResponse register(RegisterRequest registerRequest) {
         // First, check if email is already taken
         if (userRepo.existsByEmailIgnoreCase(registerRequest.getEmail())) {
             throw new ConflictException(); // Gives generic response
@@ -71,7 +69,9 @@ public class AuthService {
 
         user.setRole(basicRole);
         user = userRepo.save(user);
-        return makeResp(user, HttpStatus.CREATED.value());
+
+        return userRepo.findById(user.getUserId()).map(UserResponse::new).orElseThrow(NotFoundException::new);
+        //return makeResp(user, HttpStatus.CREATED.value());
     }
 
     private ResponseEntity makeResp(User user, int statusCode) {
@@ -134,6 +134,8 @@ public class AuthService {
         return (string == null) ? null : Hashing.sha256().
                 hashString(string, StandardCharsets.UTF_8).toString();
     }
+
+    // Leaving this to richard to fix (move all the response stuff to Controller class)
     public ResponseEntity updateUser(String token, ResetRequest resetRequest) {
         Principal principal = tokenService.extractTokenDetails(token); // get the principal from provided token
         User user = userRepo.getById(principal.getAuthUserId()); // find user by principal id

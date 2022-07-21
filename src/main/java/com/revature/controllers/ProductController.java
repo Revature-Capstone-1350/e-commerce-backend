@@ -4,6 +4,7 @@ import com.revature.annotations.AdminOnly;
 import com.revature.dtos.CreateProduct;
 import com.revature.dtos.ProductInfo;
 import com.revature.dtos.ProductReviewRequest;
+import com.revature.dtos.ReviewResponse;
 import com.revature.exceptions.NotImplementedException;
 import com.revature.models.Product;
 import com.revature.services.ProductService;
@@ -45,7 +46,7 @@ public class ProductController {
      */
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/rating/{id}")
-    public ResponseEntity getProductReviewsById(@PathVariable("id") int id) {
+    public List<ReviewResponse> getProductReviewsById(@PathVariable("id") int id) {
         return productService.findReviewsByProductId(id);
     }
 

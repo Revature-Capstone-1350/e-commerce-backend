@@ -1,13 +1,14 @@
 package com.revature.controllers;
 
-import com.revature.dtos.LoginRequest;
-import com.revature.dtos.RegisterRequest;
-import com.revature.dtos.ResetRequest;
+import com.revature.dtos.*;
 import com.revature.services.AuthService;
+import com.revature.services.jwt.TokenService;
+import jdk.nashorn.internal.parser.Token;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController
@@ -15,19 +16,24 @@ import javax.validation.Valid;
 public class AuthController {
 
     private final AuthService authService;
-    public AuthController(AuthService authService) {
+    private final TokenService tokenService;
+    public AuthController(AuthService authService, TokenService tokenService) {
         this.authService = authService;
+        this.tokenService = tokenService;
     }
 
     @ResponseStatus(HttpStatus.OK) // if successful, sets status of response
     @PostMapping("/login") // @RequestBody @Valid did not work in service layer.
-    public ResponseEntity login(@RequestBody @Valid LoginRequest loginRequest) {
-        return authService.login(loginRequest);
+    public Principal login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse resp) {
+        Principal payload = authService.login(loginRequest);
+        String token = tokenService.generateToken(payload);
+        resp.setHeader("Authorization", token);
+        return payload;
     }
 
     @ResponseStatus(HttpStatus.CREATED) // if successful, sets status of response
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterRequest registerRequest) {
+    public UserResponse register(@RequestBody @Valid RegisterRequest registerRequest) {
         return authService.register(registerRequest);
     }
     @ResponseStatus(HttpStatus.OK)
