@@ -23,6 +23,8 @@ public class Category {
 
     public Category(String name) { this.name = name; }
 
+    public Category(Integer categoryId) { this.categoryId = categoryId; }
+
     // getters
     public Integer getCategoryId() { return categoryId; }
     public String getName() { return name; }

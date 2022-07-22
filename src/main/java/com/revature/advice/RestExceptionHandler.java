@@ -49,6 +49,12 @@ public class RestExceptionHandler {
         return new ErrorResponse(HttpStatus.BAD_REQUEST.value(),
                 "Invalid Input."); // TODO : give message from DTO
     }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(PersistanceException.class)
+    public ErrorResponse handlePersistanceException(PersistanceException e) {
+        e.printStackTrace();
+        return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+    }
 
     // Generic 401
     @ResponseStatus(HttpStatus.UNAUTHORIZED)

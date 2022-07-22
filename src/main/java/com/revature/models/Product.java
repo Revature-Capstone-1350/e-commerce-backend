@@ -1,5 +1,8 @@
 package com.revature.models;
 
+import com.revature.dtos.CreateProduct;
+import com.revature.dtos.CreationResponse;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +63,15 @@ public class Product {
         this.price = price;
         this.imageUrlS = imageUrlS;
         this.imageUrlM = imageUrlM;
+    }
+
+    public Product(CreateProduct createProduct, Category category) {
+        this.name = createProduct.getName();
+        this.description = createProduct.getDescription();
+        this.price = createProduct.getPrice();
+        this.imageUrlS = createProduct.getImageUrlS();
+        this.imageUrlM = createProduct.getImageUrlM();
+        this.category = category;
     }
 
     // getters
