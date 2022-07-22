@@ -104,7 +104,7 @@ public class AuthService {
         }
     }
 
-    public UserResponse updateUser(String token, ResetRequest resetRequest) {
+    public AuthResponse updateUser(String token, ResetRequest resetRequest) {
 
         Principal principal = tokenService.extractTokenDetails(token); // get the principal from provided token
         User user = userRepo.findByUserIdAndEmailIgnoreCase(principal.getAuthUserId(), principal.getAuthUserEmail()).orElseThrow(UnauthorizedException::new);
@@ -119,11 +119,11 @@ public class AuthService {
             user.setPassword(generatePassword(resetRequest.getNewPassword()));
         }
 
-        if (resetRequest.getNewFirstname() != null && resetRequest.getNewFirstname().isEmpty()) {
+        if (resetRequest.getNewFirstname() != null) {
             user.setFirstName(resetRequest.getNewFirstname());
         }
 
-        if (resetRequest.getNewLastname() != null && resetRequest.getNewLastname().isEmpty()) {
+        if (resetRequest.getNewLastname() != null) {
             user.setLastName(resetRequest.getNewLastname());
         }
 
@@ -134,8 +134,7 @@ public class AuthService {
                 user.setEmail(resetRequest.getNewEmail());
             }
         }
-        userRepo.save(user);
-        return userRepo.findById(user.getUserId()).map(UserResponse::new).orElseThrow(NotFoundException::new);
+        return new AuthResponse(userRepo.save(user));
     }
 }
 

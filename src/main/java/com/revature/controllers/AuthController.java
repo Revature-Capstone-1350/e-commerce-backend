@@ -15,6 +15,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final TokenService tokenService;
+    private static final String AUTHORIZATION = "Authorization";
     public AuthController(AuthService authService, TokenService tokenService) {
         this.authService = authService;
         this.tokenService = tokenService;
@@ -29,7 +30,7 @@ public class AuthController {
                 authResp.getEmail()
         );
         String token = tokenService.generateToken(payload);
-        resp.setHeader("Authorization", token);
+        resp.setHeader(AUTHORIZATION, token);
         return authResp;
     }
 
@@ -42,13 +43,16 @@ public class AuthController {
                 authResp.getEmail()
         );
         String token = tokenService.generateToken(payload);
-        resp.setHeader("Authorization", token);
+        resp.setHeader(AUTHORIZATION, token);
         return authResp;
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping(value = "/update", consumes = "application/json", produces = "application/json")
-    public UserResponse updateUser(@RequestBody @Valid ResetRequest resetRequest, @RequestHeader(name = "Authorization") String token) {
-        return authService.updateUser(token, resetRequest);
+    public AuthResponse updateUser(@RequestBody @Valid ResetRequest resetRequest, @RequestHeader(name = "Authorization") String tokenProvided, HttpServletResponse resp) {
+        AuthResponse authResponse = authService.updateUser(tokenProvided, resetRequest);
+        Principal payload = new Principal(authResponse.getId(), authResponse.getEmail()); // Constructs principal from authResponse
+        resp.setHeader(AUTHORIZATION, tokenService.generateToken(payload));
+        return authResponse;
     }
 }
