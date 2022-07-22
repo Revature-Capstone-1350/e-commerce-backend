@@ -2,21 +2,15 @@ package com.revature.advice;
 
 import com.revature.dtos.ErrorResponse;
 import com.revature.exceptions.*;
-import org.apache.catalina.filters.ExpiresFilter;
-import org.apache.tomcat.websocket.AuthenticationException;
-import org.springframework.http.HttpHeaders;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestControllerAdvice
 public class RestExceptionHandler {
@@ -33,9 +27,9 @@ public class RestExceptionHandler {
     public ErrorResponse handleInvalidArgument(
             MethodArgumentNotValidException ex) {
         List<String> errors = new ArrayList<>();
-        ex.getBindingResult().getFieldErrors().forEach(error-> {
-            errors.add(error.getDefaultMessage());
-        });
+        ex.getBindingResult().getFieldErrors().forEach(error->
+            errors.add(error.getDefaultMessage())
+        );
         return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), errors);
     }
 
@@ -87,7 +81,7 @@ public class RestExceptionHandler {
         return new ErrorResponse(HttpStatus.UNAUTHORIZED.value(),
                 listOfErrorMessages);
     }
-
+    // TODO : Which one handles token expiration?
     // Specific 401
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(TokenParseException.class)

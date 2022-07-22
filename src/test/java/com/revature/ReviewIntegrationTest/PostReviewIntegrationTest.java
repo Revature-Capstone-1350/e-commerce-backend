@@ -48,9 +48,6 @@ public class PostReviewIntegrationTest {
     }
 
     @Test
-    void test() {}
-
-    @Test
     void test_post_review_gives_201_with_valid_data() throws Exception {
         User user = userRepo.findByEmailIgnoreCaseAndPassword(
                 "Tester1@revature.net",

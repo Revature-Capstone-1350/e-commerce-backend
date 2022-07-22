@@ -1,5 +1,6 @@
 package com.revature.services.jwt;
 
+import com.revature.exceptions.InternalServerErrorException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -37,9 +38,6 @@ public class JwtConfig {
     @Value("#{24 * 60 * 60 * 1000}") // number of milliseconds in a day
     private int expiration;
 
-    @Value("#{5 * 60 * 1000}") // number of milliseconds in five minutes
-    private int expirationAdmin; // only 5 minutes for security reasons
-
     private final SignatureAlgorithm sigAlg = SignatureAlgorithm.HS256;
 
     private Key signingKey;
@@ -49,7 +47,7 @@ public class JwtConfig {
     public void createSigningKey() {
         byte[] saltyBytes = DatatypeConverter.parseBase64Binary(salt);
         signingKey = new SecretKeySpec(saltyBytes, sigAlg.getJcaName());
-        Boolean genKeys = generateKeysRSA;
+        boolean genKeys = generateKeysRSA;
         if (genKeys) { // generates new RSA keys
             try {
                 long startTime = System.nanoTime();
@@ -62,12 +60,12 @@ public class JwtConfig {
                 this.privateKey = pair.getPrivate();
                 this.publicKey = pair.getPublic();
                 // The following two lines are used to get RSA keys.
-//                System.out.println(Base64.getEncoder().encodeToString(pair.getPrivate().getEncoded()));
-//                System.out.println(Base64.getEncoder().encodeToString(pair.getPublic().getEncoded()));
+                System.out.println(Base64.getEncoder().encodeToString(pair.getPrivate().getEncoded()));
+                System.out.println(Base64.getEncoder().encodeToString(pair.getPublic().getEncoded()));
                 long totalTime = System.nanoTime() - startTime;
                 System.out.println("RSA key gen took " + (totalTime/Math.pow(1000,3)) + " seconds");
-            } catch (Throwable t) {
-                throw new RuntimeException(t);
+            } catch (Exception t) {
+                throw new InternalServerErrorException(t);
             }
         }
         else { // Turn the strings from the YML config file into Keys
@@ -79,8 +77,6 @@ public class JwtConfig {
     public int getExpiration() {
         return expiration;
     }
-
-    public int getExpirationAdmin() { return expirationAdmin; }
 
     public SignatureAlgorithm getSigAlg() {
         return sigAlg;
@@ -99,8 +95,8 @@ public class JwtConfig {
             X509EncodedKeySpec spec = new X509EncodedKeySpec(data);
             KeyFactory fact = KeyFactory.getInstance("RSA");
             return fact.generatePublic(spec);
-        } catch (Throwable t) {
-            throw new RuntimeException(t);
+        } catch (Exception t) {
+            throw new InternalServerErrorException(t);
         }
     }
     public static Key loadPrivateKey(String key64) {
@@ -111,8 +107,8 @@ public class JwtConfig {
             PrivateKey priv = fact.generatePrivate(keySpec);
             Arrays.fill(clear, (byte) 0);
             return priv;
-        } catch (Throwable t) {
-            throw new RuntimeException(t);
+        } catch (Exception t) {
+            throw new InternalServerErrorException(t);
         }
 
     }
