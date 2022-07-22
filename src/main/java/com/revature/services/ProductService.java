@@ -75,15 +75,4 @@ public class ProductService {
         productRepo.save(product);
         return new CreationResponse(product.getProductId());
     }
-
-//    public ResponseEntity save(Product product) {
-//        return null;
-//    }
-    
-    public ResponseEntity saveAll(List<Product> productList, List<ProductInfo> metadata) {
-        return null;
-    }
-
-    public void delete(int id) {
-    }
 }

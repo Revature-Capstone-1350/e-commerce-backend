@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -26,6 +27,7 @@ public class ResetRequest {
     @Pattern( regexp = Regex.ONLY_THESE, message = ValidatorMessageUtil.PASSWORD_ONLY_THESE)
     private String newPassword;
 
+    @Email( message = ValidatorMessageUtil.EMAIL_REQUIRED_ON_CREATE)
     private String newEmail;
 
     private String newFirstname;

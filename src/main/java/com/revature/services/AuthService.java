@@ -137,8 +137,8 @@ public class AuthService {
         Principal principal = tokenService.extractTokenDetails(token); // get the principal from provided token
         User user = userRepo.findByUserIdAndEmailIgnoreCase(principal.getAuthUserId(), principal.getAuthUserEmail()).orElseThrow(UnauthorizedException::new);
         String hashedOldPassword = generatePassword(resetRequest.getOldPassword());
-        String hashedNewPassword;
 
+        // this code goes through each field in resetrequest to check if anything is null
         if (!hashedOldPassword.equals(user.getPassword())) { // if the old password doesn't match what we have on record...
             throw new UnauthorizedException(); // invalid password. possibly better exception could be used?
         }
@@ -147,11 +147,11 @@ public class AuthService {
             user.setPassword(generatePassword(resetRequest.getNewPassword()));
         }
 
-        if (resetRequest.getNewFirstname() != null) {
+        if (resetRequest.getNewFirstname() != null && resetRequest.getNewFirstname().isEmpty()) {
             user.setFirstName(resetRequest.getNewFirstname());
         }
 
-        if (resetRequest.getNewLastname() != null) {
+        if (resetRequest.getNewLastname() != null && resetRequest.getNewLastname().isEmpty()) {
             user.setLastName(resetRequest.getNewLastname());
         }
 
