@@ -121,7 +121,6 @@ public class ProductService {
 
         if (passed) {
             productRepo.save(product);
-            System.out.println(categoryRepository.findById(createProduct.getCategory()).isPresent());
             return new CreationResponse(product.getProductId());
 
         } else{

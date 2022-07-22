@@ -38,14 +38,11 @@ public class ProductCreationIntegrationTest {
         CreateProduct createProduct = new CreateProduct();
 
         createProduct.setName("This is a test name");
-        createProduct.setLocation("This is a test location");
         createProduct.setDescription("This is a test description");
-        createProduct.setDate(LocalDateTime.now().toString());
         createProduct.setPrice(4.99);
         createProduct.setImageUrlS("This is a small test image url");
         createProduct.setImageUrlM("This is a medium test image url");
-        createProduct.setImageUrlL("This is a large test image url");
-        createProduct.setCategory(new Category(8));
+        createProduct.setCategory(8);
 
         String requestPayload = mapper.writeValueAsString(createProduct);
 
