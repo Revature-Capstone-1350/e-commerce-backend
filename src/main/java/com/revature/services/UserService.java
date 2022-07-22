@@ -1,11 +1,9 @@
 package com.revature.services;
 
-import com.revature.dtos.AuthResponse;
 import com.revature.dtos.UserResponse;
 import com.revature.exceptions.NotFoundException;
 import com.revature.models.User;
 import com.revature.repositories.UserRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,7 +40,10 @@ public class UserService {
 
     public UserResponse findById(Integer id){
         // Find the user by ID and turn the returned entity into a response, if user is not found throw a NotFoundException
-        return userRepository.findById(id).map(UserResponse::new).orElseThrow(NotFoundException::new);
+        return userRepository
+                .findById(id)
+                .map(UserResponse::new)
+                .orElseThrow(NotFoundException::new);
     }
 
 }

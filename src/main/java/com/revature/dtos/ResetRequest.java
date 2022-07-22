@@ -11,11 +11,19 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResetRequest {
-    @NotBlank // cannot be like ""
+
     @NotNull // cannot be missing
     private String oldPassword;
 
-    @NotBlank // cannot be like ""
     @NotNull // cannot be missing
     private String newPassword;
+
+    @NotNull // cannot be missing
+    private String newEmail;
+
+    @NotNull // cannot be missing
+    private String newFirstname;
+
+    @NotNull // cannot be missing
+    private String newLastname;
 }

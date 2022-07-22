@@ -1,9 +1,6 @@
 package com.revature.controllers;
 
-import com.revature.annotations.AdminOnly;
-import com.revature.dtos.AuthResponse;
 import com.revature.dtos.UserResponse;
-import com.revature.exceptions.NotImplementedException;
 import com.revature.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

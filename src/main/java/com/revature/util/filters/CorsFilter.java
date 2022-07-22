@@ -19,6 +19,7 @@ public class CorsFilter extends HttpFilter {
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "*");
         response.setHeader("Access-Control-Allow-Headers", "*");
+        response.setHeader("Access-Control-Expose-Headers", "Authorization");
         chain.doFilter(request, response); // if you don't put this, your controller/servlet never gets the request
     }
 }
