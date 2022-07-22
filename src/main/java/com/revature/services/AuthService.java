@@ -45,28 +45,24 @@ public class AuthService {
     /**
      * Attempts to log the user in.
      * @param loginRequest The login details.
-     * @return org.springframework.http.ResponseEntity
+     * @return com.revature.dtos.Principal
      */
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity login(LoginRequest loginRequest) {
+    public Principal login(LoginRequest loginRequest) {
 
-        // Validate credentials
-        User user = userRepo.findByEmailIgnoreCaseAndPassword(
-                loginRequest.getEmail(),
-                generatePassword(loginRequest.getPassword())
-        ).orElseThrow(UnauthorizedException::new);
-        // at this point, the credentials have been determined to be valid.
-
-        return makeResp(user, HttpStatus.OK.value());
+        // Validate credential & at this point, the credentials have been determined to be valid.
+        return userRepo.findByEmailIgnoreCaseAndPassword(loginRequest.getEmail(), generatePassword(loginRequest.getPassword()))
+                .map(Principal::new)
+                .orElseThrow(UnauthorizedException::new);
     }
 
 
     /**
      * Attempts to create a new user.
      * @param registerRequest The register details.
-     * @return org.springframework.http.ResponseEntity
+     * @return com.revature.dtos.UserResponse
      */
-    public ResponseEntity register(RegisterRequest registerRequest) {
+    public UserResponse register(RegisterRequest registerRequest) {
         // First, check if email is already taken
         if (userRepo.existsByEmailIgnoreCase(registerRequest.getEmail())) {
             throw new ConflictException(); // Gives generic response
@@ -81,7 +77,9 @@ public class AuthService {
 
         user.setRole(basicRole);
         user = userRepo.save(user);
-        return makeResp(user, HttpStatus.CREATED.value());
+
+        return userRepo.findById(user.getUserId()).map(UserResponse::new).orElseThrow(NotFoundException::new);
+        //return makeResp(user, HttpStatus.CREATED.value());
     }
 
     /**
@@ -164,19 +162,36 @@ public class AuthService {
      * Updates a user password through the use of a token.
      * @param token The token to pass through
      * @param resetRequest The request to expect
-     * @return com.revature.dto.ResponseEntity
      */
-    public ResponseEntity updateUser(String token, ResetRequest resetRequest) {
+    public void updateUser(String token, ResetRequest resetRequest) {
         Principal principal = tokenService.extractTokenDetails(token); // get the principal from provided token
-        User user = userRepo.getById(principal.getAuthUserId()); // find user by principal id
+        User user = userRepo.findByUserIdAndEmailIgnoreCase(principal.getAuthUserId(), principal.getAuthUserEmail()).orElseThrow(UnauthorizedException::new);
         String hashedOldPassword = generatePassword(resetRequest.getOldPassword());
 
         if (!hashedOldPassword.equals(user.getPassword())) { // if the old password doesn't match what we have on record...
             throw new UnauthorizedException(); // invalid password. possibly better exception could be used?
         }
-        user.setPassword(generatePassword(resetRequest.getNewPassword())); // otherwise, generate the password
-        userRepo.save(user); // save to the repo
-        return makeResp(user, HttpStatus.OK.value()); // all is good
+        
+        /* could we maybe make a function for a new password? */
+        String hashedNewPassword = generatePassword(resetRequest.getNewPassword()); // hashes the new password
+        user.setPassword(hashedNewPassword);
+
+        if (!resetRequest.getNewFirstname().trim().isEmpty()) { // checks if the new first name is *not* null
+            user.setFirstName(resetRequest.getNewFirstname());
+        }
+
+        if (!resetRequest.getNewLastname().trim().isEmpty()) { // checks if the new last name is *not* null
+            user.setLastName(resetRequest.getNewLastname());
+        }
+
+        if (!resetRequest.getNewEmail().trim().isEmpty()) {
+            if (userRepo.existsByEmailIgnoreCase(resetRequest.getNewEmail())) {
+                throw new ConflictException();
+            } else {
+                user.setEmail(resetRequest.getNewEmail());
+            }
+        }
+        userRepo.save(user);
     }
 }
 
