@@ -21,8 +21,8 @@ import java.util.concurrent.ThreadLocalRandom;
  * It normally runs in 3-4 seconds
  */
 
-@Component
-@Profile("default || local || test || deploy")
+//@Component
+//@Profile("default || local || test || deploy")
 public class MockDataInserter implements CommandLineRunner {
 
     private final AddressRepository addressRepo;
