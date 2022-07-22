@@ -17,6 +17,8 @@ import java.util.Date;
 public class TokenService {
 
     private final JwtConfig jwtConfig;
+    private final String TRANSFORMATION = "RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING";
+    // "RSA/ECB/PKCS1Padding" was marked insecure by Sonar Lint
 
     public TokenService(JwtConfig jwtConfig) {
         this.jwtConfig = jwtConfig;
@@ -54,8 +56,8 @@ public class TokenService {
     }
 
     private String encryptRSA(String data) {
-        try { // TODO : secure mode (prevents printing keys?) without breaking everything
-            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+        try {
+            Cipher cipher = Cipher.getInstance(TRANSFORMATION);
             cipher.init(Cipher.ENCRYPT_MODE, jwtConfig.getPublicKey());
             byte[] encrypted = cipher.doFinal(data.getBytes());
             return Base64.encodeBase64String(encrypted);
@@ -66,7 +68,7 @@ public class TokenService {
 
     private String decryptRSA(String data) {
         try {
-            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            Cipher cipher = Cipher.getInstance(TRANSFORMATION);
             cipher.init(Cipher.DECRYPT_MODE, jwtConfig.getPrivateKey());
             return new String(cipher.doFinal(Base64.decodeBase64(data)));
         } catch (Exception t) {
