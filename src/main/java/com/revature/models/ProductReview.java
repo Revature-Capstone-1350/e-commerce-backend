@@ -29,7 +29,7 @@ public class ProductReview {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    // constructors
+    //constructors
     public ProductReview() { super(); } // required no-args constructor
 
     public ProductReview(Integer rating, String description, User user, Product product) {
@@ -48,7 +48,7 @@ public class ProductReview {
     public Product getProduct() { return product; }
 
     // setters
-//    public void setProductReviewId(Integer productReviewId) { this.productReviewId = productReviewId; }
+    // No need to set ID.
     public void setRating(Integer rating) { this.rating = rating; }
     public void setDescription(String description) { this.description = description; }
     public void setUser(User user) { this.user = user; }

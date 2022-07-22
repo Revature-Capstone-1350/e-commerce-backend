@@ -1,7 +1,5 @@
 package com.revature.dtos;
 
-import com.revature.models.Category;
-import com.revature.models.Product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

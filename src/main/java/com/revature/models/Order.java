@@ -55,7 +55,7 @@ public class Order {
     public List<Product> getItems() { return items; }
 
     // setters
-//    public void setOrderId(Integer orderId) { this.orderId = orderId; }
+    // There is no need to set the order ID. It is auto-generated
     public void setStatus(OrderStatus status) { this.status = status; }
     public void setUser(User user) { this.user = user; }
     public void setAddress(Address address) { this.address = address; }

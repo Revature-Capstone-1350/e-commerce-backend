@@ -31,7 +31,7 @@ public class UserRole {
     public String getName() { return name; }
 
     // setters
-//    public void setRoleId(Integer roleId) { this.roleId = roleId; }
+    // No need to set ID.
     public void setName(String name) { this.name = name; }
 
     @Override

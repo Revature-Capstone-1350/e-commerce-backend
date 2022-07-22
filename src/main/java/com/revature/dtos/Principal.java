@@ -10,7 +10,6 @@ public class Principal {
 
     private int authUserId;
     private String authUserEmail;
-    private Boolean isAdmin = false;
 
     public Principal(User user) {
         this.authUserId = user.getUserId();
@@ -24,8 +23,5 @@ public class Principal {
     public Principal(int authUserId, String authUserEmail) {
         this.authUserId = authUserId;
         this.authUserEmail = authUserEmail;
-    }
-    private void makeAdmin() {
-        this.isAdmin = true;
     }
 }

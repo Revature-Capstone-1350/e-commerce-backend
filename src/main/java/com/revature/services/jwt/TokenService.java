@@ -24,7 +24,7 @@ public class TokenService {
 
     public String generateToken(Principal subject) {
         long now = System.currentTimeMillis();
-        long timeout = (subject.getIsAdmin()? jwtConfig.getExpirationAdmin() : jwtConfig.getExpiration());
+        long timeout = jwtConfig.getExpiration();
 
         JwtBuilder tokenBuilder = Jwts.builder() // IF adding claims, test that RSA key-size supports additional size
                                       .setIssuer("ecomapi")
@@ -54,12 +54,12 @@ public class TokenService {
     }
 
     private String encryptRSA(String data) {
-        try {
+        try { // TODO : secure mode (prevents printing keys?)
             Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             cipher.init(Cipher.ENCRYPT_MODE, jwtConfig.getPublicKey());
             byte[] encrypted = cipher.doFinal(data.getBytes());
             return Base64.encodeBase64String(encrypted);
-        } catch (Throwable t) {
+        } catch (Exception t) {
             throw new BadRequestException(t);
         } // This was tested, so errors here are due to bad data
     }
@@ -69,7 +69,7 @@ public class TokenService {
             Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             cipher.init(Cipher.DECRYPT_MODE, jwtConfig.getPrivateKey());
             return new String(cipher.doFinal(Base64.decodeBase64(data)));
-        } catch (Throwable t) {
+        } catch (Exception t) {
             throw new BadRequestException(t);
         } // This was tested, so errors here are due to bad data
     }

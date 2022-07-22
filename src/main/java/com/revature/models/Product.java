@@ -1,8 +1,6 @@
 package com.revature.models;
 
 import com.revature.dtos.CreateProduct;
-import com.revature.dtos.CreationResponse;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,16 +21,16 @@ public class Product {
     @Column(length=50, nullable = false)
     private String name; // person who posted or provided image
 
-    @Column(length=50)
+    @Column
     private String description; // What's showcased in the photo
 
     @Column(nullable = false)
     private double price;
 
-    @Column(name = "image_url_s", nullable = false)
+    @Column(name = "image_url_small", nullable = false)
     private String imageUrlS;
 
-    @Column(name = "image_url_m", nullable = false)
+    @Column(name = "image_url_medium", nullable = false)
     private String imageUrlM;
 
     @ManyToOne
@@ -45,7 +43,7 @@ public class Product {
     // constructors
     public Product() { super(); } // required no-args constructor
 
-    public Product(String name, String location, String description, String date, double price, String imageUrlS, String imageUrlM, String imageUrlL, Category category) {
+    public Product(String name, String description, double price, String imageUrlS, String imageUrlM, Category category) {
         this();
         this.name = name;
         this.description = description;
@@ -88,7 +86,7 @@ public class Product {
     }
 
     // setters
-//    public void setProductId(Integer productId) { this.productId = productId; }
+    // No need to set ID.
     public void setName(String name) { this.name = name; }
     public void setDescription(String description) { this.description = description; }
     public void setPrice(double price) { this.price = price; }

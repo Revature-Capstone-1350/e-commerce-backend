@@ -10,6 +10,7 @@ import com.revature.exceptions.BadRequestException;
 import com.revature.exceptions.NotFoundException;
 import com.revature.exceptions.PersistanceException;
 import com.revature.models.Category;
+import com.revature.exceptions.NotImplementedException;
 import com.revature.models.Product;
 import com.revature.models.ProductReview;
 import com.revature.repositories.CategoryRepository;
@@ -19,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,28 +58,13 @@ public class ProductService {
                 .body(resp);        // Add the JSON response body
     }
 
-    public ResponseEntity findReviewsByProductId(int id) {
-        Product product = productRepo.findById(id)
-                .orElseThrow(NotFoundException::new);
-
-        List<ReviewResponse> reviews;
-        if (product.getRatings() == null || product.getRatings().size() == 0) {
-            reviews = new ArrayList<>();
-        }
-        else {
-            reviews = product.getRatings().stream().map(ReviewResponse::new).collect(Collectors.toList());
-        }
-        String resp = "";
-        try {
-            resp = mapper.writeValueAsString(reviews); // prepare JSON response
-        } catch (JsonProcessingException e) {
-            throw new BadRequestException();
-        } // This throw is only anticipated to happen upon a bad request
-
-        return ResponseEntity
-                .status(HttpStatus.OK.value()) // Set response status
-                .body(resp);        // Add the JSON response body
-
+    public List<ReviewResponse> findReviewsByProductId(int id) {
+        return productRepo.findById(id)
+                .orElseThrow(NotFoundException::new)
+                .getRatings()
+                .stream()
+                .map(ReviewResponse::new)
+                .collect(Collectors.toList());     // Add the JSON response body
     }
 
 
@@ -131,7 +116,6 @@ public class ProductService {
         public ResponseEntity saveAll (List < Product > productList, List < ProductInfo > metadata){
             return null;
         }
-
-    public void delete(int id) {
+    public void delete(int id) { throw new NotImplementedException();
     }
 }

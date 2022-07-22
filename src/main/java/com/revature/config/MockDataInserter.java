@@ -1,6 +1,5 @@
 package com.revature.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.dtos.Principal;
 import com.revature.models.*;
 import com.revature.repositories.*;
@@ -83,6 +82,7 @@ public class MockDataInserter implements CommandLineRunner {
         }
         statusRepo.saveAll(statuses);
 
+        // TODO : move to a test to verify that largest Principle will fit with RSA key size
         Boolean testRSA = false;
         if (testRSA) { // tests maximum email size RSA key-size permits
             stars();
@@ -104,17 +104,15 @@ public class MockDataInserter implements CommandLineRunner {
             stars();
         }
 
-
-
         // Populate table "user"
         List<User> users = new ArrayList<>();
         users.add(new User("Admin","Admin","Admin@SkyView.com",
-                authService.generatePassword("admin"),
+                authService.generatePassword("Admin12@"),
                 roles.get(0), // ADMIN user
                 null,null)); // inserted with no reviews nor orders
 
         users.add(new User("Tester","McTesterson","Tester1@revature.net",
-                authService.generatePassword("tester"),
+                authService.generatePassword("Tester12@"),
                 roles.get(1), // BASIC user
                 null,null)); // inserted with no reviews nor orders
 
