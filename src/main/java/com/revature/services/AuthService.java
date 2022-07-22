@@ -114,8 +114,10 @@ public class AuthService {
             throw new UnauthorizedException(); // invalid password. possibly a better exception could be used?
         }
 
-        String hashedNewPassword = generatePassword(resetRequest.getNewPassword());
-        user.setPassword(hashedNewPassword);
+        if(!resetRequest.getNewPassword().trim().isEmpty()){
+            String hashedNewPassword = generatePassword(resetRequest.getNewPassword());
+            user.setPassword(hashedNewPassword);
+        } // Empty input means no changes to field
 
         if (!resetRequest.getNewFirstname().trim().isEmpty()) {
             user.setFirstName(resetRequest.getNewFirstname());
