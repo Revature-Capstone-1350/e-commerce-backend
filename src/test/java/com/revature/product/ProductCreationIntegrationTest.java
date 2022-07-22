@@ -15,8 +15,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+//@SpringBootTest
+//@AutoConfigureMockMvc
 public class ProductCreationIntegrationTest {
     private final MockMvc mockMvc;
     private final ObjectMapper mapper;
@@ -24,14 +24,14 @@ public class ProductCreationIntegrationTest {
     private final String PATH = "/api/product/createproduct";
     private final String CONTENT_TYPE = "application/json";
 
-    @Autowired
+//    @Autowired
     public ProductCreationIntegrationTest(MockMvc mockMvc, ObjectMapper mapper, ProductRepository productRepository) {
         this.mockMvc = mockMvc;
         this.mapper = mapper;
         this.productRepository = productRepository;
     }
 
-    @Test
+//    @Test
     void test_product_creation_returns201givenValid() throws Exception {
         CreateProductRequest createProductRequest = new CreateProductRequest();
 
