@@ -7,6 +7,7 @@ import com.revature.dtos.ProductInfo;
 import com.revature.dtos.ReviewResponse;
 import com.revature.exceptions.BadRequestException;
 import com.revature.exceptions.NotFoundException;
+import com.revature.exceptions.NotImplementedException;
 import com.revature.models.Product;
 import com.revature.models.ProductReview;
 import com.revature.repositories.ProductRepository;
@@ -14,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -75,15 +75,11 @@ public class ProductService {
         productRepo.save(product);
         return new CreationResponse(product.getProductId());
     }
-
-//    public ResponseEntity save(Product product) {
-//        return null;
-//    }
     
     public ResponseEntity saveAll(List<Product> productList, List<ProductInfo> metadata) {
         return null;
     }
 
-    public void delete(int id) {
+    public void delete(int id) { throw new NotImplementedException();
     }
 }

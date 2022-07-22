@@ -15,7 +15,9 @@ public class LoggingAspect {
     private final Logger logger = LogManager.getLogger();
 
     @Pointcut("within(com.revature..*)")
-    public void logAll() {}
+    public void logAll() {
+        // Defines where to insert advice
+    }
 
     // Injecting log before method execution
     @Before(value = "logAll()")

@@ -1,7 +1,6 @@
 package com.revature.advice;
 
 import com.revature.annotations.AdminOnly;
-import com.revature.annotations.Authorized;
 import com.revature.services.AuthService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

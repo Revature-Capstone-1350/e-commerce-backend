@@ -30,7 +30,7 @@ public class OrderStatus {
     public String getName() { return name; }
 
     // setters
-//    public void setOrderStatusId(Integer orderStatusId) { this.orderStatusId = orderStatusId; }
+    // There is no need to set the ID.
     public void setName(String name) { this.name = name; }
 
     @Override

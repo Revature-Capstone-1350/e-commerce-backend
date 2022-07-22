@@ -44,7 +44,7 @@ public class Product {
     // constructors
     public Product() { super(); } // required no-args constructor
 
-    public Product(String name, String location, String description, String date, double price, String imageUrlS, String imageUrlM, String imageUrlL, Category category) {
+    public Product(String name, String description, double price, String imageUrlS, String imageUrlM, Category category) {
         this();
         this.name = name;
         this.description = description;
@@ -88,7 +88,7 @@ public class Product {
     }
 
     // setters
-//    public void setProductId(Integer productId) { this.productId = productId; }
+    // No need to set ID.
     public void setName(String name) { this.name = name; }
     public void setDescription(String description) { this.description = description; }
     public void setPrice(double price) { this.price = price; }
