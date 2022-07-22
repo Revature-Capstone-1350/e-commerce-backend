@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.controllers.AuthController;
 import com.revature.dtos.LoginRequest;
 import com.revature.dtos.Principal;
+import com.revature.dtos.ProductReviewRequest;
 import com.revature.dtos.RegisterRequest;
 import com.revature.models.User;
 import com.revature.repositories.UserRepository;
@@ -21,7 +22,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static com.revature.util.ValidatorMessageUtil.PASSWORD_LOWER;
+import static com.revature.util.ValidatorMessageUtil.*;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,7 +30,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-// Test disabled for now
 @SpringBootTest // Tells Spring we need to have an entire application context with everything set up and ready to go
 @AutoConfigureMockMvc // configures mockMvc
 @DirtiesContext
@@ -47,6 +47,7 @@ class AuthIntegrationTest {
     private final String REGISTER_PATH = "/auth/register";
     private final String LOGIN_PATH = "/auth/login";
     private final String TEST_PATH = "/api/product/"+Integer.MAX_VALUE;
+    private final String POST_REVIEW_PATH = "/api/product/rating/" + 1;
     private final String CONTENT_TYPE = "application/json";
 
 
@@ -68,6 +69,7 @@ class AuthIntegrationTest {
     String validPass = randomPass();
     String validFirst = "Valid";
     String validLast = "AlsoValid";
+
 
     @Test
     void test_register_login_and_adminOnly_annotation() throws Exception {
@@ -105,7 +107,9 @@ class AuthIntegrationTest {
         newRegistrationRequest.setPassword(validPass);
         String registerRequest = mapper.writeValueAsString(newRegistrationRequest);
         String token =
-                mockMvc.perform(post(REGISTER_PATH).contentType(CONTENT_TYPE).content(registerRequest))
+                mockMvc.perform(post(REGISTER_PATH)
+                                .contentType(CONTENT_TYPE)
+                                .content(registerRequest))
                         .andExpect(status().isCreated())
                         .andExpect(header().string("content-type", CONTENT_TYPE))
                         .andExpect(header().string("Access-Control-Allow-Origin", "*"))
@@ -132,7 +136,8 @@ class AuthIntegrationTest {
                 .orElseThrow(RuntimeException::new);
         assertTrue(user.getRole().getName().equalsIgnoreCase("Basic"));
 
-//         Third block : Utilize token to access @AdminOnly endpoint
+        // Third block : Utilize token to access @AdminOnly endpoint
+
         mockMvc.perform(delete(TEST_PATH)
                         .contentType(CONTENT_TYPE)
                         .header("Authorization", token))
@@ -151,23 +156,52 @@ class AuthIntegrationTest {
                 .andExpect(jsonPath("$.timestamp").isNotEmpty())
                 .andReturn();
 
+        // Fourth Block : Can access login-restricted endpoint
 
+        ProductReviewRequest reviewReq = new ProductReviewRequest(5, "great picture!");
+        String req = mapper.writeValueAsString(reviewReq);
+
+        mockMvc.perform(post(POST_REVIEW_PATH)
+                        .header("Authorization", token)
+                        .contentType(CONTENT_TYPE)
+                        .content(req)
+                )
+                .andExpect(status().isCreated())
+                .andExpect(header().string("Access-Control-Allow-Origin", "*"))
+                .andExpect(header().string("Access-Control-Allow-Methods", "*"))
+                .andExpect(header().string("Access-Control-Allow-Headers", "*"))
+                .andReturn();
+        // This only tests authentication, not particulars of product endpoints
     }
 
+    @Test
+    void access_denied_with_bad_token() throws Exception {
 
-//    @Test
-//    void test_register_directly_returns_201_given_valid_data() throws Exception {
-//        RegisterRequest newRegistrationRequest = new RegisterRequest();
-//        newRegistrationRequest.setEmail(validEmail);
-//        newRegistrationRequest.setFirstName(validFirst);
-//        newRegistrationRequest.setLastName(validLast);
-//        newRegistrationRequest.setPassword(validPass);
-//        String registerRequest = mapper.writeValueAsString(newRegistrationRequest);
-//        assertFalse(userRepo.existsByEmailIgnoreCase(validEmail));
-//        ResponseEntity resp =  authCtrl.register(newRegistrationRequest);
-//        assertTrue(resp.hasBody());
-//        assertTrue(userRepo.existsByEmailIgnoreCase(validEmail));
-//    }
+        ProductReviewRequest reviewReq = new ProductReviewRequest(5, "great picture!");
+        String req = mapper.writeValueAsString(reviewReq);
+
+        final String BAD_TOKEN = "12345";
+
+        mockMvc.perform(post(POST_REVIEW_PATH)
+                        .header("Authorization", BAD_TOKEN)
+                        .contentType(CONTENT_TYPE)
+                        .content(req)
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(header().string("content-type", CONTENT_TYPE))
+                .andExpect(header().string("Access-Control-Allow-Origin", "*"))
+                .andExpect(header().string("Access-Control-Allow-Methods", "*"))
+                .andExpect(header().string("Access-Control-Allow-Headers", "*"))
+                .andExpect(jsonPath("$.statusCode").exists())
+                .andExpect(jsonPath("$.statusCode").isNumber())
+                .andExpect(jsonPath("$.statusCode").value(400))
+                .andExpect(jsonPath("$.message").exists())
+                .andExpect(jsonPath("$.message").isArray())
+                .andExpect(jsonPath("$.message", hasItem("Invalid Input.")))
+                .andExpect(jsonPath("$.timestamp").exists())
+                .andExpect(jsonPath("$.timestamp").isNotEmpty())
+                .andReturn();
+    }
 
     @Test
     void test_login_returns_201_given_valid_data() throws Exception {
@@ -252,7 +286,7 @@ class AuthIntegrationTest {
 
         Principal prin = tokenService.extractTokenDetails(token);
         assertTrue(prin.getAuthUserEmail().equalsIgnoreCase(validEmail));
-        assertTrue(prin.getAuthUserId() == user.getUserId());
+        assertEquals(prin.getAuthUserId(), (int) user.getUserId());
     }
 
     @Test
@@ -261,6 +295,10 @@ class AuthIntegrationTest {
         req.setEmail(validEmail);
         req.setPassword("aA@@@@@@");
         String loginRequest = mapper.writeValueAsString(req);
+
+        final String NUMBER_MISSING_CHECK = "Password must contain at least one number";
+        assertEquals(PASSWORD_NUMBER, NUMBER_MISSING_CHECK);
+
         mockMvc.perform(post(LOGIN_PATH).contentType(CONTENT_TYPE).content(loginRequest))
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string("content-type", CONTENT_TYPE))
@@ -272,7 +310,8 @@ class AuthIntegrationTest {
                 .andExpect(jsonPath("$.statusCode").value(400))
                 .andExpect(jsonPath("$.message").exists())
                 .andExpect(jsonPath("$.message").isArray())
-                .andExpect(jsonPath("$.message", hasItem("Invalid Input.")))
+                .andExpect(jsonPath("$.message", hasItem(PASSWORD_NUMBER)))
+                .andExpect(jsonPath("$.message", hasSize(1)))
                 .andExpect(jsonPath("$.timestamp").exists())
                 .andExpect(jsonPath("$.timestamp").isNotEmpty())
                 .andReturn();
@@ -286,7 +325,7 @@ class AuthIntegrationTest {
         String loginRequest = mapper.writeValueAsString(req);
 
         final String LOWER_MISSING_CHECK = "Password must contain at least one lowercase letter";
-        assertEquals(LOWER_MISSING_CHECK, PASSWORD_LOWER);
+        assertEquals(PASSWORD_LOWER, LOWER_MISSING_CHECK);
 
         mockMvc.perform(post(LOGIN_PATH).contentType(CONTENT_TYPE).content(loginRequest))
                 .andExpect(status().isBadRequest())
@@ -312,6 +351,10 @@ class AuthIntegrationTest {
         req.setPassword("1a@@@@@@");
         assert(req.getPassword().length() >= 8);
         String loginRequest = mapper.writeValueAsString(req);
+
+        final String UPPER_MISSING_CHECK = "Password must contain at least one uppercase letter";
+        assertEquals(PASSWORD_UPPER, UPPER_MISSING_CHECK);
+
         mockMvc.perform(post(LOGIN_PATH).contentType(CONTENT_TYPE).content(loginRequest))
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string("content-type", CONTENT_TYPE))
@@ -323,11 +366,13 @@ class AuthIntegrationTest {
                 .andExpect(jsonPath("$.statusCode").value(400))
                 .andExpect(jsonPath("$.message").exists())
                 .andExpect(jsonPath("$.message").isArray())
-                .andExpect(jsonPath("$.message", hasItem("Invalid Input.")))
+                .andExpect(jsonPath("$.message", hasItem(PASSWORD_UPPER)))
+                .andExpect(jsonPath("$.message", hasSize(1)))
                 .andExpect(jsonPath("$.timestamp").exists())
                 .andExpect(jsonPath("$.timestamp").isNotEmpty())
                 .andReturn();
     }
+
     @Test
     void test_login_dto_no_special_char() throws Exception {
         LoginRequest req = new LoginRequest();
@@ -335,6 +380,10 @@ class AuthIntegrationTest {
         req.setPassword("1Aaaaaaa");
         assert(req.getPassword().length() >= 8);
         String loginRequest = mapper.writeValueAsString(req);
+
+        final String SYMBOL_MISSING_CHECK = "Password must contain at least one of @$!%*?&";
+        assertEquals(PASSWORD_SYMBOL, SYMBOL_MISSING_CHECK);
+
         mockMvc.perform(post(LOGIN_PATH).contentType(CONTENT_TYPE).content(loginRequest))
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string("content-type", CONTENT_TYPE))
@@ -346,8 +395,8 @@ class AuthIntegrationTest {
                 .andExpect(jsonPath("$.statusCode").value(400))
                 .andExpect(jsonPath("$.message").exists())
                 .andExpect(jsonPath("$.message").isArray())
-                .andExpect(jsonPath("$.message", hasItem("Invalid Input.")))
-                //.andExpect(jsonPath("$.messages", hasItem("Invalid Input.")))
+                .andExpect(jsonPath("$.message", hasItem(PASSWORD_SYMBOL)))
+                .andExpect(jsonPath("$.message", hasSize(1)))
                 .andExpect(jsonPath("$.timestamp").exists())
                 .andExpect(jsonPath("$.timestamp").isNotEmpty())
                 .andReturn();
@@ -359,6 +408,10 @@ class AuthIntegrationTest {
         req.setPassword("1A@aaa");
         assert(req.getPassword().length() < 8);
         String loginRequest = mapper.writeValueAsString(req);
+
+        final String LENGTH_CHECK = "Password must be at least 8 characters";
+        assertEquals(PASSWORD_LENGTH, LENGTH_CHECK);
+
         mockMvc.perform(post(LOGIN_PATH).contentType(CONTENT_TYPE).content(loginRequest))
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string("content-type", CONTENT_TYPE))
@@ -370,11 +423,13 @@ class AuthIntegrationTest {
                 .andExpect(jsonPath("$.statusCode").value(400))
                 .andExpect(jsonPath("$.message").exists())
                 .andExpect(jsonPath("$.message").isArray())
-                .andExpect(jsonPath("$.message", hasItem("Invalid Input.")))
+                .andExpect(jsonPath("$.message", hasItem(PASSWORD_LENGTH)))
+                .andExpect(jsonPath("$.message", hasSize(1)))
                 .andExpect(jsonPath("$.timestamp").exists())
                 .andExpect(jsonPath("$.timestamp").isNotEmpty())
                 .andReturn();
     }
+
     @Test
     void test_login_dto_correct_input() throws Exception {
         LoginRequest req = new LoginRequest();
