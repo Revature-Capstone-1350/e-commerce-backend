@@ -24,9 +24,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-//@SpringBootTest
-//@DirtiesContext
-//@AutoConfigureMockMvc
+@SpringBootTest
+@DirtiesContext
+@AutoConfigureMockMvc
 public class PostReviewIntegrationTest {
     private final MockMvc mockMvc;
     private final ObjectMapper jsonMapper;
@@ -37,7 +37,7 @@ public class PostReviewIntegrationTest {
     private final String PATH = "/api/product/rating/";
     private final String CONTENT_TYPE = "application/json";
 
-//    @Autowired
+    @Autowired
     public PostReviewIntegrationTest(MockMvc mockMvc, ObjectMapper jsonMapper, UserRepository userRepo, ProductRepository productService, AuthService authService, TokenService tokenService) {
         this.mockMvc = mockMvc;
         this.jsonMapper = jsonMapper;
@@ -47,7 +47,7 @@ public class PostReviewIntegrationTest {
         this.tokenService = tokenService;
     }
 
-//    @Test
+    @Test
     void test_post_review_gives_201_with_valid_data() throws Exception {
         User user = userRepo.findByEmailIgnoreCaseAndPassword(
                 "Tester1@revature.net",
@@ -83,7 +83,7 @@ public class PostReviewIntegrationTest {
 
     }
 
-//    @Test
+    @Test
     void test_post_review_gives_400_with_invalid_data() throws Exception {
         User user = userRepo.findByEmailIgnoreCaseAndPassword(
                 "Tester1@revature.net",

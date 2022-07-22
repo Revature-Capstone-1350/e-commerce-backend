@@ -15,75 +15,40 @@ public class AuthController {
 
     private final AuthService authService;
     private final TokenService tokenService;
-    private static final String AUTHORIZATION = "Authorization";
-
     public AuthController(AuthService authService, TokenService tokenService) {
         this.authService = authService;
         this.tokenService = tokenService;
     }
 
     @ResponseStatus(HttpStatus.OK) // if successful, sets status of response
-    @PostMapping(
-            path = "/login",
-            consumes = "application/json",
-            produces = "application/json"
-    )
-    // @RequestBody @Valid did not work in service layer.
-    public AuthResponse login(
-            @RequestBody @Valid LoginRequest loginRequest,
-            HttpServletResponse resp
-    )
-    {
+    @PostMapping("/login") // @RequestBody @Valid did not work in service layer.
+    public AuthResponse login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse resp) {
         AuthResponse authResp = authService.login(loginRequest);
         Principal payload = new Principal( // construct principle from authresp
                 authResp.getId(),
                 authResp.getEmail()
         );
         String token = tokenService.generateToken(payload);
-        resp.setHeader(AUTHORIZATION, token);
+        resp.setHeader("Authorization", token);
         return authResp;
     }
 
     @ResponseStatus(HttpStatus.CREATED) // if successful, sets status of response
-    @PostMapping(
-            path = "/register",
-            consumes = "application/json",
-            produces = "application/json"
-    )
-    public AuthResponse register(
-            @RequestBody @Valid RegisterRequest registerRequest,
-            HttpServletResponse resp
-    )
-    {
+    @PostMapping("/register")
+    public AuthResponse register(@RequestBody @Valid RegisterRequest registerRequest, HttpServletResponse resp) {
         AuthResponse authResp = authService.register(registerRequest);
         Principal payload = new Principal( // construct principle from authresp
                 authResp.getId(),
                 authResp.getEmail()
         );
         String token = tokenService.generateToken(payload);
-        resp.setHeader(AUTHORIZATION, token);
+        resp.setHeader("Authorization", token);
         return authResp;
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping(
-            path = "/reset",
-            consumes = "application/json",
-            produces = "application/json"
-    )
-    public AuthResponse resetPassword(
-            @RequestBody @Valid ResetRequest resetRequest,
-            @RequestHeader(name = AUTHORIZATION) String tokenProvided,
-            HttpServletResponse resp
-    )
-    {
-        AuthResponse authResp = authService.updateUser(tokenProvided, resetRequest);
-        Principal payload = new Principal( // construct principle from authresp
-                authResp.getId(),
-                authResp.getEmail()
-        );
-        String tokenResponse = tokenService.generateToken(payload);
-        resp.setHeader(AUTHORIZATION, tokenResponse);
-        return authResp;
+    @PatchMapping(value = "/reset", consumes = "application/json")
+    public void resetPassword(@RequestBody @Valid ResetRequest resetRequest, @RequestHeader(name = "Authorization") String token) {
+        authService.updateUser(token, resetRequest);
     }
 }

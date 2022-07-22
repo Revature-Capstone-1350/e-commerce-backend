@@ -1,6 +1,6 @@
 package com.revature.controllers;
 
-import com.revature.dtos.AuthResponse;
+import com.revature.dtos.UserResponse;
 import com.revature.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,19 +20,15 @@ public class UserController {
         this.userService = userService;
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping(produces = "application/json")
-    public List<AuthResponse> findAllUsers() {
+    public List<UserResponse> findAllUsers() {
         return userService.findAllUsers();
     }
 
     //
     @ResponseStatus(HttpStatus.OK) // Set status of the response
     @GetMapping("/{id}") // Mapping /api/users/reqId
-    public AuthResponse getUserById(
-            @PathVariable("id") @Valid int id
-    )
-    {
+    public UserResponse getUserById(@PathVariable("id") @Valid int id) {
         return userService.findById(id);
     }
 

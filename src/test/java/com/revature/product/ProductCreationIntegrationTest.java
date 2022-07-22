@@ -1,7 +1,7 @@
 package com.revature.product;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.dtos.CreateProductRequest;
+import com.revature.dtos.CreateProduct;
 import com.revature.models.Category;
 import com.revature.repositories.ProductRepository;
 import org.junit.jupiter.api.Test;
@@ -15,8 +15,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//@SpringBootTest
-//@AutoConfigureMockMvc
+@SpringBootTest
+@AutoConfigureMockMvc
 public class ProductCreationIntegrationTest {
     private final MockMvc mockMvc;
     private final ObjectMapper mapper;
@@ -24,25 +24,25 @@ public class ProductCreationIntegrationTest {
     private final String PATH = "/api/product/createproduct";
     private final String CONTENT_TYPE = "application/json";
 
-//    @Autowired
+    @Autowired
     public ProductCreationIntegrationTest(MockMvc mockMvc, ObjectMapper mapper, ProductRepository productRepository) {
         this.mockMvc = mockMvc;
         this.mapper = mapper;
         this.productRepository = productRepository;
     }
 
-//    @Test
+    @Test
     void test_product_creation_returns201givenValid() throws Exception {
-        CreateProductRequest createProductRequest = new CreateProductRequest();
+        CreateProduct createProduct = new CreateProduct();
 
-        createProductRequest.setName("This is a test name");
-        createProductRequest.setDescription("This is a test description");
-        createProductRequest.setPrice(4.99);
-        createProductRequest.setImageUrlS("This is a small test image url");
-        createProductRequest.setImageUrlM("This is a medium test image url");
-        createProductRequest.setCategory(new Category(8));
+        createProduct.setName("This is a test name");
+        createProduct.setDescription("This is a test description");
+        createProduct.setPrice(4.99);
+        createProduct.setImageUrlS("This is a small test image url");
+        createProduct.setImageUrlM("This is a medium test image url");
+        createProduct.setCategory(new Category(8));
 
-        String requestPayload = mapper.writeValueAsString(createProductRequest);
+        String requestPayload = mapper.writeValueAsString(createProduct);
 
         mockMvc.perform(post(PATH).contentType(CONTENT_TYPE).content(requestPayload))
                 .andExpect(status().isCreated())

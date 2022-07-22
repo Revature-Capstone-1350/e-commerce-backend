@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateProductRequest {
+public class CreateProduct {
 
     private String name;
     private String description;
