@@ -22,16 +22,16 @@ public class Product {
     @Column(length=50, nullable = false)
     private String name; // person who posted or provided image
 
-    @Column(length=50)
+    @Column
     private String description; // What's showcased in the photo
 
     @Column(nullable = false)
     private double price;
 
-    @Column(name = "image_url_s", nullable = false)
+    @Column(name = "image_url_small", nullable = false)
     private String imageUrlS;
 
-    @Column(name = "image_url_m", nullable = false)
+    @Column(name = "image_url_medium", nullable = false)
     private String imageUrlM;
 
     @ManyToOne

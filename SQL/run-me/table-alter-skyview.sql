@@ -10,7 +10,8 @@ alter table if exists skyview.address
 add column if not exists address_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL,
 add column if not exists street VARCHAR NOT NULL,
 add column if not exists street2 VARCHAR,
-add column if not exists state CHAR(2) NOT NULL,
+add column if not exists state VARCHAR(2) NOT NULL,
+alter column state type VARCHAR(2),
 add column if not exists city VARCHAR(50) NOT NULL,
 add column if not exists postal_code VARCHAR(10) NOT null;
 
@@ -23,7 +24,8 @@ add column if not exists user_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY NO
 add column if not exists first_name VARCHAR(50) NOT NULL,
 add column if not exists last_name VARCHAR(50),
 add column if not exists email VARCHAR(255) NOT NULL UNIQUE,
-add column if not exists "password" CHAR(64) NOT NULL,
+add column if not exists "password" VARCHAR(64) NOT NULL,
+alter column "password" type VARCHAR(64),
 add column if not exists role_id INT NOT null REFERENCES user_role(role_id);
 
 alter table if exists skyview.product
@@ -31,7 +33,10 @@ add column if not exists product_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY
 add column if not exists name VARCHAR(50) NOT NULL,
 add column if not exists description VARCHAR,
 add column if not exists price DECIMAL(8,2) NOT NULL,
-add column if not exists image_url VARCHAR NOT NULL,
+alter column price type double precision,
+drop column if exists image_url cascade,
+add column if not exists image_url_small VARCHAR,
+add column if not exists image_url_medium VARCHAR,
 add column if not exists category_id INT NOT null REFERENCES category(category_id);
 
 alter table if exists skyview.product_review
