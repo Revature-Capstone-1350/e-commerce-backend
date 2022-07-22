@@ -132,37 +132,38 @@ public class AuthService {
     }
     // Leaving this to richard to fix (move all the response stuff to Controller class)
 
-    public void updateUser(String token, ResetRequest resetRequest) {
+    public UserResponse updateUser(String token, ResetRequest resetRequest) {
 
         Principal principal = tokenService.extractTokenDetails(token); // get the principal from provided token
         User user = userRepo.findByUserIdAndEmailIgnoreCase(principal.getAuthUserId(), principal.getAuthUserEmail()).orElseThrow(UnauthorizedException::new);
         String hashedOldPassword = generatePassword(resetRequest.getOldPassword());
+        String hashedNewPassword;
 
         if (!hashedOldPassword.equals(user.getPassword())) { // if the old password doesn't match what we have on record...
             throw new UnauthorizedException(); // invalid password. possibly better exception could be used?
         }
 
-        String hashedNewPassword = generatePassword(resetRequest.getNewPassword());
-        user.setPassword(hashedNewPassword);
+        if (resetRequest.getNewPassword() != null) {
+            user.setPassword(generatePassword(resetRequest.getNewPassword()));
+        }
 
-        if (!resetRequest.getNewFirstname().trim().isEmpty()) {
+        if (resetRequest.getNewFirstname() != null) {
             user.setFirstName(resetRequest.getNewFirstname());
         }
 
-        if (!resetRequest.getNewLastname().trim().isEmpty()) {
+        if (resetRequest.getNewLastname() != null) {
             user.setLastName(resetRequest.getNewLastname());
         }
 
-        if (!resetRequest.getNewEmail().trim().isEmpty()) {
+        if (resetRequest.getNewEmail() != null) {
             if (userRepo.existsByEmailIgnoreCase(resetRequest.getNewEmail())) {
                 throw new ConflictException();
-            }
-            else {
+            } else {
                 user.setEmail(resetRequest.getNewEmail());
             }
-
         }
         userRepo.save(user);
+        return userRepo.findById(user.getUserId()).map(UserResponse::new).orElseThrow(NotFoundException::new);
     }
 }
 

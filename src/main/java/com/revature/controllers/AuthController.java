@@ -37,8 +37,8 @@ public class AuthController {
         return authService.register(registerRequest);
     }
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping(value = "/reset", consumes = "application/json")
-    public void resetPassword(@RequestBody @Valid ResetRequest resetRequest, @RequestHeader(name = "Authorization") String token) {
-        authService.updateUser(token, resetRequest);
+    @PatchMapping(value = "/update", consumes = "application/json", produces = "application/json")
+    public UserResponse updateUser(@RequestBody @Valid ResetRequest resetRequest, @RequestHeader(name = "Authorization") String token) {
+        return authService.updateUser(token, resetRequest);
     }
 }
