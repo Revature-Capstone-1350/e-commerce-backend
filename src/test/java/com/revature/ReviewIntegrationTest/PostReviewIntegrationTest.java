@@ -54,7 +54,7 @@ public class PostReviewIntegrationTest {
     void test_post_review_gives_201_with_valid_data() throws Exception {
         User user = userRepo.findByEmailIgnoreCaseAndPassword(
                 "Tester1@revature.net",
-                authService.generatePassword("tester")
+                authService.generatePassword("Tester12@")
         ).orElseThrow(NotFoundException::new);
         Principal prin = new Principal(user);
         String token = tokenService.generateToken(prin);
@@ -90,7 +90,7 @@ public class PostReviewIntegrationTest {
     void test_post_review_gives_400_with_invalid_data() throws Exception {
         User user = userRepo.findByEmailIgnoreCaseAndPassword(
                 "Tester1@revature.net",
-                authService.generatePassword("tester")
+                authService.generatePassword("Tester12@")
         ).orElseThrow(NotFoundException::new);
         Principal prin = new Principal(user);
         String token = tokenService.generateToken(prin);

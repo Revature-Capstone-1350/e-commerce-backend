@@ -130,11 +130,6 @@ public class AuthService {
             throw new RuntimeException();
         }
     }
-    private String additionalHash(String string) {
-        return (string == null) ? null : Hashing.sha256().
-                hashString(string, StandardCharsets.UTF_8).toString();
-    }
-
     // Leaving this to richard to fix (move all the response stuff to Controller class)
 
     public void updateUser(String token, ResetRequest resetRequest) {
