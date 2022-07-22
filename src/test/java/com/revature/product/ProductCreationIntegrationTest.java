@@ -1,7 +1,7 @@
 package com.revature.product;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.dtos.CreateProduct;
+import com.revature.dtos.CreateProductRequest;
 import com.revature.models.Category;
 import com.revature.repositories.ProductRepository;
 import org.junit.jupiter.api.Test;
@@ -33,16 +33,16 @@ public class ProductCreationIntegrationTest {
 
     @Test
     void test_product_creation_returns201givenValid() throws Exception {
-        CreateProduct createProduct = new CreateProduct();
+        CreateProductRequest createProductRequest = new CreateProductRequest();
 
-        createProduct.setName("This is a test name");
-        createProduct.setDescription("This is a test description");
-        createProduct.setPrice(4.99);
-        createProduct.setImageUrlS("This is a small test image url");
-        createProduct.setImageUrlM("This is a medium test image url");
-        createProduct.setCategory(new Category(8));
+        createProductRequest.setName("This is a test name");
+        createProductRequest.setDescription("This is a test description");
+        createProductRequest.setPrice(4.99);
+        createProductRequest.setImageUrlS("This is a small test image url");
+        createProductRequest.setImageUrlM("This is a medium test image url");
+        createProductRequest.setCategory(new Category(8));
 
-        String requestPayload = mapper.writeValueAsString(createProduct);
+        String requestPayload = mapper.writeValueAsString(createProductRequest);
 
         mockMvc.perform(post(PATH).contentType(CONTENT_TYPE).content(requestPayload))
                 .andExpect(status().isCreated())

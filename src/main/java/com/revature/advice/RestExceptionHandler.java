@@ -81,16 +81,16 @@ public class RestExceptionHandler {
         return new ErrorResponse(HttpStatus.UNAUTHORIZED.value(),
                 listOfErrorMessages);
     }
-    // TODO : Which one handles token expiration?
-    // Specific 401
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+
+    // Specific 400
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(TokenParseException.class)
     public ErrorResponse handleTokenParseException(Throwable t) {
         t.printStackTrace();
-        String message = "Login session expired. Please login again.";
+        String message = "Invalid login token. Please login again.";
         List<String> listOfErrorMessages = new ArrayList<>();
         listOfErrorMessages.add(message);
-        return new ErrorResponse(HttpStatus.UNAUTHORIZED.value(),
+        return new ErrorResponse(HttpStatus.BAD_REQUEST.value(),
                 listOfErrorMessages);
     }
 

@@ -54,7 +54,7 @@ public class TokenService {
     }
 
     private String encryptRSA(String data) {
-        try { // TODO : secure mode (prevents printing keys?)
+        try { // TODO : secure mode (prevents printing keys?) without breaking everything
             Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             cipher.init(Cipher.ENCRYPT_MODE, jwtConfig.getPublicKey());
             byte[] encrypted = cipher.doFinal(data.getBytes());
