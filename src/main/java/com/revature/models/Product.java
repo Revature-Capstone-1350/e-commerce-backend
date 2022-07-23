@@ -30,10 +30,10 @@ public class Product {
     @Column(nullable = false, precision = 8, scale = 2, columnDefinition = "numeric")
     private double price;
 
-    @Column(name = "image_url_s", nullable = false)
+    @Column(name = "image_url_small", nullable = false)
     private String imageUrlS;
 
-    @Column(name = "image_url_m", nullable = false)
+    @Column(name = "image_url_medium", nullable = false)
     private String imageUrlM;
 
     @ManyToOne

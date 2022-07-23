@@ -88,7 +88,7 @@ public class ProductController {
      * @param product receives a product Json
      * @return org.springframework.http.ResponseEntity
      */
-    //@AdminOnly
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping(consumes = "application/json")
     public void update(@RequestBody ProductRequest product) {

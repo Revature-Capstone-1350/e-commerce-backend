@@ -9,7 +9,7 @@ public class ProductRequest {
     private String imageUrlM;
     private int category;
 
-    ProductRequest(int id, String name, String description, double price, String urls, String urlm, int category) {
+    public ProductRequest(int id, String name, String description, double price, String urls, String urlm, int category) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -73,5 +73,18 @@ public class ProductRequest {
 
     public void setCategory(int category) {
         this.category = category;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductRequest{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", imageUrlS='" + imageUrlS + '\'' +
+                ", imageUrlM='" + imageUrlM + '\'' +
+                ", category=" + category +
+                '}';
     }
 }

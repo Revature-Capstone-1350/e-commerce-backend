@@ -19,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -126,10 +125,6 @@ public class ProductService {
         return new CreationResponse(product.getProductId());
 
     }
-
-//    public ResponseEntity save(Product product) {
-//        return null;
-//    }
     
     public ResponseEntity saveAll(List<Product> productList, List<ProductInfo> metadata) {
         return null;

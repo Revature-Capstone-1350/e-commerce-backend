@@ -21,7 +21,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 
 //@Component
-//@Profile("default || local || test || deploy")
+//@Profile("default || local || test")
 public class MockDataInserter implements CommandLineRunner {
 
     private final AddressRepository addressRepo;
