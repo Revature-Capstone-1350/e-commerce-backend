@@ -28,7 +28,7 @@ public class User {
     @Column(length=255, nullable = false)
     private String email;
 
-    @Column(length = 64, nullable = false, columnDefinition = "bpchar") // TODO : Length
+    @Column(length = 64, nullable = false)
     private String password;
 
     @ManyToOne // one role, many users; each user has 1 role

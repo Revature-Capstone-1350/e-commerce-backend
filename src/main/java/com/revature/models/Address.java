@@ -26,7 +26,7 @@ public class Address {
     @Column(length = 50)
     private String city;
 
-    @Column(length = 2, nullable = false, columnDefinition = "bpchar")
+    @Column(length = 2, nullable = false)
     private String state;
 
     @Column(length = 10, name = "postal_code")

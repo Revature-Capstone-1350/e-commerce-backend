@@ -27,7 +27,7 @@ public class Product {
     @Column
     private String description; // What's showcased in the photo
 
-    @Column(nullable = false, precision = 8, scale = 2, columnDefinition = "numeric")
+    @Column(nullable = false, precision = 8, scale = 2)
     private double price;
 
     @Column(name = "image_url_small", nullable = false)
