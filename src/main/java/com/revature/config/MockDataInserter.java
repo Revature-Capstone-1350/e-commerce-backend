@@ -20,8 +20,9 @@ import java.util.concurrent.ThreadLocalRandom;
  * It normally runs in 3-4 seconds
  */
 
-//@Component
-//@Profile("default || local || test")
+
+@Component
+@Profile("default || local || test")
 public class MockDataInserter implements CommandLineRunner {
 
     private final AddressRepository addressRepo;
@@ -82,6 +83,7 @@ public class MockDataInserter implements CommandLineRunner {
         }
         statusRepo.saveAll(statuses);
 
+        // TODO : move to a test to verify that largest Principle will fit with RSA key size
         Boolean testRSA = false;
         if (testRSA) { // tests maximum email size RSA key-size permits
             stars();
@@ -102,8 +104,6 @@ public class MockDataInserter implements CommandLineRunner {
             }
             stars();
         }
-
-
 
         // Populate table "user"
         List<User> users = new ArrayList<>();

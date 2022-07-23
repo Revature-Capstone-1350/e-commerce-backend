@@ -1,11 +1,11 @@
 package com.revature.models;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity // necessary annotation to mark this class as an entity bean
 @Table(name = "`address`") // specifies database table name
-//@Embeddable
 public class Address {
 
     @Id // Identifies this column as a primary key
@@ -53,16 +53,21 @@ public class Address {
     public String getCity() { return city; }
     public String getState() { return state; }
     public String getPostalCode() { return postalCode; }
-//    public List<Order> getOrderList() { return orderList; }
+    public List<Order> getOrderList() {
+        if (orderList == null) {
+            return new ArrayList<>();
+        }
+        return orderList;
+    }
 
     // setters
-//    public void setAddressId(Integer addressId) { this.addressId = addressId; }
+    // There is no need to set the ID
     public void setStreet(String street) { this.street = street; }
     public void setStreet2(String street2) { this.street2 = street2; }
     public void setCity(String city) { this.city = city; }
     public void setState(String state) { this.state = state; }
     public void setPostalCode(String postalCode) { this.postalCode = postalCode; }
-//    public void setOrderList(List<Order> orderList) { this.orderList = orderList; }
+    // We just add items to the order list and save user; no need to set order list
 
     @Override
     public String toString() {

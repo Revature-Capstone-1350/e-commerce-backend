@@ -30,7 +30,7 @@ public class Category {
     public String getName() { return name; }
 
     // setters
-    public void setCategoryId(Integer categoryId) { this.categoryId = categoryId; }
+    // We have no need to set the ID
     public void setName(String name) { this.name = name; }
 
     @Override

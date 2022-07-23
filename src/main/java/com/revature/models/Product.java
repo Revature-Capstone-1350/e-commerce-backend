@@ -1,7 +1,7 @@
 package com.revature.models;
 
 import com.revature.dtos.ProductRequest;
-import com.revature.dtos.CreateProduct;
+import com.revature.dtos.CreateProductRequest;
 
 
 import javax.persistence.*;
@@ -46,7 +46,8 @@ public class Product {
     // constructors
     public Product() { super(); } // required no-args constructor
 
-    public Product(String name, String location, String description, double price, String imageUrlS, String imageUrlM, String imageUrlL, Category category) {
+
+    public Product(String name, String description, double price, String imageUrlS, String imageUrlM, Category category) {
         this();
         this.name = name;
         this.description = description;
@@ -62,7 +63,6 @@ public class Product {
         this.name = name;
         this.description = description;
         this.price = price;
-        //this.imageUrl = imageUrlS;
         this.imageUrlS = imageUrlS;
         this.imageUrlM = imageUrlM;
     }
@@ -77,14 +77,14 @@ public class Product {
         this.category = category;
     }
 
-    public Product(CreateProduct createProduct) {
+    public Product(CreateProductRequest createProductRequest) {
         this();
-        this.name = createProduct.getName();
-        this.description = createProduct.getDescription();
-        this.price = createProduct.getPrice();
-        this.imageUrlS = createProduct.getImageUrlS();
-        this.imageUrlM = createProduct.getImageUrlM();
-        this.category = createProduct.getCategory();
+        this.name = createProductRequest.getName();
+        this.description = createProductRequest.getDescription();
+        this.price = createProductRequest.getPrice();
+        this.imageUrlS = createProductRequest.getImageUrlS();
+        this.imageUrlM = createProductRequest.getImageUrlM();
+        this.category = createProductRequest.getCategory();
     }
 
     // getters
@@ -101,7 +101,7 @@ public class Product {
     }
 
     // setters
-    public void setProductId(Integer productId) { this.productId = productId; }
+    // No need to set ID.
     public void setName(String name) { this.name = name; }
     public void setDescription(String description) { this.description = description; }
     public void setPrice(double price) { this.price = price; }

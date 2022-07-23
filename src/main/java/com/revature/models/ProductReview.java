@@ -18,7 +18,7 @@ public class ProductReview {
     @Column(nullable = false)
     private Integer rating;
 
-    @Column(length = 500, nullable = false) // TODO : length=500 ?
+    @Column(nullable = false)
     private String description;
 
     @ManyToOne // one user, many ratings; each rating has one associated user
@@ -48,7 +48,7 @@ public class ProductReview {
     public Product getProduct() { return product; }
 
     // setters
-//    public void setProductReviewId(Integer productReviewId) { this.productReviewId = productReviewId; }
+    // No need to set ID.
     public void setRating(Integer rating) { this.rating = rating; }
     public void setDescription(String description) { this.description = description; }
     public void setUser(User user) { this.user = user; }

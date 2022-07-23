@@ -1,8 +1,5 @@
 package com.revature.services;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.hash.Hashing;
 import com.revature.dtos.*;
 import com.revature.exceptions.*;
 import com.revature.models.User;
@@ -12,28 +9,24 @@ import com.revature.repositories.UserRoleRepository;
 import com.revature.services.jwt.TokenService;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-import java.nio.charset.StandardCharsets;
 import java.security.spec.KeySpec;
 
 @Service
 public class AuthService {
 
-    @Value("${secrets.salt}") // TODO : test whether salt is getting set or needs @PostConstruct
+    @Value("${secrets.salt}")
     private String salt;
 
     private final UserRepository userRepo;
     private final UserRoleRepository roleRepo;
     private final UserService userService;
     private final TokenService tokenService;
-    private final ObjectMapper mapper = new ObjectMapper();
 
     public AuthService(UserRepository userRepo, UserRoleRepository roleRepo, UserService userService, TokenService tokenService) {
         this.userRepo = userRepo;
@@ -43,18 +36,23 @@ public class AuthService {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    public Principal login(LoginRequest loginRequest) {
+    public AuthResponse login(LoginRequest loginRequest) {
 
         // Validate credential & at this point, the credentials have been determined to be valid.
         return userRepo.findByEmailIgnoreCaseAndPassword(loginRequest.getEmail(), generatePassword(loginRequest.getPassword()))
-                .map(Principal::new)
+                .map(AuthResponse::new)
                 .orElseThrow(UnauthorizedException::new);
-
-        //return makeResp(user, HttpStatus.OK.value());
     }
 
+    public AuthResponse getAuthResponseFromLogin(LoginRequest loginRequest) {
+        User user = userRepo.findByEmailIgnoreCaseAndPassword(
+                loginRequest.getEmail(),
+                generatePassword(loginRequest.getPassword())
+        ).orElseThrow(UnauthorizedException::new);
+        return new AuthResponse(user);
+    }
 
-    public UserResponse register(RegisterRequest registerRequest) {
+    public AuthResponse register(RegisterRequest registerRequest) {
         // First, check if email is already taken
         if (userRepo.existsByEmailIgnoreCase(registerRequest.getEmail())) {
             throw new ConflictException(); // Gives generic response
@@ -70,34 +68,11 @@ public class AuthService {
         user.setRole(basicRole);
         user = userRepo.save(user);
 
-        return userRepo.findById(user.getUserId()).map(UserResponse::new).orElseThrow(NotFoundException::new);
-        //return makeResp(user, HttpStatus.CREATED.value());
-    }
-
-    private ResponseEntity makeResp(User user, int statusCode) {
-        AuthResponse authResp = new AuthResponse(user); // init
-        String resp = "";
-        try {
-            resp = mapper.writeValueAsString(authResp); // prepare JSON response
-        } catch (JsonProcessingException e) {
-            throw new BadRequestException();
-        } // This throw is only anticipated to happen upon a bad request
-
-        String token = getToken(user); // Generate a JWT
-        HttpHeaders headers = new HttpHeaders(); // init
-        headers.add("Authorization", token); // Set token in header
-
-        return ResponseEntity
-                .status(statusCode) // Set response status
-                .headers(headers)   // Add the headers object
-                .body(resp);        // Add the JSON response body
+        return userRepo.findById(user.getUserId()).map(AuthResponse::new).orElseThrow(NotFoundException::new);
     }
 
     public String getToken(User user) {
         Principal prin = new Principal(user);
-        if (user.getRole().getName().equalsIgnoreCase("Admin")) {
-            prin.setIsAdmin(true); // this affects the token expiration time
-        }
         return tokenService.generateToken(prin);
     }
 
@@ -107,11 +82,9 @@ public class AuthService {
 
     public void adminCheck(String token) {
         Principal prin = tokenService.extractTokenDetails(token);
-        System.out.println("Checking if admin: "+prin);
         User user = userService.findByIdAndEmailIgnoreCase(prin.getAuthUserId(), prin.getAuthUserEmail())
                 .orElseThrow(BadRequestException::new); // user data in token not in DB
-        System.out.println("User found: " + user);
-        if (!user.getRole().getName().toString().equalsIgnoreCase("admin")) {
+        if (!user.getRole().getName().equalsIgnoreCase("admin")) {
             throw new ForbiddenException(); // 403 error; must be admin
         }
         // no errors thrown, execution of program can continue
@@ -126,28 +99,29 @@ public class AuthService {
             factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             byte[] hash = factory.generateSecret(keySpec).getEncoded();
             return Base64.encodeBase64String(hash);
-        } catch (Throwable e) {
-            throw new RuntimeException();
+        } catch (Exception e) {
+            throw new InternalServerErrorException();
         }
     }
-    // Leaving this to richard to fix (move all the response stuff to Controller class)
 
-    public void updateUser(String token, ResetRequest resetRequest) {
+    public AuthResponse updateUser(String token, ResetRequest resetRequest) {
 
         Principal principal = tokenService.extractTokenDetails(token); // get the principal from provided token
         User user = userRepo.findByUserIdAndEmailIgnoreCase(principal.getAuthUserId(), principal.getAuthUserEmail()).orElseThrow(UnauthorizedException::new);
         String hashedOldPassword = generatePassword(resetRequest.getOldPassword());
 
         if (!hashedOldPassword.equals(user.getPassword())) { // if the old password doesn't match what we have on record...
-            throw new UnauthorizedException(); // invalid password. possibly better exception could be used?
+            throw new UnauthorizedException(); // invalid password. possibly a better exception could be used?
         }
 
-        String hashedNewPassword = generatePassword(resetRequest.getNewPassword());
-        user.setPassword(hashedNewPassword);
+        if(!resetRequest.getNewPassword().trim().isEmpty()){
+            String hashedNewPassword = generatePassword(resetRequest.getNewPassword());
+            user.setPassword(hashedNewPassword);
+        } // Empty input means no changes to field
 
         if (!resetRequest.getNewFirstname().trim().isEmpty()) {
             user.setFirstName(resetRequest.getNewFirstname());
-        }
+        } // Empty input means no changes to field
 
         if (!resetRequest.getNewLastname().trim().isEmpty()) {
             user.setLastName(resetRequest.getNewLastname());
@@ -160,9 +134,8 @@ public class AuthService {
             else {
                 user.setEmail(resetRequest.getNewEmail());
             }
-
         }
-        userRepo.save(user);
+        return new AuthResponse(userRepo.save(user));
     }
 }
 

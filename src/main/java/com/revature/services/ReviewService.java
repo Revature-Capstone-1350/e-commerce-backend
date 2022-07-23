@@ -1,6 +1,5 @@
 package com.revature.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.dtos.Principal;
 import com.revature.dtos.ProductReviewRequest;
 import com.revature.exceptions.BadRequestException;
@@ -20,7 +19,6 @@ public class ReviewService {
     private final ProductReviewRepository reviewRepo;
     private final UserRepository userRepo;
     private final TokenService tokenService;
-    private final ObjectMapper mapper = new ObjectMapper();
 
     public ReviewService(ProductRepository productRepo, ProductReviewRepository reviewRepo, UserRepository userRepo, TokenService tokenService) {
         this.productRepo = productRepo;
@@ -37,13 +35,11 @@ public class ReviewService {
      */
     public void postReview(String token, ProductReviewRequest reviewReq, int productId) {
         Principal prin = tokenService.extractTokenDetails(token);
-        System.out.println(prin);
         User user = userRepo.findByUserIdAndEmailIgnoreCase(
                 prin.getAuthUserId(),
                 prin.getAuthUserEmail()
         ).orElseThrow(ForbiddenException::new);
         //User identity now verified
-
 
         // now, verify product exists
         Product product = productRepo.findById(productId).orElseThrow(BadRequestException::new);

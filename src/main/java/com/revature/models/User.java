@@ -3,6 +3,7 @@ package com.revature.models;
 import com.revature.dtos.RegisterRequest;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity // necessary annotation to mark this class as an entity bean
@@ -38,7 +39,7 @@ public class User {
     private List<Order> userOrders;
 
     @OneToMany(mappedBy = "productReviewId")
-    private List<ProductReview> userProductReviews; // TODO : constructor (?) and getter/setter
+    private List<ProductReview> userProductReviews;
 
     // constructors
     public User() {
@@ -70,10 +71,15 @@ public class User {
     public String getLastName() { return lastName; }
     public String getEmail() { return email; }
     public String getPassword() { return password; }
-    public List<Order> getUserOrders() { return userOrders; }
+    public List<Order> getUserOrders() {
+        if (userOrders == null) {
+            return new ArrayList<>();
+        }
+        return userOrders;
+    }
 
     // setters
-//    public void setUser_id(Integer user_id) { this.user_id = user_id; }
+    // No need to set ID.
     public void setRole(UserRole role) { this.role = role; }
     public void setFirstName(String firstName) {
         this.firstName = firstName;

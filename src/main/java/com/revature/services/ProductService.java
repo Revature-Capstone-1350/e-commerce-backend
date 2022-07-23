@@ -1,21 +1,18 @@
 package com.revature.services;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.dtos.CreateProductRequest;
 import com.revature.dtos.CreationResponse;
 import com.revature.dtos.ProductInfo;
 import com.revature.dtos.ProductRequest;
 import com.revature.dtos.ReviewResponse;
-import com.revature.exceptions.BadRequestException;
 import com.revature.exceptions.NotFoundException;
 import com.revature.exceptions.UnprocessableEntityException;
 import com.revature.models.Category;
+import com.revature.exceptions.NotImplementedException;
 import com.revature.models.Product;
 import com.revature.models.ProductReview;
 import com.revature.repositories.CategoryRepository;
 import com.revature.repositories.ProductRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -27,14 +24,13 @@ public class ProductService {
 
     private final ProductRepository productRepo;
     private final CategoryRepository categoryRepo;
-    private final ObjectMapper mapper = new ObjectMapper();
 
     public ProductService(ProductRepository productRepo, CategoryRepository categoryRepo) {
         this.productRepo = productRepo;
         this.categoryRepo = categoryRepo;
     }
 
-    public ResponseEntity findAll() {
+    public List<ProductInfo> findAll() {
         List<Product> products = productRepo.findAll();
         List<ProductInfo> prodInfo = products.stream().map(ProductInfo::new).collect(Collectors.toList());
         for (int i = 0; i < products.size(); i++) {
@@ -45,16 +41,7 @@ public class ProductService {
             }
             prodInfo.get(i).setSumOfRating(sum);
         }
-        String resp = "";
-        try {
-            resp = mapper.writeValueAsString(prodInfo); // prepare JSON response
-        } catch (JsonProcessingException e) {
-            throw new BadRequestException();
-        } // This throw is only anticipated to happen upon a bad request
-
-        return ResponseEntity
-                .status(HttpStatus.OK.value()) // Set response status
-                .body(resp);        // Add the JSON response body
+        return prodInfo;
     }
 
     public List<ReviewResponse> findReviewsByProductId(int id) {
@@ -117,19 +104,20 @@ public class ProductService {
 
     /**
      * This method is used to persist a new product to the database
-     * @param product takes a Product that was mapped from the CreateProduct DTO
+     * @param createProductRequest takes a CreateProductRequest DTO
      * @return a new CreationResponse DTO
      */
-    public CreationResponse save(Product product) {
-        productRepo.save(product);
+    public CreationResponse save(CreateProductRequest createProductRequest) {
+        Product product = new Product(createProductRequest);
+        product = productRepo.save(product);
         return new CreationResponse(product.getProductId());
-
     }
     
-    public ResponseEntity saveAll(List<Product> productList, List<ProductInfo> metadata) {
-        return null;
+    public void saveAll(List<Product> productList, List<ProductInfo> metadata) {
+        throw new NotImplementedException();
     }
 
     public void delete(int id) {
+        throw new NotImplementedException();
     }
 }
