@@ -57,9 +57,9 @@ public class ProductCreationIntegrationTest {
         createProductRequest.setImageUrlM("This is a medium test image url");
         createProductRequest.setCategory(8);
 
+
         User user = userRepository.findByEmailIgnoreCaseAndPassword(username, authService.generatePassword(password)).orElseThrow(RuntimeException::new);
         String token = tokenService.generateToken(new Principal(user));
-
 
         String requestPayload = mapper.writeValueAsString(createProductRequest);
 

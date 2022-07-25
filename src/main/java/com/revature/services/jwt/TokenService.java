@@ -17,7 +17,7 @@ import java.util.Date;
 public class TokenService {
 
     private final JwtConfig jwtConfig;
-    private final String TRANSFORMATION = "RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING";
+    private static final String TRANSFORMATION = "RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING";
     // "RSA/ECB/PKCS1Padding" was marked insecure by Sonar Lint
 
     public TokenService(JwtConfig jwtConfig) {
@@ -34,7 +34,7 @@ public class TokenService {
                                       .claim("email",""+subject.getAuthUserEmail())
                                       .setIssuedAt(new Date(now))
                                       .setExpiration(new Date(now + timeout))
-                                      .signWith(jwtConfig.getSigAlg(), jwtConfig.getSigningKey());
+                                      .signWith(jwtConfig.getSigningKey(), jwtConfig.getSigAlg());
 
         return encryptRSA(tokenBuilder.compact());
 
@@ -45,8 +45,10 @@ public class TokenService {
         if (token == null || token.isEmpty()) {
             throw new UnauthorizedException();
         }
-        Claims claims = Jwts.parser()
+
+        Claims claims = Jwts.parserBuilder()
                 .setSigningKey(jwtConfig.getSigningKey())
+                .build()
                 .parseClaimsJws(decryptRSA(token))
                 .getBody();
 
