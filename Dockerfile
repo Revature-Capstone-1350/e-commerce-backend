@@ -1,5 +1,9 @@
+
+
 # selects java 8 as base image
+
 FROM openjdk:8-jdk-alpine
+
 
 # Allows us to specify a place on the local machine that container data should be persisted to
 # So that it can be accessed even after the container shuts down (or while its running)
@@ -21,7 +25,7 @@ RUN echo 'Making SkyView image...'
 RUN ls
 
 # ran when the container starts
-CMD echo 'Successfully created image! Hello!'
+CMD echo 'Successfully created image!'
 
 ENTRYPOINT [ "sh", "-c", "java -jar -Dspring.profiles.active=${PROFILE} skyview.jar" ]
-""
+
