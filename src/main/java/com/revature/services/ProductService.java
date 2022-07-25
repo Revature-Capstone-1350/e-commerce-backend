@@ -61,9 +61,7 @@ public class ProductService {
     }
 
     /**
-     * <<<<<<< HEAD
      * This method is used by the ProductController to persist a new product to the database using the ProductRepo
-     *
      * @param createProduct This is a DTO that is passed from the ProductController to this method that contains all the information from the user to be persisted
      * @return Returns a CreationResponse DTO that contains the new product ID
      */
