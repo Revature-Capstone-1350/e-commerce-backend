@@ -30,12 +30,8 @@ class ResetRequestRegexTests {
     private final ObjectMapper mapper;
     private final UserRepository userRepo;
     private final AuthService authService;
-    private final AuthController authCtrl;
     private final TokenService tokenService;
     private final String RESET_PATH = "/auth/reset";
-    private final String LOGIN_PATH = "/auth/login";
-    private final String TEST_PATH = "/api/product/"+Integer.MAX_VALUE;
-    private final String POST_REVIEW_PATH = "/api/product/rating/" + 1;
     private final String CONTENT_TYPE = "application/json";
 
     final String username = "Admin@SkyView.com";
@@ -43,12 +39,11 @@ class ResetRequestRegexTests {
     final String newPassword = "12@Admin";
 
     @Autowired
-    public ResetRequestRegexTests(MockMvc mockMvc, ObjectMapper mapper, UserRepository userRepo, AuthService authService, AuthController authCtrl, TokenService tokenService) {
+    public ResetRequestRegexTests(MockMvc mockMvc, ObjectMapper mapper, UserRepository userRepo, AuthService authService, TokenService tokenService) {
         this.mockMvc = mockMvc;
         this.mapper = mapper;
         this.userRepo = userRepo;
         this.authService = authService;
-        this.authCtrl = authCtrl;
         this.tokenService = tokenService;
     }
 
