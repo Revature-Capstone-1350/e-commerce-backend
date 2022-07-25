@@ -9,7 +9,6 @@ import com.revature.exceptions.NotFoundException;
 import com.revature.exceptions.PersistanceException;
 import com.revature.exceptions.UnprocessableEntityException;
 import com.revature.models.Category;
-import com.revature.exceptions.NotImplementedException;
 import com.revature.models.Product;
 import com.revature.models.ProductReview;
 import com.revature.repositories.CategoryRepository;
@@ -143,14 +142,6 @@ public class ProductService {
         } else {
             throw new UnprocessableEntityException(errorMessage.toString());
         }
-    }
-
-    public void saveAll(List<Product> productList, List<ProductInfo> metadata){
-            throw new NotImplementedException();
-    }
-
-    public void delete(int id){
-            throw new NotImplementedException();
     }
 }
 
