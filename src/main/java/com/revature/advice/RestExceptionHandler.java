@@ -5,6 +5,7 @@ import com.revature.exceptions.*;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -51,6 +52,19 @@ public class RestExceptionHandler {
     public ErrorResponse handleBadRequestException(Throwable t) {
         t.printStackTrace();
         String message = "Invalid Input.";
+        List<String> listOfErrorMessages = new ArrayList<>();
+        listOfErrorMessages.add(message);
+        return new ErrorResponse(HttpStatus.BAD_REQUEST.value(),
+                listOfErrorMessages
+        );
+    }
+
+    // Specific 400
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MissingRequestHeaderException.class)
+    public ErrorResponse handleMissingRequestHeaderException(Throwable t) {
+        t.printStackTrace();
+        String message = "You must be logged in to access this.";
         List<String> listOfErrorMessages = new ArrayList<>();
         listOfErrorMessages.add(message);
         return new ErrorResponse(HttpStatus.BAD_REQUEST.value(),
