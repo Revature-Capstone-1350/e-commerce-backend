@@ -18,7 +18,7 @@ public class ProductReview {
     @Column(nullable = false)
     private Integer rating;
 
-    @Column(length = 500, nullable = false) // TODO : length=500 ?
+    @Column(nullable = false)
     private String description;
 
     @ManyToOne // one user, many ratings; each rating has one associated user

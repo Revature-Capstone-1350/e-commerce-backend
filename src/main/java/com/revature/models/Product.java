@@ -1,6 +1,8 @@
 package com.revature.models;
 
-import com.revature.dtos.CreateProduct;
+import com.revature.dtos.ProductRequest;
+import com.revature.dtos.CreateProductRequest;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +20,13 @@ public class Product {
             )
     private Integer productId;
 
-    @Column(length=50, nullable = false)
+    @Column(length = 50, nullable = false)
     private String name; // person who posted or provided image
 
     @Column
     private String description; // What's showcased in the photo
 
-    @Column(nullable = false)
+    @Column(nullable = false, precision = 8, scale = 2)
     private double price;
 
     @Column(name = "image_url_small", nullable = false)
@@ -42,6 +44,7 @@ public class Product {
 
     // constructors
     public Product() { super(); } // required no-args constructor
+
 
     public Product(String name, String description, double price, String imageUrlS, String imageUrlM, Category category) {
         this();
@@ -63,12 +66,23 @@ public class Product {
         this.imageUrlM = imageUrlM;
     }
 
-    public Product(CreateProduct createProduct, Category category) {
-        this.name = createProduct.getName();
-        this.description = createProduct.getDescription();
-        this.price = createProduct.getPrice();
-        this.imageUrlS = createProduct.getImageUrlS();
-        this.imageUrlM = createProduct.getImageUrlM();
+    public Product(ProductRequest product, Category category) {
+        this.productId = product.getId();
+        this.name = product.getName();
+        this.description = product.getDescription();
+        this.price = product.getPrice();
+        this.imageUrlS = product.getImageUrlS();
+        this.imageUrlM = product.getImageUrlM();
+        this.category = category;
+    }
+
+    public Product(CreateProductRequest createProductRequest, Category category) {
+        this();
+        this.name = createProductRequest.getName();
+        this.description = createProductRequest.getDescription();
+        this.price = createProductRequest.getPrice();
+        this.imageUrlS = createProductRequest.getImageUrlS();
+        this.imageUrlM = createProductRequest.getImageUrlM();
         this.category = category;
     }
 
@@ -94,8 +108,6 @@ public class Product {
     public void setImageUrlM(String imageUrlM) { this.imageUrlM = imageUrlM; }
     public void setCategory(Category category) { this.category = category; }
     public void setRatings(List<ProductReview> productReviews) { this.productReviews = productReviews; }
-
-
 
     @Override
     public String toString() {

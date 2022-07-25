@@ -1,16 +1,15 @@
 package com.revature.controllers;
 
 import com.revature.annotations.AdminOnly;
-import com.revature.dtos.CreateProduct;
+import com.revature.dtos.CreateProductRequest;
 import com.revature.dtos.ProductInfo;
+import com.revature.dtos.ProductRequest;
 import com.revature.dtos.ProductReviewRequest;
 import com.revature.dtos.ReviewResponse;
 import com.revature.exceptions.NotImplementedException;
-import com.revature.models.Product;
 import com.revature.services.ProductService;
 import com.revature.services.ReviewService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,6 +21,7 @@ public class ProductController {
 
     private final ProductService productService;
     private final ReviewService reviewService;
+    private static final String AUTHORIZATION = "Authorization";
 
     public ProductController(ProductService productService, ReviewService reviewService) {
         this.productService = productService;
@@ -33,8 +33,8 @@ public class ProductController {
      * @return Return a list of the products
      */
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping
-    public ResponseEntity getInventory() {
+    @GetMapping(produces = "application/json")
+    public List<ProductInfo> getInventory() {
         return productService.findAll();
     }
 
@@ -45,7 +45,10 @@ public class ProductController {
      * @return Returns all the reviews for the selected product
      */
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/rating/{id}")
+    @GetMapping(
+            path = "/rating/{id}",
+            produces = "application/json"
+    )
     public List<ReviewResponse> getProductReviewsById(@PathVariable("id") int id) {
         return productService.findReviewsByProductId(id);
     }
@@ -62,7 +65,7 @@ public class ProductController {
             consumes = "application/json"
     )
     public void addReview(
-            @RequestHeader("Authorization") String token,
+            @RequestHeader(AUTHORIZATION) String token,
             @RequestBody @Valid ProductReviewRequest reviewReq,
             @PathVariable("productId") int productId
     ) {
@@ -75,20 +78,33 @@ public class ProductController {
      * @return return product
      */
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = "application/json")
     public ProductInfo getProductById(@PathVariable("id") int id) {
         return productService.findById(id);
     }
 
-    /**
-     * Will insert product information
-     * @param product
-     */
 
-    @AdminOnly
-    @PutMapping
-    public void insert(@RequestBody ProductInfo product) {
-        throw new NotImplementedException();
+
+    /**
+     * put endpoint to update a product
+     * @param product receives a product Json
+     */
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping(consumes = "application/json")
+    public void update(@RequestBody ProductRequest product) {
+        /*
+        //example json
+        {
+            "id":1,
+            "name":"limit 50 char",
+            "description":"no limit",
+            "price":123456.12,
+            "imageUrlS":"url",
+            "imageUrlM":"url",
+            "category":1
+        }
+        */
+        productService.updateProduct(product);
     }
 
     /**
@@ -97,31 +113,46 @@ public class ProductController {
      * @return return product information
      */
 
-    @AdminOnly
-    @PatchMapping
-    public ResponseEntity<List<ProductInfo>> purchase(@RequestBody List<ProductInfo> metadata) {
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping(produces = "application/json", consumes = "application/json")
+    public List<ProductInfo> purchase(
+            @RequestHeader(AUTHORIZATION) String token, // for AOP validation
+            @RequestBody List<ProductInfo> metadata
+            // TODO : implement and make a DTO to return necessary info
+            // or just delete this
+    )
+    {
         throw new NotImplementedException();
     }
 
     /**
      * Will delete product by id
      * @param id
-     * @return delete product
      */
 
     @AdminOnly
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    public ResponseEntity<ProductInfo> deleteProduct(@PathVariable("id") int id) {
+    public void deleteProduct(
+            @RequestHeader(AUTHORIZATION) String token, // for AOP validation
+            @PathVariable("id") int id
+    )
+    {
         throw new NotImplementedException();
     }
 
     /**
-     * This is a POST endpoint used to create new products by sending a CreateProduct DTO to the ProductService
-     * @param createProduct DTO containing all the provided details of a new product
+     *  POST endpoint that utilizes the ProductService to persist a new product to the database
+     * @param createProductRequest DTO that maps to the product model
      */
-    @ResponseStatus(value = HttpStatus.CREATED)
-    @PostMapping( value = "/createproduct", consumes = "application/json", produces = "application/json")
-    public void newProduct(@RequestBody CreateProduct createProduct) {
-        productService.save(createProduct);
+    @AdminOnly
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(path = "/createproduct", consumes = "application/json")
+    public void newProduct(
+            @RequestHeader(AUTHORIZATION) String token, // for AOP validation
+            @RequestBody CreateProductRequest createProductRequest
+    )
+    {
+        productService.save(createProductRequest);
     }
 }
