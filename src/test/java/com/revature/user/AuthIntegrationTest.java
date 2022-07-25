@@ -2,10 +2,7 @@ package com.revature.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.controllers.AuthController;
-import com.revature.dtos.LoginRequest;
-import com.revature.dtos.Principal;
-import com.revature.dtos.ProductReviewRequest;
-import com.revature.dtos.RegisterRequest;
+import com.revature.dtos.*;
 import com.revature.models.User;
 import com.revature.repositories.UserRepository;
 import com.revature.repositories.UserRoleRepository;
@@ -26,7 +23,6 @@ import static com.revature.util.ValidatorMessageUtil.*;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -46,7 +42,7 @@ class AuthIntegrationTest {
     private final TokenService tokenService;
     private final String REGISTER_PATH = "/auth/register";
     private final String LOGIN_PATH = "/auth/login";
-    private final String TEST_PATH = "/api/product/"+Integer.MAX_VALUE;
+    private final String CREATE_PRODUCT_PATH = "/api/product/createproduct";
     private final String POST_REVIEW_PATH = "/api/product/rating/" + 1;
     private final String CONTENT_TYPE = "application/json";
 
@@ -137,9 +133,13 @@ class AuthIntegrationTest {
         assertTrue(user.getRole().getName().equalsIgnoreCase("Basic"));
 
         // Third block : Utilize token to access @AdminOnly endpoint
+        CreateProductRequest createProductRequest = new CreateProductRequest();
+        String reqJSON = mapper.writeValueAsString(createProductRequest);
 
-        mockMvc.perform(delete(TEST_PATH)
+
+        mockMvc.perform(post(CREATE_PRODUCT_PATH)
                         .contentType(CONTENT_TYPE)
+                        .content(reqJSON)
                         .header("Authorization", token))
                 .andExpect(status().isForbidden())
                 .andExpect(header().string("content-type", CONTENT_TYPE))
