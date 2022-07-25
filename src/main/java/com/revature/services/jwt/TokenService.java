@@ -17,7 +17,7 @@ import java.util.Date;
 public class TokenService {
 
     private final JwtConfig jwtConfig;
-    private final String TRANSFORMATION = "RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING";
+    private static final String TRANSFORMATION = "RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING";
     // "RSA/ECB/PKCS1Padding" was marked insecure by Sonar Lint
 
     public TokenService(JwtConfig jwtConfig) {
