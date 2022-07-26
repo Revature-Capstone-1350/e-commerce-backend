@@ -94,18 +94,6 @@ public class ProductController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping(consumes = "application/json")
     public void update(@RequestBody ProductRequest product) {
-        /*
-        //example json
-        {
-            "id":1,
-            "name":"limit 50 char",
-            "description":"no limit",
-            "price":123456.12,
-            "imageUrlS":"url",
-            "imageUrlM":"url",
-            "category":1
-        }
-        */
         productService.updateProduct(product);
     }
 
