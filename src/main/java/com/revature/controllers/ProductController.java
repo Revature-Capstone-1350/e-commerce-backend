@@ -6,6 +6,7 @@ import com.revature.dtos.ProductInfo;
 import com.revature.dtos.ProductRequest;
 import com.revature.dtos.ProductReviewRequest;
 import com.revature.dtos.ReviewResponse;
+import com.revature.services.DeleteProductService;
 import com.revature.services.ProductService;
 import com.revature.services.ReviewService;
 import org.springframework.http.HttpStatus;
@@ -20,11 +21,13 @@ public class ProductController {
 
     private final ProductService productService;
     private final ReviewService reviewService;
+    private final DeleteProductService deleteProductService;
     private static final String AUTHORIZATION = "Authorization";
 
-    public ProductController(ProductService productService, ReviewService reviewService) {
+    public ProductController(ProductService productService, ReviewService reviewService, DeleteProductService deleteProductService) {
         this.productService = productService;
         this.reviewService = reviewService;
+        this.deleteProductService = deleteProductService;
     }
 
     /**
@@ -119,5 +122,16 @@ public class ProductController {
     )
     {
         productService.save(createProductRequest);
+    }
+
+    @AdminOnly
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(path = "/deleteproduct/{productId}")
+    public void deleteProduct(
+            @RequestHeader(AUTHORIZATION) String token, // for AOP validation
+            @PathVariable("productId") int productId
+    )
+    {
+        deleteProductService.deleteProduct(productId);
     }
 }
