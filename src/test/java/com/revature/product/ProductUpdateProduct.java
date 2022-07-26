@@ -1,11 +1,16 @@
 package com.revature.product;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.dtos.Principal;
 import com.revature.dtos.ProductInfo;
 import com.revature.dtos.ProductRequest;
 import com.revature.models.Category;
+import com.revature.models.User;
 import com.revature.repositories.CategoryRepository;
+import com.revature.repositories.UserRepository;
+import com.revature.services.AuthService;
 import com.revature.services.ProductService;
+import com.revature.services.jwt.TokenService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,15 +36,23 @@ public class ProductUpdateProduct {
     private final ObjectMapper mapper;
     private final ProductService productService;
     private final CategoryRepository categoryRepo;
+    private final UserRepository userRepo;
+    private final AuthService authService;
+    private final TokenService tokenService;
     private final String PATH = "/api/product";
     private final String CONTENT_TYPE = "application/json";
+    final String username = "Admin@SkyView.com";
+    final String password = "Admin12@";
 
     @Autowired
-    public ProductUpdateProduct(MockMvc mockMvc, ObjectMapper mapper, ProductService productService, CategoryRepository categoryRepo) {
+    public ProductUpdateProduct(MockMvc mockMvc, ObjectMapper mapper, ProductService productService, CategoryRepository categoryRepo, UserRepository userRepo, AuthService authService, TokenService tokenService) {
         this.mockMvc = mockMvc;
         this.mapper = mapper;
         this.productService = productService;
         this.categoryRepo = categoryRepo;
+        this.userRepo = userRepo;
+        this.authService = authService;
+        this.tokenService = tokenService;
     }
 
     @Test
@@ -54,9 +67,12 @@ public class ProductUpdateProduct {
                 1
                 );
 
+        User user = userRepo.findByEmailIgnoreCaseAndPassword(username, authService.generatePassword(password)).orElseThrow(RuntimeException::new);
+        String token = tokenService.generateToken(new Principal(user));
+
         String json = mapper.writeValueAsString(updateProduct);
 
-        mockMvc.perform(put(PATH).contentType(CONTENT_TYPE).content(json))
+        mockMvc.perform(put(PATH).contentType(CONTENT_TYPE).content(json).header("Authorization", token))
                 .andExpect(status().isNoContent())
                 .andExpect(header().string("Access-Control-Allow-Origin", "*"))
                 .andExpect(header().string("Access-Control-Allow-Methods", "*"))
@@ -87,9 +103,12 @@ public class ProductUpdateProduct {
                 -1
         );
 
+        User user = userRepo.findByEmailIgnoreCaseAndPassword(username, authService.generatePassword(password)).orElseThrow(RuntimeException::new);
+        String token = tokenService.generateToken(new Principal(user));
+
         String json = mapper.writeValueAsString(updateProduct);
 
-        MvcResult result = mockMvc.perform(put(PATH).contentType(CONTENT_TYPE).content(json))
+        MvcResult result = mockMvc.perform(put(PATH).contentType(CONTENT_TYPE).content(json).header("Authorization", token))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(header().string("Access-Control-Allow-Origin", "*"))
                 .andExpect(header().string("Access-Control-Allow-Methods", "*"))
@@ -113,9 +132,12 @@ public class ProductUpdateProduct {
                 1
         );
 
+        User user = userRepo.findByEmailIgnoreCaseAndPassword(username, authService.generatePassword(password)).orElseThrow(RuntimeException::new);
+        String token = tokenService.generateToken(new Principal(user));
+
         String json = mapper.writeValueAsString(updateProduct);
 
-        MvcResult result = mockMvc.perform(put(PATH).contentType(CONTENT_TYPE).content(json))
+        MvcResult result = mockMvc.perform(put(PATH).contentType(CONTENT_TYPE).content(json).header("Authorization", token))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(header().string("Access-Control-Allow-Origin", "*"))
                 .andExpect(header().string("Access-Control-Allow-Methods", "*"))
@@ -139,9 +161,12 @@ public class ProductUpdateProduct {
                 1
         );
 
+        User user = userRepo.findByEmailIgnoreCaseAndPassword(username, authService.generatePassword(password)).orElseThrow(RuntimeException::new);
+        String token = tokenService.generateToken(new Principal(user));
+
         String json = mapper.writeValueAsString(updateProduct);
 
-        MvcResult result = mockMvc.perform(put(PATH).contentType(CONTENT_TYPE).content(json))
+        MvcResult result = mockMvc.perform(put(PATH).contentType(CONTENT_TYPE).content(json).header("Authorization", token))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(header().string("Access-Control-Allow-Origin", "*"))
                 .andExpect(header().string("Access-Control-Allow-Methods", "*"))
@@ -165,9 +190,12 @@ public class ProductUpdateProduct {
                 1
         );
 
+        User user = userRepo.findByEmailIgnoreCaseAndPassword(username, authService.generatePassword(password)).orElseThrow(RuntimeException::new);
+        String token = tokenService.generateToken(new Principal(user));
+
         String json = mapper.writeValueAsString(updateProduct);
 
-        MvcResult result = mockMvc.perform(put(PATH).contentType(CONTENT_TYPE).content(json))
+        MvcResult result = mockMvc.perform(put(PATH).contentType(CONTENT_TYPE).content(json).header("Authorization", token))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(header().string("Access-Control-Allow-Origin", "*"))
                 .andExpect(header().string("Access-Control-Allow-Methods", "*"))
@@ -191,9 +219,12 @@ public class ProductUpdateProduct {
                 1
         );
 
+        User user = userRepo.findByEmailIgnoreCaseAndPassword(username, authService.generatePassword(password)).orElseThrow(RuntimeException::new);
+        String token = tokenService.generateToken(new Principal(user));
+
         String json = mapper.writeValueAsString(updateProduct);
 
-        MvcResult result = mockMvc.perform(put(PATH).contentType(CONTENT_TYPE).content(json))
+        MvcResult result = mockMvc.perform(put(PATH).contentType(CONTENT_TYPE).content(json).header("Authorization", token))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(header().string("Access-Control-Allow-Origin", "*"))
                 .andExpect(header().string("Access-Control-Allow-Methods", "*"))
@@ -217,9 +248,12 @@ public class ProductUpdateProduct {
                 -1
         );
 
+        User user = userRepo.findByEmailIgnoreCaseAndPassword(username, authService.generatePassword(password)).orElseThrow(RuntimeException::new);
+        String token = tokenService.generateToken(new Principal(user));
+
         String json = mapper.writeValueAsString(updateProduct);
 
-        MvcResult result = mockMvc.perform(put(PATH).contentType(CONTENT_TYPE).content(json))
+        MvcResult result = mockMvc.perform(put(PATH).contentType(CONTENT_TYPE).content(json).header("Authorization", token))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(header().string("Access-Control-Allow-Origin", "*"))
                 .andExpect(header().string("Access-Control-Allow-Methods", "*"))
