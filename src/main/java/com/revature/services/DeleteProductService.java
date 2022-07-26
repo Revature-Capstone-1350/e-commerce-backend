@@ -5,7 +5,6 @@ import com.revature.exceptions.PersistanceException;
 import com.revature.models.Order;
 import com.revature.models.Product;
 import com.revature.models.ProductReview;
-import com.revature.repositories.CategoryRepository;
 import com.revature.repositories.OrderRepository;
 import com.revature.repositories.ProductRepository;
 import com.revature.repositories.ProductReviewRepository;
@@ -19,18 +18,14 @@ import java.util.List;
 public class DeleteProductService { // Added as separate service to avoid refactoring tests
 
     private final ProductRepository productRepo;
-    private final CategoryRepository categoryRepo;
     private final ProductReviewRepository reviewRepo;
     private final OrderRepository orderRepo;
-    private final ProductService productService;
 
     @Autowired
-    public DeleteProductService(ProductRepository productRepo, CategoryRepository categoryRepo, ProductReviewRepository reviewRepo, OrderRepository orderRepo, ProductService productService) {
+    public DeleteProductService(ProductRepository productRepo, ProductReviewRepository reviewRepo, OrderRepository orderRepo) {
         this.productRepo = productRepo;
-        this.categoryRepo = categoryRepo;
         this.reviewRepo = reviewRepo;
         this.orderRepo = orderRepo;
-        this.productService = productService;
     }
 
     private List<Order> findOrdersByProductId(int productId) {

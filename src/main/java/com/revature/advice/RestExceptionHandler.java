@@ -3,7 +3,6 @@ package com.revature.advice;
 import com.revature.dtos.ErrorResponse;
 import com.revature.exceptions.*;
 import io.jsonwebtoken.ExpiredJwtException;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -41,7 +40,6 @@ public class RestExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BadRequestException.class)
     public ErrorResponse handleBadRequestException(Throwable t) {
-
         String message = "Invalid Input.";
         List<String> listOfErrorMessages = new ArrayList<>();
         listOfErrorMessages.add(message);
@@ -54,7 +52,6 @@ public class RestExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(PersistanceException.class)
     public ErrorResponse handlePersistanceException(PersistanceException e) {
-
         return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), Collections.singletonList(e.getMessage()));
     }
 
@@ -62,7 +59,6 @@ public class RestExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MissingRequestHeaderException.class)
     public ErrorResponse handleMissingRequestHeaderException(Throwable t) {
-
         String message = "You must be logged in to access this.";
         List<String> listOfErrorMessages = new ArrayList<>();
         listOfErrorMessages.add(message);
@@ -75,7 +71,6 @@ public class RestExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ErrorResponse handleHttpMessageNotReadableException(Throwable t) {
-
         String message = HttpStatus.BAD_REQUEST.getReasonPhrase();
         List<String> listOfErrorMessages = new ArrayList<>();
         listOfErrorMessages.add(message);
@@ -89,7 +84,6 @@ public class RestExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(UnauthorizedException.class)
     public ErrorResponse handleUnauthorizedException(Throwable t) {
-
         String message = "Invalid Credentials.";
         List<String> listOfErrorMessages = new ArrayList<>();
         listOfErrorMessages.add(message);
@@ -101,7 +95,6 @@ public class RestExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(ExpiredJwtException.class)
     public ErrorResponse handleTokenExpirationException(Throwable t) {
-
         String message = "Login session expired. Please login again.";
         List<String> listOfErrorMessages = new ArrayList<>();
         listOfErrorMessages.add(message);
@@ -113,7 +106,6 @@ public class RestExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(TokenParseException.class)
     public ErrorResponse handleTokenParseException(Throwable t) {
-
         String message = "Invalid login token. Please login again.";
         List<String> listOfErrorMessages = new ArrayList<>();
         listOfErrorMessages.add(message);
@@ -125,7 +117,6 @@ public class RestExceptionHandler {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(ForbiddenException.class)
     public ErrorResponse handleForbiddenException(Throwable t) {
-
         String message = "Access Denied";
         List<String> listOfErrorMessages = new ArrayList<>();
         listOfErrorMessages.add(message);
@@ -137,7 +128,6 @@ public class RestExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
     public ErrorResponse handleNotFoundException(Throwable t) {
-
         String message = "Resource not found.";
         List<String> listOfErrorMessages = new ArrayList<>();
         listOfErrorMessages.add(message);
@@ -149,7 +139,6 @@ public class RestExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(NumberFormatException.class)
     public ErrorResponse handleNumberFormatException(Throwable t){
-
         String message = "Invalid ID";
         List<String> listOfErrorMessages = new ArrayList<>();
         listOfErrorMessages.add(message);
@@ -161,7 +150,6 @@ public class RestExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(ConflictException.class)
     public ErrorResponse handleConflictException(Throwable t) {
-
         String message = "There is already a resource with those specifications.";
         List<String> listOfErrorMessages = new ArrayList<>();
         listOfErrorMessages.add(message);
@@ -180,7 +168,6 @@ public class RestExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler
     public ErrorResponse handleOtherException(Throwable t) {
-
         String message = "An internal server error occurred.";
         List<String> listOfErrorMessages = new ArrayList<>();
         listOfErrorMessages.add(message);
