@@ -41,6 +41,7 @@ public class LoggingAspect {
     public void logMethodException(JoinPoint jp, Throwable t) {
         String methodSig = extractMethodSignature(jp);
         String exceptionName = t.getClass().getSimpleName();
+        t.printStackTrace();
         logger.warn("{} was thrown in method {} with the message \"{}\"", exceptionName, methodSig, t.getMessage());
     }
 

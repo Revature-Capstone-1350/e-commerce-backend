@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@Profile("!deploy")
 @RestControllerAdvice
 public class RestExceptionHandler {
     /**
