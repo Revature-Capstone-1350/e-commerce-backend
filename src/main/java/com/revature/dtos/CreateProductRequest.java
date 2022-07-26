@@ -1,6 +1,5 @@
 package com.revature.dtos;
 
-import com.revature.models.Category;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +14,6 @@ public class CreateProductRequest {
     private double price;
     private String imageUrlS;
     private String imageUrlM;
-    private Category category;
-    private int createId;
+    private int category;
+
 }

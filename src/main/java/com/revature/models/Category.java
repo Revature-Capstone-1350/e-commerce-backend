@@ -22,8 +22,8 @@ public class Category {
     public Category() { super(); } // required no-args constructor
 
     public Category(String name) { this.name = name; }
-    public Category(Integer categoryId) { this.categoryId = categoryId; }
 
+    public Category(Integer categoryId) { this.categoryId = categoryId; }
 
     // getters
     public Integer getCategoryId() { return categoryId; }

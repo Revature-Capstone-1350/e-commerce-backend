@@ -8,7 +8,7 @@ import com.revature.dtos.ReviewResponse;
 import com.revature.exceptions.NotFoundException;
 import com.revature.exceptions.UnprocessableEntityException;
 import com.revature.models.Category;
-import com.revature.exceptions.NotImplementedException;
+import com.revature.exceptions.PersistanceException;
 import com.revature.models.Product;
 import com.revature.models.ProductReview;
 import com.revature.repositories.CategoryRepository;
@@ -36,7 +36,7 @@ public class ProductService {
         for (int i = 0; i < products.size(); i++) {
             Product product = products.get(i);
             int sum = 0;
-            for (ProductReview rating: product.getRatings()) {
+            for (ProductReview rating : product.getRatings()) {
                 sum += rating.getRating();
             }
             prodInfo.get(i).setSumOfRating(sum);
@@ -54,16 +54,56 @@ public class ProductService {
     }
 
 
-    public ProductInfo findById(int id){
+    public ProductInfo findById(int id) {
         return productRepo.findById(id).map(ProductInfo::new).orElseThrow(NotFoundException::new);
 
+    }
+
+    /**
+     * This method is used by the ProductController to persist a new product to the database using the ProductRepo
+     * @param createProduct This is a DTO that is passed from the ProductController to this method that contains all the information from the user to be persisted
+     * @return Returns a CreationResponse DTO that contains the new product ID
+     */
+    public CreationResponse save(CreateProductRequest createProduct) {
+        Category category = categoryRepo.getById(createProduct.getCategory()); //This fetches the category by its Id sent in the CreateProduct DTO
+        Product product = new Product(createProduct, category); //This creates a new product object with the fetched category and fields of the CreateProducts DTO
+        StringBuilder errorMessage = new StringBuilder("Issue(s) with this request:");
+        boolean passed = true;
+
+        if (!categoryRepo.findById(createProduct.getCategory()).isPresent()) {
+            errorMessage.append(" - No category found");
+            passed = false;
+        }
+
+        if (BigDecimal.valueOf(product.getPrice()).scale() > 2) {
+            errorMessage.append(" - Price too long of a decimal number");
+            passed = false;
+        }
+
+        if (BigDecimal.valueOf(product.getPrice()).precision() > 8) {
+            errorMessage.append(" - Price length is too long");
+            passed = false;
+        }
+
+        if (product.getName().length() > 50) {
+            errorMessage.append(" - Name is more then 50 characters");
+            passed = false;
+        }
+
+        if (passed) {
+            productRepo.save(product);
+            return new CreationResponse(product.getProductId());
+
+        } else {
+            throw new PersistanceException(errorMessage.toString());
+        }
     }
 
     /**
      * attempts to update based off a product
      * @param product product to be updated
      */
-    public void updateProduct(ProductRequest product) {
+    public void updateProduct(ProductRequest product){
 
         StringBuilder errorMessage = new StringBuilder("Issue(s) with this request:");
         boolean passed = true;
@@ -101,23 +141,5 @@ public class ProductService {
             throw new UnprocessableEntityException(errorMessage.toString());
         }
     }
-
-    /**
-     * This method is used to persist a new product to the database
-     * @param createProductRequest takes a CreateProductRequest DTO
-     * @return a new CreationResponse DTO
-     */
-    public CreationResponse save(CreateProductRequest createProductRequest) {
-        Product product = new Product(createProductRequest);
-        product = productRepo.save(product);
-        return new CreationResponse(product.getProductId());
-    }
-    
-    public void saveAll(List<Product> productList, List<ProductInfo> metadata) {
-        throw new NotImplementedException();
-    }
-
-    public void delete(int id) {
-        throw new NotImplementedException();
-    }
 }
+

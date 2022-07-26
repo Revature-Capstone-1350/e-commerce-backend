@@ -17,6 +17,8 @@ import java.util.Date;
 public class TokenService {
 
     private final JwtConfig jwtConfig;
+    private static final String TRANSFORMATION = "RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING";
+    // "RSA/ECB/PKCS1Padding" was marked insecure by Sonar Lint
 
     public TokenService(JwtConfig jwtConfig) {
         this.jwtConfig = jwtConfig;
@@ -32,7 +34,7 @@ public class TokenService {
                                       .claim("email",""+subject.getAuthUserEmail())
                                       .setIssuedAt(new Date(now))
                                       .setExpiration(new Date(now + timeout))
-                                      .signWith(jwtConfig.getSigAlg(), jwtConfig.getSigningKey());
+                                      .signWith(jwtConfig.getSigningKey(), jwtConfig.getSigAlg());
 
         return encryptRSA(tokenBuilder.compact());
 
@@ -43,8 +45,10 @@ public class TokenService {
         if (token == null || token.isEmpty()) {
             throw new UnauthorizedException();
         }
-        Claims claims = Jwts.parser()
+
+        Claims claims = Jwts.parserBuilder()
                 .setSigningKey(jwtConfig.getSigningKey())
+                .build()
                 .parseClaimsJws(decryptRSA(token))
                 .getBody();
 
@@ -54,8 +58,8 @@ public class TokenService {
     }
 
     private String encryptRSA(String data) {
-        try { // TODO : secure mode (prevents printing keys?) without breaking everything
-            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+        try {
+            Cipher cipher = Cipher.getInstance(TRANSFORMATION);
             cipher.init(Cipher.ENCRYPT_MODE, jwtConfig.getPublicKey());
             byte[] encrypted = cipher.doFinal(data.getBytes());
             return Base64.encodeBase64String(encrypted);
@@ -66,7 +70,7 @@ public class TokenService {
 
     private String decryptRSA(String data) {
         try {
-            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            Cipher cipher = Cipher.getInstance(TRANSFORMATION);
             cipher.init(Cipher.DECRYPT_MODE, jwtConfig.getPrivateKey());
             return new String(cipher.doFinal(Base64.decodeBase64(data)));
         } catch (Exception t) {

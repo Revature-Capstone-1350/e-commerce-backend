@@ -77,14 +77,14 @@ public class Product {
         this.category = category;
     }
 
-    public Product(CreateProductRequest createProductRequest) {
+    public Product(CreateProductRequest createProductRequest, Category category) {
         this();
         this.name = createProductRequest.getName();
         this.description = createProductRequest.getDescription();
         this.price = createProductRequest.getPrice();
         this.imageUrlS = createProductRequest.getImageUrlS();
         this.imageUrlM = createProductRequest.getImageUrlM();
-        this.category = createProductRequest.getCategory();
+        this.category = category;
     }
 
     // getters

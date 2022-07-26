@@ -6,7 +6,6 @@ import com.revature.dtos.ProductInfo;
 import com.revature.dtos.ProductRequest;
 import com.revature.dtos.ProductReviewRequest;
 import com.revature.dtos.ReviewResponse;
-import com.revature.exceptions.NotImplementedException;
 import com.revature.services.ProductService;
 import com.revature.services.ReviewService;
 import org.springframework.http.HttpStatus;
@@ -84,11 +83,11 @@ public class ProductController {
     }
 
 
-
     /**
      * put endpoint to update a product
      * @param product receives a product Json
      */
+    @AdminOnly
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping(consumes = "application/json")
     public void update(@RequestBody ProductRequest product) {
@@ -105,40 +104,6 @@ public class ProductController {
         }
         */
         productService.updateProduct(product);
-    }
-
-    /**
-     * Will list product information
-     * @param metadata
-     * @return return product information
-     */
-
-    @ResponseStatus(HttpStatus.OK)
-    @PatchMapping(produces = "application/json", consumes = "application/json")
-    public List<ProductInfo> purchase(
-            @RequestHeader(AUTHORIZATION) String token, // for AOP validation
-            @RequestBody List<ProductInfo> metadata
-            // TODO : implement and make a DTO to return necessary info
-            // or just delete this
-    )
-    {
-        throw new NotImplementedException();
-    }
-
-    /**
-     * Will delete product by id
-     * @param id
-     */
-
-    @AdminOnly
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{id}")
-    public void deleteProduct(
-            @RequestHeader(AUTHORIZATION) String token, // for AOP validation
-            @PathVariable("id") int id
-    )
-    {
-        throw new NotImplementedException();
     }
 
     /**
