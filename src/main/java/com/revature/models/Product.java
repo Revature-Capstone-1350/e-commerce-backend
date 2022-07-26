@@ -87,6 +87,7 @@ public class Product {
         this.category = category;
     }
 
+
     // getters
     public Integer getProductId() { return productId; }
     public String getName() { return name; }
