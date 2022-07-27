@@ -43,7 +43,8 @@ If you require help, have a look at the provided example `application-local.yml`
 Building with the Dockerfile requires the following:
 - Apache Maven 3.8.6
 
-You have the option to build SkyView's backend using the supplied Dockerfile. In order to use it, navigate to the root of the repository, and run `mvn clean package`, followed by `docker build -t . skyview` and `docker run -d skyview --name <container-name>`. Doing so will containerize and then launch the backend on `localhost:5000`. This is a good way to simply run this if you do not intend on modifying it; nothing else is required. You can also use the provided shell script to automate this. 
+You have the option to build SkyView's backend using the supplied Dockerfile. In order to use it, navigate to the root of the repository, and run `mvn clean package`, followed by `docker build -t . skyview` and `docker run -d skyview --name <container-name>`. Doing so will containerize and then launch the backend on `<container-ip>:5000`. Find the IP of your container using the output of `docker inspect <container-name> | grep IPAddress`. This is a good way to simply run this if you do not intend on modifying it; nothing else is required. You can also use the provided shell script to automate this (`create-container.sh`). 
+
 
 ## Building from source
 
