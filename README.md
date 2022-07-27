@@ -2,6 +2,8 @@
 
 SkyView is an online shop dedicated to selling photos of our beautiful sky. With SkyView, people are able to easily view and purchase photos while making it fun!
 
+[_Click here to view the official SkyView frontend_](https://github.com/Revature-Capstone-1350/e-commerce-frontend)
+
 [![Java CI Workflow](https://github.com/Revature-Capstone-1350/e-commerce-backend/actions/workflows/workflowAPI.yml/badge.svg)](https://github.com/Revature-Capstone-1350/e-commerce-backend/actions/workflows/workflowAPI.yml)
 # About SkyView
 
@@ -41,7 +43,7 @@ If you require help, have a look at the provided example `application-local.yml`
 ## Building with Dockerfile
 
 Building with the Dockerfile requires the following:
-- Apache Maven 3.8.6
+- Apache Maven 3.8.6 (if you don't have Maven, download it [here](https://maven.apache.org/download.cgi) or install it using your package manager) 
 
 You have the option to build SkyView's backend using the supplied Dockerfile. In order to use it, navigate to the root of the repository, and run `mvn clean package`, followed by `docker build -t . skyview` and `docker run -d skyview --name <container-name>`. Doing so will containerize and then launch the backend on `<container-ip>:5000`. Find the IP of your container using the output of `docker inspect <container-name> | grep IPAddress`. This is a good way to simply run this if you do not intend on modifying it; nothing else is required. You can also use the provided shell script to automate this (`create-container.sh`). 
 
