@@ -122,14 +122,4 @@ public class OrderService {
             }
         }
     }
-
-    /*
-    able to
-    place an order ( all orders without login go to Tester )
-
-    modify an order ( set status )
-    delete an order
-    get all orders
-
-     */
 }
