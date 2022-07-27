@@ -6,6 +6,7 @@ import com.revature.dtos.ProductInfo;
 import com.revature.dtos.ProductRequest;
 import com.revature.dtos.ProductReviewRequest;
 import com.revature.dtos.ReviewResponse;
+import com.revature.services.DeleteProductService;
 import com.revature.services.ProductService;
 import com.revature.services.ReviewService;
 import org.springframework.http.HttpStatus;
@@ -20,11 +21,13 @@ public class ProductController {
 
     private final ProductService productService;
     private final ReviewService reviewService;
+    private final DeleteProductService deleteProductService;
     private static final String AUTHORIZATION = "Authorization";
 
-    public ProductController(ProductService productService, ReviewService reviewService) {
+    public ProductController(ProductService productService, ReviewService reviewService, DeleteProductService deleteProductService) {
         this.productService = productService;
         this.reviewService = reviewService;
+        this.deleteProductService = deleteProductService;
     }
 
     /**
@@ -83,26 +86,14 @@ public class ProductController {
     }
 
 
-
     /**
      * put endpoint to update a product
      * @param product receives a product Json
      */
+    @AdminOnly
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping(consumes = "application/json")
     public void update(@RequestBody ProductRequest product) {
-        /*
-        //example json
-        {
-            "id":1,
-            "name":"limit 50 char",
-            "description":"no limit",
-            "price":123456.12,
-            "imageUrlS":"url",
-            "imageUrlM":"url",
-            "category":1
-        }
-        */
         productService.updateProduct(product);
     }
 
@@ -119,5 +110,16 @@ public class ProductController {
     )
     {
         productService.save(createProductRequest);
+    }
+
+    @AdminOnly
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(path = "/deleteproduct/{productId}")
+    public void deleteProduct(
+            @RequestHeader(AUTHORIZATION) String token, // for AOP validation
+            @PathVariable("productId") int productId
+    )
+    {
+        deleteProductService.deleteProduct(productId);
     }
 }

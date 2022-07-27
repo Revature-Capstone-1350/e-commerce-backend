@@ -54,8 +54,7 @@ public class JwtConfig {
                 System.out.println("Generating RSA keys. This may take a few minutes.");
                 KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
                 keyGen.initialize(8192);
-                // 4096 only supports email length 240
-                // 8192 supports email length 632
+                // 4096 key-size did not support 255-length emails
                 KeyPair pair = keyGen.generateKeyPair();
                 this.privateKey = pair.getPrivate();
                 this.publicKey = pair.getPublic();

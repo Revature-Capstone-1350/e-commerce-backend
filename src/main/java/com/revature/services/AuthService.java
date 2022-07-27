@@ -9,9 +9,7 @@ import com.revature.repositories.UserRoleRepository;
 import com.revature.services.jwt.TokenService;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -35,21 +33,12 @@ public class AuthService {
         this.tokenService = tokenService;
     }
 
-    @ResponseStatus(HttpStatus.OK)
     public AuthResponse login(LoginRequest loginRequest) {
 
         // Validate credential & at this point, the credentials have been determined to be valid.
         return userRepo.findByEmailIgnoreCaseAndPassword(loginRequest.getEmail(), generatePassword(loginRequest.getPassword()))
                 .map(AuthResponse::new)
                 .orElseThrow(UnauthorizedException::new);
-    }
-
-    public AuthResponse getAuthResponseFromLogin(LoginRequest loginRequest) {
-        User user = userRepo.findByEmailIgnoreCaseAndPassword(
-                loginRequest.getEmail(),
-                generatePassword(loginRequest.getPassword())
-        ).orElseThrow(UnauthorizedException::new);
-        return new AuthResponse(user);
     }
 
     public AuthResponse register(RegisterRequest registerRequest) {
@@ -69,15 +58,6 @@ public class AuthService {
         user = userRepo.save(user);
 
         return userRepo.findById(user.getUserId()).map(AuthResponse::new).orElseThrow(NotFoundException::new);
-    }
-
-    public String getToken(User user) {
-        Principal prin = new Principal(user);
-        return tokenService.generateToken(prin);
-    }
-
-    public void verifyToken(String token) {
-        tokenService.extractTokenDetails(token);
     }
 
     public void adminCheck(String token) {

@@ -2,7 +2,6 @@ package com.revature.dtos;
 
 import com.revature.util.Regex;
 import com.revature.util.ValidatorMessageUtil;
-import com.revature.util.groups.OnCreate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,23 +32,11 @@ public class RegisterRequest {
     @Pattern( regexp = Regex.ONLY_THESE, message = ValidatorMessageUtil.PASSWORD_ONLY_THESE)
     private String password;
 
-    @NotNull(
-            message = ValidatorMessageUtil.FNAME_REQUIRED_ON_CREATE,
-            groups = OnCreate.class
-    )
-    @Length (
-            message = ValidatorMessageUtil.FNAME_REQUIRED_ON_CREATE,
-            groups = OnCreate.class
-    )
+    @NotNull(message = ValidatorMessageUtil.FNAME_REQUIRED_ON_CREATE)
+    @Length (message = ValidatorMessageUtil.FNAME_REQUIRED_ON_CREATE)
     private String firstName;
 
-    @NotNull(
-            message = ValidatorMessageUtil.LNAME_REQUIRED_ON_CREATE,
-            groups = OnCreate.class
-    )
-    @Length (
-            message = ValidatorMessageUtil.LNAME_REQUIRED_ON_CREATE,
-            groups = OnCreate.class
-    )
+    @NotNull(message = ValidatorMessageUtil.LNAME_REQUIRED_ON_CREATE)
+    @Length (message = ValidatorMessageUtil.LNAME_REQUIRED_ON_CREATE)
     private String lastName;
 }

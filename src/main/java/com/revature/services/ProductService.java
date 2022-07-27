@@ -6,9 +6,9 @@ import com.revature.dtos.ProductInfo;
 import com.revature.dtos.ProductRequest;
 import com.revature.dtos.ReviewResponse;
 import com.revature.exceptions.NotFoundException;
-import com.revature.exceptions.PersistanceException;
 import com.revature.exceptions.UnprocessableEntityException;
 import com.revature.models.Category;
+import com.revature.exceptions.PersistanceException;
 import com.revature.models.Product;
 import com.revature.models.ProductReview;
 import com.revature.repositories.CategoryRepository;
@@ -141,5 +141,5 @@ public class ProductService {
             throw new UnprocessableEntityException(errorMessage.toString());
         }
     }
-}
 
+}
