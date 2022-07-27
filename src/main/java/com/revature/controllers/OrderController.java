@@ -34,7 +34,7 @@ public class OrderController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(path = "/userid/{orderId}", produces = "application/json")
+    @GetMapping(path = "/userid/{userId}", produces = "application/json")
     public List<OrderDTO> getOrdersByUserId(
             @RequestHeader(AUTHORIZATION) String token,
             @PathVariable int userId
