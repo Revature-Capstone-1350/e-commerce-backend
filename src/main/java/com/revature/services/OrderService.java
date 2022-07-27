@@ -108,10 +108,17 @@ public class OrderService {
     }
 
     public void deleteOrdersByProductId(int productId) {
-        Product product = productRepo.findById(productId)
+        productRepo.findById(productId)
                 .orElseThrow(NotFoundException::new);
-
-
+        List<Order> orders = orderRepo.findAll();
+        for (Order order: orders) {
+            for (Product product: order.getItems()) {
+                if (product.getProductId() == productId) {
+                    orderRepo.delete(order);
+                    break;
+                }
+            }
+        }
     }
 
     /*

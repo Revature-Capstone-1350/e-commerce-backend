@@ -1,7 +1,6 @@
 package com.revature.services;
 
 import com.revature.exceptions.BadRequestException;
-import com.revature.exceptions.PersistanceException;
 import com.revature.models.Order;
 import com.revature.models.Product;
 import com.revature.models.ProductReview;
@@ -20,12 +19,14 @@ public class DeleteProductService { // Added as separate service to avoid refact
     private final ProductRepository productRepo;
     private final ProductReviewRepository reviewRepo;
     private final OrderRepository orderRepo;
+    private final OrderService orderService;
 
     @Autowired
-    public DeleteProductService(ProductRepository productRepo, ProductReviewRepository reviewRepo, OrderRepository orderRepo) {
+    public DeleteProductService(ProductRepository productRepo, ProductReviewRepository reviewRepo, OrderRepository orderRepo, OrderService orderService) {
         this.productRepo = productRepo;
         this.reviewRepo = reviewRepo;
         this.orderRepo = orderRepo;
+        this.orderService = orderService;
     }
 
     private List<Order> findOrdersByProductId(int productId) {
@@ -46,7 +47,7 @@ public class DeleteProductService { // Added as separate service to avoid refact
         Product product = productRepo.findById(productId) // ensures product exists
                 .orElseThrow(BadRequestException::new);
         if (!findOrdersByProductId(productId).isEmpty() ) { // ensures no cascade drop is needed
-            throw new PersistanceException("There are orders associated with this product.");
+            orderService.deleteOrdersByProductId(productId);
         }
 
         List<ProductReview> reviews = product.getRatings(); // removes reviews

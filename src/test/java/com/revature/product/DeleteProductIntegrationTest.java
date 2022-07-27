@@ -85,7 +85,7 @@ public class DeleteProductIntegrationTest {
     }
 
     @Test
-    void test_delete_old_product_returns_400() throws Exception {
+    void test_delete_old_product_returns_204() throws Exception {
 
         // attempt to delete a product that has orders attached to it
         final int OLD_PRODUCT_ID = 1;
@@ -96,9 +96,9 @@ public class DeleteProductIntegrationTest {
         // Attempt to delete the product
         mockMvc.perform(delete(DELETE_PATH+OLD_PRODUCT_ID)
                         .header("Authorization", token))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNoContent())
                 .andReturn();
 
-        assertTrue(productRepository.existsById(OLD_PRODUCT_ID));
+        assertFalse(productRepository.existsById(OLD_PRODUCT_ID));
     }
 }
