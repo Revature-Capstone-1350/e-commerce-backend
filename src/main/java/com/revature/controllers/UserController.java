@@ -1,5 +1,6 @@
 package com.revature.controllers;
 
+import com.revature.annotations.AdminOnly;
 import com.revature.dtos.AuthResponse;
 import com.revature.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +21,14 @@ public class UserController {
         this.userService = userService;
     }
 
+    @AdminOnly
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(produces = "application/json")
     public List<AuthResponse> findAllUsers() {
         return userService.findAllUsers();
     }
 
-    //
+    @AdminOnly
     @ResponseStatus(HttpStatus.OK) // Set status of the response
     @GetMapping("/{id}") // Mapping /api/users/reqId
     public AuthResponse getUserById(

@@ -77,7 +77,8 @@ public class OrderService {
         }
         Address address;
         try {
-            address = addressRepo.getById(orderDetails.getAddress().getAddressId());
+            address = addressRepo.findById(orderDetails.getAddress().getAddressId())
+                    .orElseThrow(RuntimeException::new);
         } catch (Exception e) {
             address = new Address(
                     orderDetails.getAddress().getStreet(),

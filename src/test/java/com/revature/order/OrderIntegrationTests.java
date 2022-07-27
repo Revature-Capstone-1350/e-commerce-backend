@@ -2,13 +2,18 @@ package com.revature.order;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.controllers.AuthController;
+import com.revature.dtos.AddressDTO;
+import com.revature.dtos.OrderDTO;
 import com.revature.dtos.Principal;
+import com.revature.dtos.ProductInfo;
 import com.revature.models.Order;
 import com.revature.models.User;
 import com.revature.repositories.OrderRepository;
+import com.revature.repositories.ProductRepository;
 import com.revature.repositories.UserRepository;
 import com.revature.repositories.UserRoleRepository;
 import com.revature.services.AuthService;
+import com.revature.services.OrderService;
 import com.revature.services.jwt.TokenService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasItem;
@@ -38,26 +44,29 @@ public class OrderIntegrationTests {
     private final UserRepository userRepo;
     private final UserRoleRepository roleRepo;
     private final OrderRepository orderRepo;
+    private final ProductRepository productRepo;
     private final AuthService authService;
+    private final OrderService orderService;
     private final AuthController authCtrl;
     private final TokenService tokenService;
     private final String GET_ALL = "/api/order";
     private final String GET_BY_ORDER_ID = "/api/order/orderid/";
     private final String GET_BY_USER_ID = "/api/order/userid/";
-    private final String CREATE_PRODUCT_PATH = "/api/product/createproduct";
-    private final String POST_REVIEW_PATH = "/api/product/rating/" + 1;
+    private final String PLACE_ORDER = "/api/order/place";
     private final String CONTENT_TYPE = "application/json";
     final String username = "Admin@SkyView.com";
     final String password = "Admin12@";
 
     @Autowired
-    public OrderIntegrationTests(MockMvc mockMvc, ObjectMapper mapper, UserRepository userRepo, UserRoleRepository roleRepo, OrderRepository orderRepo, AuthService authService, AuthController authCtrl, TokenService tokenService) {
+    public OrderIntegrationTests(MockMvc mockMvc, ObjectMapper mapper, UserRepository userRepo, UserRoleRepository roleRepo, OrderRepository orderRepo, ProductRepository productRepo, AuthService authService, OrderService orderService, AuthController authCtrl, TokenService tokenService) {
         this.mockMvc = mockMvc;
         this.mapper = mapper;
         this.userRepo = userRepo;
         this.roleRepo = roleRepo;
         this.orderRepo = orderRepo;
+        this.productRepo = productRepo;
         this.authService = authService;
+        this.orderService = orderService;
         this.authCtrl = authCtrl;
         this.tokenService = tokenService;
     }
@@ -157,6 +166,55 @@ public class OrderIntegrationTests {
         final String GET_PATH = GET_BY_USER_ID + (user.getUserId()+1);
         mockMvc.perform(get(GET_PATH).header("Authorization", token))
                 .andExpect(status().isUnauthorized())
+                .andExpect(header().string("content-type", CONTENT_TYPE))
+                .andExpect(header().string("Access-Control-Allow-Origin", "*"))
+                .andExpect(header().string("Access-Control-Allow-Methods", "*"))
+                .andExpect(header().string("Access-Control-Allow-Headers", "*"))
+                .andReturn();
+    }
+
+    @Test
+    void test_user_can_place_an_order() throws Exception {
+
+        // Just grabs a user
+        final int ORDER_ID = 4;
+        Order oldOrder = orderRepo.findById(ORDER_ID).orElseThrow(RuntimeException::new);
+        User user = userRepo.findById(oldOrder.getUser().getUserId())
+                .orElseThrow(RuntimeException::new);
+        String token = tokenService.generateToken(new Principal(user));
+
+        OrderDTO order = new OrderDTO(0,0,null,null,"");
+        AddressDTO address = new AddressDTO();
+        address.setStreet("One Street Ave");
+        address.setStreet2("");
+        address.setCity("");
+        address.setState("AB");
+        address.setPostalCode("1234567");
+        order.setAddress(address);
+        List<ProductInfo> products = new ArrayList<>();
+        for (int i = 4; i < 12; i++) {
+            ProductInfo productInfo = new ProductInfo(
+                    i,
+                    "name"+i,
+                    "desc"+i,
+                    0.95,
+                    "smallurl"+i,
+                    "medurl"+i,
+                    "Sun",
+                    10,
+                    33);
+        }
+        order.setItems(products);
+
+        String placeOrderReq = mapper.writeValueAsString(order);
+
+
+        mockMvc.perform(post(PLACE_ORDER)
+                        .header("Authorization", token)
+                        .contentType(CONTENT_TYPE)
+                        .content(placeOrderReq)
+                )
+                .andExpect(status().isOk())
                 .andExpect(header().string("content-type", CONTENT_TYPE))
                 .andExpect(header().string("Access-Control-Allow-Origin", "*"))
                 .andExpect(header().string("Access-Control-Allow-Methods", "*"))
