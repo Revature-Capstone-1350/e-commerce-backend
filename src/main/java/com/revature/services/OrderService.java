@@ -109,8 +109,9 @@ public class OrderService {
     }
 
     public void deleteOrdersByProductId(int productId) {
-        productRepo.findById(productId)
-                .orElseThrow(NotFoundException::new);
+        if(productRepo.getById(productId) == null) {
+            throw new NotFoundException();
+        }
         List<Order> orders = orderRepo.findAll();
         for (Order order: orders) {
             for (Product product: order.getItems()) {

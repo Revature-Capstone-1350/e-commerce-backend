@@ -25,29 +25,20 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.hasItem;
-import static org.junit.Assert.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest // Tells Spring we need to have an entire application context with everything set up and ready to go
 @AutoConfigureMockMvc // configures mockMvc
 @DirtiesContext
 public class OrderIntegrationTests {
     private final MockMvc mockMvc;
-    // allows to send HTTP requests and assert about their responses
-
     private final ObjectMapper mapper;
     private final UserRepository userRepo;
-    private final UserRoleRepository roleRepo;
     private final OrderRepository orderRepo;
-    private final ProductRepository productRepo;
     private final AuthService authService;
-    private final OrderService orderService;
-    private final AuthController authCtrl;
     private final TokenService tokenService;
     private final String GET_ALL = "/api/order";
     private final String GET_BY_ORDER_ID = "/api/order/orderid/";
@@ -62,12 +53,8 @@ public class OrderIntegrationTests {
         this.mockMvc = mockMvc;
         this.mapper = mapper;
         this.userRepo = userRepo;
-        this.roleRepo = roleRepo;
         this.orderRepo = orderRepo;
-        this.productRepo = productRepo;
         this.authService = authService;
-        this.orderService = orderService;
-        this.authCtrl = authCtrl;
         this.tokenService = tokenService;
     }
 
@@ -221,7 +208,4 @@ public class OrderIntegrationTests {
                 .andExpect(header().string("Access-Control-Allow-Headers", "*"))
                 .andReturn();
     }
-
-
-
 }
