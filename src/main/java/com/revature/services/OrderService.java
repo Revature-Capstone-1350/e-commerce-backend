@@ -65,7 +65,7 @@ public class OrderService {
 
     public OrderDTO placeOrder(String token, OrderDTO orderDetails) {
         User user;
-        if (token != null) {
+        if (token != null && !token.isEmpty()) {
             Principal prin = tokenService.extractTokenDetails(token);
             user = userRepo.findByUserIdAndEmailIgnoreCase(
                     prin.getAuthUserId(),
